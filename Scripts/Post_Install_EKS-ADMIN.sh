@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #  Status: Complete/Done
-# Purpose:
+# Purpose:  To configure the "admin host" (aka thekubernerd) once the OS is installed and host is on the network
 
+NEEDSRESTART=0
 
 # Allow sudo NOPASSWD
 SUDO_USER=mansible
@@ -18,8 +19,10 @@ PKGS="etherwake net-tools"
 sudo apt -y install $PKGS 
 
 # Unload problematic module at reboot via cron
+# TODO:  This has to be done as root - this code is not setup to run as "mansible" to udpate root's cront at this time
 CRON_UPDATE="@reboot modprobe -r tps6598x"
 (crontab -l; echo "$CRON_UPDATE") | crontab -
+modprobe -r tps6598x
 
 # Update SSH 
 [ ! -f ~/.ssh/id_ecdsa ] && { echo | ssh-keygen -C "Default Host SSH Key" -f ~/.ssh/id_ecdsa -tecdsa -b521 -N ''; } 
@@ -49,7 +52,9 @@ curl https://raw.githubusercontent.com/cloudxabide/devops/main/Files/.bashrc.d_c
 
 # Install Desktop GUI
 install_desktop() {
-  sudo apt install ubuntu-desktop
+  sudo apt install -y ubuntu-desktop
+  NEEDSRESTART=$((NEEDSRESTART + 1))
 }
 
+[[ $NEEDSRESTART != 0 ]] && { sudo shutdown now -r; }
 exit 0
