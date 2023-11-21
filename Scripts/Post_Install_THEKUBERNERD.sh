@@ -2,7 +2,6 @@
 
 #  Status: Complete/Done
 # Purpose:  To configure the "admin host" (aka thekubernerd) once the OS is installed and host is on the network
-
 NEEDSRESTART=0
 
 # Allow sudo NOPASSWD
@@ -42,8 +41,8 @@ cat << EOF >> ~/.bashrc
 # User specific aliases and functions
 if [ -d ~/.bashrc.d ]; then
 	for rc in ~/.bashrc.d/*; do
-		if [ -f "$rc" ]; then
-			. "$rc"
+		if [ -f "\$rc" ]; then
+			. "\$rc"
 		fi
 	done
 fi
