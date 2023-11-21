@@ -27,7 +27,7 @@ modprobe -r tps6598x
 [ ! -f ~/.ssh/id_ecdsa ] && { echo | ssh-keygen -C "Default Host SSH Key" -f ~/.ssh/id_ecdsa -tecdsa -b521 -N ''; } 
 [ ! -f ~/.ssh/id_ecdsa-lab ] && { echo | ssh-keygen -C "Lab Host SSH Key" -f ~/.ssh/id_ecdsa-lab -tecdsa -b521 -N ''; } 
 cat << EOF > ~/.ssh/config 
-Host *.kubernerdes.lab
+Host 10.10.12.* *.kubernerdes.lab
   User mansible
   UserKnownHostsFile ~/.ssh/known_hosts.kubernerdes.lab
   IdentityFile ~/.ssh/id_ecdsa-lab
@@ -54,6 +54,11 @@ install_desktop() {
   sudo apt install -y ubuntu-desktop
   NEEDSRESTART=$((NEEDSRESTART + 1))
 }
+
+mkdir -p $HOME/Repositories/Personal/cloudxabide/; cd $_
+git clone https://github.com/cloudxabide/kubernerdes.git
+ln -s $HOME/Repositories/Personal/cloudxabide/kubernerdes $HOME
+cd $HOME
 
 [[ $NEEDSRESTART != 0 ]] && { sudo shutdown now -r; }
 exit 0
