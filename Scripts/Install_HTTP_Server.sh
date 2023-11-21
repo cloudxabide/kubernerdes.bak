@@ -1,6 +1,7 @@
 #!/bin/bash
 
-
+#NOTE #NOTE #NOTE #NOTE 
+# THIS MAY BE UNNECESSARY AND POSSIBLY WORSE, MAKE EKS-A NOT WORK
 
 
 sudo apt install -y apache2
@@ -9,6 +10,13 @@ sudo systemctl enable apache2
 sudo ufw app list
 sudo ufw allow 'Apache'
 sudo ufw status
+
+
+
+
+
+exit 0
+#### I have decided NOT to do any of this, and just use /var/www/html 
 
 # Some foolishness to serve this repo as the web directory (might change this later?)
 sudo mkdir /var/www/kubernerdes /var/www/hookImages /var/www/osImage
@@ -51,6 +59,8 @@ cat << EOF  | sudo tee /etc/apache2/sites-available/kubernerdes.lab.conf
 </VirtualHost>
 EOF 
 
+sudo apache2ctl configtest
 cd /etc/apache2/sites-enabled
 sudo ln -s ../sites-available/kubernerdes.lab.conf
 sudo systemctl restart apache2
+
