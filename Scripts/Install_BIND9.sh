@@ -29,6 +29,7 @@ named-checkzone kubernerdes.lab db.kubernerdes.lab
 for FILE in `ls *arpa`; do named-checkzone $(echo $FILE | sed 's/db.//g'; ) $FILE; done
 cd -
 
+sudo systemctl restart systemd-resolved.serviceb
 
 exit 0
 
