@@ -1,0 +1,10 @@
+---
+# instance-id: iid-abcdefg
+network-interfaces: |
+  iface eno1 inet static
+  address 10.10.12.13
+  network 10.10.12.0
+  netmask 255.255.252.0
+  broadcast 10.10.15.255
+  gateway 10.10.12.1
+hostname: eks-host03

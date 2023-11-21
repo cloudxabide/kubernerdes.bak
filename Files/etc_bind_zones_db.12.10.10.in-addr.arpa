@@ -1,0 +1,22 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
+                     2023111801         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        36000         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      thekubernerd.
+10      IN      PTR     thekubernerd.kubernerdes.lab.
+
+; also list other computers
+101	IN	PTR	host01.kubernerdes.lab.
+102	IN	PTR	host02.kubernerdes.lab.
+103	IN	PTR	host03.kubernerdes.lab.
+; Application Endpoints
+200	IN	PTR	eks-control-plane.kubernerdes.lab.
+201	IN	PTR	tinkerbell.kubernerdes.lab.
+

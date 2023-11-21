@@ -1,0 +1,36 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+// Forward Lookup Zones
+zone "kubernerdes.lab" {
+    type primary;
+    file "/etc/bind/zones/db.kubernerdes.lab"; # zone file path
+    allow-transfer { 10.10.12.0/24; };         # local subnet
+};
+
+// Reverse Lookups Zones 
+zone "12.10.10.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones/db.12.10.10.in-addr.arpa"; # zone file path
+    allow-transfer { 10.10.12.0/24; };         # local subnet
+};
+zone "13.10.10.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones/db.13.10.10.in-addr.arpa"; # zone file path
+    allow-transfer { 10.10.13.0/24; };         # local subnet
+};
+zone "14.10.10.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones/db.14.10.10.in-addr.arpa"; # zone file path
+    allow-transfer { 10.10.12.0/24; };         # local subnet
+};
+zone "15.10.10.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones/db.15.10.10.in-addr.arpa"; # zone file path
+    allow-transfer { 10.10.12.0/24; };         # local subnet
+};

@@ -1,0 +1,26 @@
+acl "trusted" {
+        10.10.12.10;    # thekubernerd
+        10.10.12.11;    # eks-host01
+        10.10.12.12;    # eks-host02
+        10.10.12.13;    # eks-host03
+};
+
+
+options {
+        directory "/var/cache/bind";
+
+        recursion yes;                 # enables recursive queries
+        allow-recursion { trusted; };  # allows recursive queries from "trusted" clients
+        listen-on { 10.10.12.10; };   # ns1 private IP address - listen on private network only
+        allow-transfer { any; };      # disable zone transfers by default
+
+        forwarders {
+                8.8.8.8;
+                8.8.4.4;
+        };
+
+	//========================================================================
+	dnssec-validation auto;
+
+	listen-on-v6 { any; };
+};

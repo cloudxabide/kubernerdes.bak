@@ -1,0 +1,21 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
+                     2023111801         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        36000         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      thekubernerd.kubernerdes.lab.
+thekubernerd	IN      A       10.10.12.10
+
+gateway		IN      A       10.10.12.1
+; Hosts
+eks-host01	IN      A       10.10.12.101
+eks-host02	IN      A       10.10.12.102
+eks-host03	IN      A       10.10.12.103
+eks-control-plane 	IN	A	10.10.12.200
+tinkerbell	IN	A	10.10.12.201
