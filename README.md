@@ -9,7 +9,7 @@ Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) an
 ## Build EKS-ADMIN Host
 You will need to install Ubuntu on "Admin Host".  While I have ways of accomplishing this with automation, *that* is not in-scope to explain here.
 
-[Post Install Script](Scripts/Post_Install.sh)
+[Post Install Script - THEKUBERNERD](Scripts/Post_Install_THEKUBERNERD.sh)
 
 Install/Configure: 
 
