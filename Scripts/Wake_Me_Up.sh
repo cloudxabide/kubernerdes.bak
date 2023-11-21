@@ -41,7 +41,7 @@ do
   #etherwake $MAC
   secs=$(($SLEEPYTIME))
 while [ $secs -gt 0 ]; do
-   echo -ne "$secs\033[0K\r"
+   echo -ne "pause for: $secs\033[0K\r"
    sleep 1
    : $((secs--))
 done 
