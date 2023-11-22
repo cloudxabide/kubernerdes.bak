@@ -9,6 +9,9 @@ SUDO_USER=mansible
 echo "Note:  you are going to be asked the login password for $SUDO_USER"
 echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee  /etc/sudoers.d/$SUDO_USER-nopasswd-all
 
+echo "DEBIAN_FRONTEND=noninteractive" | sudo tee -a ~/.bashrc
+echo "NEEDRESTART_MODE=a" | sudo tee -a ~/.bashrc
+
 # Update the system
 NEEDRESTART_MODE=a
 sudo apt update -y
@@ -19,9 +22,11 @@ sudo apt -y install $PKGS
 
 # Unload problematic module at reboot via cron
 # TODO:  This has to be done as root - this code is not setup to run as "mansible" to udpate root's cront at this time
+sudo su -
 CRON_UPDATE="@reboot modprobe -r tps6598x"
 (crontab -l; echo "$CRON_UPDATE") | crontab -
 modprobe -r tps6598x
+exit 
 
 # Update SSH 
 [ ! -f ~/.ssh/id_ecdsa ] && { echo | ssh-keygen -C "Default Host SSH Key" -f ~/.ssh/id_ecdsa -tecdsa -b521 -N ''; } 
