@@ -11,6 +11,8 @@ You will need to install Ubuntu on "Admin Host".  While I have ways of accomplis
 
 [Post Install Script - THEKUBERNERD](Scripts/Post_Install_THEKUBERNERD.sh)
 
+-- NOTE:  I don't believe you need ANY of this.  🤯 
+
 Install/Configure: 
 
 * [BIND](Scripts/Install_BIND9.sh)
