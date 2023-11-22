@@ -30,7 +30,7 @@ echo "You need to logout/login to recognize group modification"
 mkdir $HOME/eksa; cd $_
 curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware.csv
 
-export EKSA_AWS_ACCESS_KEY_ID="
+export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
 export EKSA_AWS_REGION="us-east-2" 
 
