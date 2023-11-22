@@ -3,19 +3,39 @@
 #NOTE #NOTE #NOTE #NOTE 
 # THIS MAY BE UNNECESSARY AND POSSIBLY WORSE, MAKE EKS-A NOT WORK
 
-
-sudo apt install -y apache2
-sudo systemctl enable apache2
+sudo apt install -y apache2 php libapache2-mod-php php-mysql
+sudo systemctl enable apache2 --now
 
 sudo ufw app list
-sudo ufw allow 'Apache'
+sudo ufw allow in 'Apache'
 sudo ufw status
+#sudo systemctl enable --now ufw
 
+# https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/
+EKSA_RELEASE_VERSION=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.latestVersion")
+# EKSA_RELEASE_VERSION=v0.18.0
+BUNDLE_MANIFEST_URL=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.releases[] | select(.version==\"$EKSA_RELEASE_VERSION\").bundleManifestUrl")
 
+cd /var/www/html
+sudo mv index.html index.html.orig
 
+# Bottlerocket Image
+curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[].eksD.raw.bottlerocket.uri" | sudo tee manifest-$EKSA_RELEASE_VERSION.txt
+sudo curl -O -J $(tail -1 manifest-$EKSA_RELEASE_VERSION.txt)
 
+# vmlinuz
+sudo curl -O -J $(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].tinkerbell.tinkerbellStack.hook.vmlinuz.amd.uri")
+# initramfs
+sudo curl -O -J $(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].tinkerbell.tinkerbellStack.hook.initramfs.amd.uri")
 
+sudo chown -R www-data:www-data /var/www
+# Update the index page to be a dynamic version run in PHP
+sudo curl -o /var/www/html/index.php https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/index.php
 exit 0
+
+
+
+######################33
 #### I have decided NOT to do any of this, and just use /var/www/html 
 
 # Some foolishness to serve this repo as the web directory (might change this later?)
