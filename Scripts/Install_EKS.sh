@@ -49,6 +49,14 @@ eksctl anywhere create cluster \
    -f $CLUSTER_NAME.yaml \
    --install-packages packages.yaml
 
+export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
+kubectl get nodes -A -o wide
+
+# Label the worker nodes as ... (wait for it .... ) workers
+for NODE in $(kubectl get nodes -A -o wide | grep -v control-plane | grep "<none>" | awk '{ print $1 }'); do kubectl label node $NODE node-role.kubernetes.io/worker=worker ; done
+kubectl get nodes -A -o wide --show-labels=true
+kubectl get hardware -n eksa-system --show-labels 
+
 exit 0
 
 ## Troubleshooting and Observability
