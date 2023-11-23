@@ -13,9 +13,13 @@ You will need to install Ubuntu on "Admin Host".  While I have ways of accomplis
 
 [Post Install Script - THEKUBERNERD](Scripts/Post_Install_THEKUBERNERD.sh)
 
--- NOTE:  I don't believe you need ANY of the following.  🤯  
 The EKS Anywhere build process will create all the PXE bits, etc..  
 The only "customization" I am going to pursue is hosting the OS Image and Hooks on my own webeserver.  
+* [BIND](Scripts/Install_BIND9.sh)
+* [WWW](Scripts/Install_HTTP_Server.sh)
+
+-- NOTE:  You do not need to do ANY of the following.  🤯  
+
 EKS Anywhere is incredible.
 
 Install/Configure: 
@@ -24,7 +28,6 @@ Install/Configure:
 * PXE (DHCP/TFTP/WWW)
   * [DHCP](Scripts/Install_DHCP_Server.sh)
   * [TFTP](Scripts/Install_TFTP.sh)
-  * [WWW](Scripts/)
 
 ## Deploy EKS Anywhere Cluster
 [Install EKS Anywhere](Scripts/Install_EKS_Anywhere.sh)
