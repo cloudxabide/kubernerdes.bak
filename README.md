@@ -25,9 +25,9 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 [Install EKS Anywhere](Scripts/Install_EKS_Anywhere.sh)
 
 ## References
-[EKS Anywhere](https://anywhere.eks.amazonaws.com/)  
-[EKS Anywhere Docs](https://anywhere.eks.amazonaws.com/docs/)  
-[Ubuntu Server](https://ubuntu.com/download/server)  
+[EKS Anywhere - Landing Page](https://anywhere.eks.amazonaws.com/)  
+[EKS Anywhere - Docs](https://anywhere.eks.amazonaws.com/docs/)  
+[Ubuntu Server - Download](https://ubuntu.com/download/server)  
 
-[Containers from the Couch - EKS Anywhere (YouTube)](https://www.youtube.com/@ContainersfromtheCouch/search?query=eks%20anywhere)
+[Containers from the Couch - Search: EKS Anywhere (YouTube)](https://www.youtube.com/@ContainersfromtheCouch/search?query=eks%20anywhere)
 
