@@ -1,4 +1,4 @@
-# kubernerdes.lab - My Kubernetes Lab
+# My Kubernetes Lab - kubernerdes.lab 
 
 This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab.The Kubernerdes lab.
 
