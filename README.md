@@ -13,25 +13,16 @@ You will need to install Ubuntu on "Admin Host".  While I have ways of accomplis
 
 [Post Install Script - THEKUBERNERD](Scripts/Post_Install_THEKUBERNERD.sh)
 
-The EKS Anywhere build process will create all the PXE bits, etc..  
-The only "customization" I am going to pursue is hosting the OS Image and Hooks on my own webeserver.  
+The EKS Anywhere build process will create all the PXE bits, etc..  EKS Anywhere is incredible.  
+It will deploy a KIND Cluster using Docker to build a "bootstrap Cluster" - this will include all the necessary plumbing, etc.. to bootstrap the base OS on the Cluster Nodes.
+
+The only "customization" I am going to pursue is hosting the OS Image and Hooks on my own webeserver, and my own DNS server for my Lab.    
+
 * [BIND](Scripts/Install_BIND9.sh)
 * [WWW](Scripts/Install_HTTP_Server.sh)
 
--- NOTE:  You do not need to do ANY of the following.  🤯  
-
-EKS Anywhere is incredible.
-
-Install/Configure: 
-
-* [BIND](Scripts/Install_BIND9.sh)
-* PXE (DHCP/TFTP/WWW)
-  * [DHCP](Scripts/Install_DHCP_Server.sh)
-  * [TFTP](Scripts/Install_TFTP.sh)
-
 ## Deploy EKS Anywhere Cluster
 [Install EKS Anywhere](Scripts/Install_EKS_Anywhere.sh)
-
 
 ## References
 [EKS Anywhere](https://anywhere.eks.amazonaws.com/)  
