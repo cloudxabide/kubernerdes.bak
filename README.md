@@ -17,12 +17,16 @@ The EKS Anywhere build process will create all the PXE bits, etc..  EKS Anywhere
 It will deploy a KIND Cluster using Docker to build a "bootstrap Cluster" - this will include all the necessary plumbing, etc.. to bootstrap the base OS on the Cluster Nodes.
 
 The only "customization" I am going to pursue is hosting the OS Image and Hooks on my own webeserver, and my own DNS server for my Lab.    
+* [Ansible](Scripts/10_Install_Ansible.sh)
+* [EKS Tools](Scripts/11_Install_EKS_Tools.sh)
+* [BIND](Scripts/15_Install_BIND9.sh)
 
-* [BIND](Scripts/Install_BIND9.sh)
+Uneeded:  
 * [WWW](Scripts/Install_HTTP_Server.sh)
+* [DHCP Server](Scripts/Install_DHCP_Server.sh)
 
 ## Deploy EKS Anywhere Cluster
-[Install EKS Anywhere](Scripts/Install_EKS_Anywhere.sh)
+[Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
 ## References
 [EKS Anywhere - Landing Page](https://anywhere.eks.amazonaws.com/)  
