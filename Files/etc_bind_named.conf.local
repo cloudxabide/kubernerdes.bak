@@ -10,27 +10,27 @@
 zone "kubernerdes.lab" {
     type primary;
     file "/etc/bind/zones/db.kubernerdes.lab"; # zone file path
-    allow-transfer { 10.10.12.0/24; };         # local subnet
+    allow-transfer { 10.10.12.0/22; };         # local subnet
 };
 
 // Reverse Lookups Zones 
 zone "12.10.10.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.12.10.10.in-addr.arpa"; # zone file path
-    allow-transfer { 10.10.12.0/24; };         # local subnet
+    allow-transfer { 10.10.12.0/22; };         # local subnet
 };
 zone "13.10.10.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.13.10.10.in-addr.arpa"; # zone file path
-    allow-transfer { 10.10.13.0/24; };         # local subnet
+    allow-transfer { 10.10.13.0/22; };         # local subnet
 };
 zone "14.10.10.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.14.10.10.in-addr.arpa"; # zone file path
-    allow-transfer { 10.10.12.0/24; };         # local subnet
+    allow-transfer { 10.10.12.0/22; };         # local subnet
 };
 zone "15.10.10.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.15.10.10.in-addr.arpa"; # zone file path
-    allow-transfer { 10.10.12.0/24; };         # local subnet
+    allow-transfer { 10.10.12.0/22; };         # local subnet
 };

@@ -10,7 +10,7 @@ sudo sed -i -e 's/bind/bind -4/g' /etc/default/named
 
 sudo cp /etc/bind/named.conf.options /etc/bind/named.conf.options.bak
 curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_named.conf.options | sudo tee /etc/bind/named.conf.options
-sudo systemctl restart bind9  # You now have a caching nameserver using Google DNS as forwarders
+sudo systemctl enable named.service --now
 
 # Add all of the zone files to the BIND config
 sudo cp /etc/bind/named.conf.local /etc/bind/named.conf.local.bak
@@ -22,13 +22,15 @@ do
   curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_zones_db.$ZONE.10.10.in-addr.arpa | sudo tee /etc/bind/zones/db.$ZONE.10.10.in-addr.arpa
 done 
 curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_zones_db.kubernerdes.lab | sudo tee /etc/bind/zones/db.kubernerdes.lab
-sudo systemctl restart bind9  # You now have a nameserver for your subnet(s)
+sudo systemctl restart named.service -
 
+# Validate all the zone files
 cd /etc/bind/zones
 named-checkzone kubernerdes.lab db.kubernerdes.lab
 for FILE in `ls *arpa`; do named-checkzone $(echo $FILE | sed 's/db.//g'; ) $FILE; done
 cd -
 
+# Reset the host lookups (hopefully)
 sudo systemctl restart systemd-resolved.service
 
 exit 0

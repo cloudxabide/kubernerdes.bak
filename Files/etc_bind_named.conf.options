@@ -1,8 +1,8 @@
 acl "trusted" {
         10.10.12.10;    # thekubernerd
-        10.10.12.11;    # eks-host01
-        10.10.12.12;    # eks-host02
-        10.10.12.13;    # eks-host03
+        10.10.12.101;    # eks-host01
+        10.10.12.102;    # eks-host02
+        10.10.12.103;    # eks-host03
 };
 
 

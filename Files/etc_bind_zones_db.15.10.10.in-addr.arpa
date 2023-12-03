@@ -10,6 +10,5 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      thekubernerd.
-10      IN      PTR     thekubernerd.kubernerdes.lab.
 
 ; also list other computers
