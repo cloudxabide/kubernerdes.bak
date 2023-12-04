@@ -11,8 +11,14 @@ echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee  /etc/sudoers.d/$SUDO_USER-
 
 # Install/enable SSH Server
 sudo apt install -y openssh-server
+
+# Enable Firewall
+enable_firewall() {
 sudo ufw allow ssh
 sudo ufw enable
+sudo ufw status
+sudo ufw show added
+}
 
 echo "DEBIAN_FRONTEND=noninteractive" | sudo tee -a ~/.bashrc
 echo "NEEDRESTART_MODE=a" | sudo tee -a ~/.bashrc
@@ -22,25 +28,23 @@ NEEDRESTART_MODE=a
 sudo apt update -y
 sudo apt upgrade -y
 
-PKGS="etherwake net-tools"
+PKGS="etherwake net-tools curl git"
 sudo apt -y install $PKGS 
 
 # Unload problematic module at reboot via cron
-# TODO:  This has to be done as root - this code is not setup to run as "mansible" to udpate root's cront at this time
-sudo su -
+sudo su - -c '
 CRON_UPDATE="@reboot modprobe -r tps6598x"
 (crontab -l; echo "$CRON_UPDATE") | crontab -
-modprobe -r tps6598x
-exit 
+modprobe -r tps6598x '
 
 # Update SSH 
 [ ! -f ~/.ssh/id_ecdsa ] && { echo | ssh-keygen -C "Default Host SSH Key" -f ~/.ssh/id_ecdsa -tecdsa -b521 -N ''; } 
-[ ! -f ~/.ssh/id_ecdsa-lab ] && { echo | ssh-keygen -C "Lab Host SSH Key" -f ~/.ssh/id_ecdsa-lab -tecdsa -b521 -N ''; } 
+[ ! -f ~/.ssh/id_ecdsa-kubernerdes.lab ] && { echo | ssh-keygen -C "Lab Host SSH Key" -f ~/.ssh/id_ecdsa-kubernerdes.lab -tecdsa -b521 -N ''; } 
 cat << EOF > ~/.ssh/config 
 Host 10.10.12.* *.kubernerdes.lab
   User mansible
   UserKnownHostsFile ~/.ssh/known_hosts.kubernerdes.lab
-  IdentityFile ~/.ssh/id_ecdsa-lab
+  IdentityFile ~/.ssh/id_ecdsa-kubernerdes.lab
 EOF
 chmod 0600 ~/.ssh/config
 
