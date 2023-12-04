@@ -9,6 +9,11 @@ SUDO_USER=mansible
 echo "Note:  you are going to be asked the login password for $SUDO_USER"
 echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee  /etc/sudoers.d/$SUDO_USER-nopasswd-all
 
+# Install/enable SSH Server
+sudo apt install -y openssh-server
+sudo ufw allow ssh
+
+
 echo "DEBIAN_FRONTEND=noninteractive" | sudo tee -a ~/.bashrc
 echo "NEEDRESTART_MODE=a" | sudo tee -a ~/.bashrc
 
