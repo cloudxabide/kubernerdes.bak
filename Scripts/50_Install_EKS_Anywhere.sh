@@ -28,21 +28,27 @@ sudo docker run hello-world
 sudo gpasswd -a mansible docker
 echo "You need to logout/login to recognize group modification"
 
-docker run hello-world
+docker run hello-world || { echo "Logging out to update Group membership"; logout; }
+
+docker kill $(docker ps -a | grep hello-world | awk '{ print $1 }')
+docker rm $(docker ps -a | grep hello-world | awk '{ print $1 }')
 
 # Install EKS 
 mkdir $HOME/eksa; cd $_
 curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware_with_bmc.csv
 
+cat << EOF > ./.info
 export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
 export EKSA_AWS_REGION="us-east-2" 
+EOF
+.  ./.info
 
 export CLUSTER_NAME=kubernerdes-eksa
 export TINKERBELL_HOST_IP=10.10.21.201
 
 # The following is how you create a vanilla clusterconfig
-# eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
+eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
 
 # However, I have one that I have already modified for my needs
 mv $CLUSTER_NAME.yaml $CLUSTER_NAME.yaml.vanilla 
@@ -89,3 +95,9 @@ docker logs -f boots
    export CLUSTER_NAME="mycluster"
    export TINKERBELL_PROVIDER=true
    eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
+
+## Cleanup
+```
+docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
+docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
+rm -rf kubernerdes-eksa
