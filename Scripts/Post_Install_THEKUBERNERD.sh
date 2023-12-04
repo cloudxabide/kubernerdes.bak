@@ -12,7 +12,7 @@ echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee  /etc/sudoers.d/$SUDO_USER-
 # Install/enable SSH Server
 sudo apt install -y openssh-server
 sudo ufw allow ssh
-
+sudo ufw enable
 
 echo "DEBIAN_FRONTEND=noninteractive" | sudo tee -a ~/.bashrc
 echo "NEEDRESTART_MODE=a" | sudo tee -a ~/.bashrc
