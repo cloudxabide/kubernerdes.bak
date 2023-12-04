@@ -15,6 +15,12 @@ sudo apt install -y openssh-server
 # Enable Firewall
 enable_firewall() {
 sudo ufw allow ssh
+sudo ufw allow http 
+sudo ufw allow tftp 
+sudo ufw allow bootps
+sudo ufw allow 53/udp
+sudo ufw allow 53/tcp
+
 sudo ufw enable
 sudo ufw status
 sudo ufw show added
