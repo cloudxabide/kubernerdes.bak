@@ -28,11 +28,10 @@ sudo curl -O -J $(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].ti
 # initramfs
 sudo curl -O -J $(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].tinkerbell.tinkerbellStack.hook.initramfs.amd.uri")
 
-sudo chown -R www-data:www-data /var/www
 # Update the index page to be a dynamic version run in PHP
 sudo curl -o /var/www/html/index.php https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/index.php
+sudo chown -R www-data:www-data /var/www
 exit 0
-
 
 
 ######################33

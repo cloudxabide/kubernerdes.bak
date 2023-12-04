@@ -21,9 +21,10 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 * [EKS Tools](Scripts/11_Install_EKS_Tools.sh)
 * [BIND](Scripts/15_Install_BIND9.sh)
 
-Uneeded:  
+Uneeded (this is all handled by the "tinkerbell boots" container:  
 * [WWW](Scripts/Install_HTTP_Server.sh)
 * [DHCP Server](Scripts/Install_DHCP_Server.sh)
+* TFTP
 
 ## Deploy EKS Anywhere Cluster
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)

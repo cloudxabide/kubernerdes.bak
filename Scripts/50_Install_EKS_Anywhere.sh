@@ -4,7 +4,10 @@
 # https://docs.docker.com/engine/install/ubuntu/
 
 # First, remove any existing Docker packages
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+DOCKER_PKGS="docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc"
+sudo apt-get remove -y $DOCKER_PKGS
+# This is Docker's recommendation
+# for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -23,8 +26,9 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo docker run hello-world
 sudo gpasswd -a mansible docker
-docker run hello-world
 echo "You need to logout/login to recognize group modification"
+
+docker run hello-world
 
 # Install EKS 
 mkdir $HOME/eksa; cd $_
@@ -34,20 +38,31 @@ export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
 export EKSA_AWS_REGION="us-east-2" 
 
-
 export CLUSTER_NAME=kubernerdes-eksa
 export TINKERBELL_HOST_IP=10.10.21.201
-eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
+
+# The following is how you create a vanilla clusterconfig
+# eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
+
+# However, I have one that I have already modified for my needs
 mv $CLUSTER_NAME.yaml $CLUSTER_NAME.yaml.vanilla 
-curl -o  $CLUSTER_NAME.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig.yaml
+curl -o  $CLUSTER_NAME.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
 
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
+# NOTE:  I recommend connecting with another ssh session and running the following and waiting for the "boots" container to be running
+watch docker ps -a | grep boots
+
+# Then run...
 eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_NAME.yaml \
    --install-packages packages.yaml
+# You will watch the logs of the last command until you see "Creating new workload cluster"
+# You can then start powering on your NUC and boot from the network
+# Go back to the window where the "watch" command was running and kill the watch.  Then run
+docker logs -f 
 
 export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
 kubectl get nodes -A -o wide
