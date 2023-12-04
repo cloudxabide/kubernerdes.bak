@@ -32,7 +32,7 @@ docker run hello-world
 
 # Install EKS 
 mkdir $HOME/eksa; cd $_
-curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware.csv
+curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware_with_bmc.csv
 
 export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
@@ -51,8 +51,8 @@ curl -o  $CLUSTER_NAME.yaml https://raw.githubusercontent.com/cloudxabide/kubern
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
-# NOTE:  I recommend connecting with another ssh session and running the following and waiting for the "boots" container to be running
-watch docker ps -a | grep boots
+# NOTE:  I recommend connecting with another ssh session and running the following and waiting for the "boots" container to be running and then grabbing the container id and running the 2nd command
+watch docker ps -a 
 
 # Then run...
 eksctl anywhere create cluster \
@@ -60,9 +60,10 @@ eksctl anywhere create cluster \
    -f $CLUSTER_NAME.yaml \
    --install-packages packages.yaml
 # You will watch the logs of the last command until you see "Creating new workload cluster"
-# You can then start powering on your NUC and boot from the network
 # Go back to the window where the "watch" command was running and kill the watch.  Then run
-docker logs -f 
+docker logs -f <container id of "boots" container>
+
+# You can then start powering on your NUC and boot from the network and watch the Docker logs
 
 export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
 kubectl get nodes -A -o wide

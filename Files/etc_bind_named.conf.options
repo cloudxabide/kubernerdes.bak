@@ -10,7 +10,7 @@ options {
         directory "/var/cache/bind";
 
         recursion yes;                 # enables recursive queries
-        allow-recursion { trusted; };  # allows recursive queries from "trusted" clients
+        allow-recursion { any; };     # allows recursive queries from any clients - replace with "trusted" to limit clients
         listen-on { 10.10.12.10; };   # ns1 private IP address - listen on private network only
         allow-transfer { any; };      # disable zone transfers by default
 

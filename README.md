@@ -27,6 +27,7 @@ Uneeded (this is all handled by the "tinkerbell boots" container:
 * TFTP
 
 ## Deploy EKS Anywhere Cluster
+ProTip:  If you have only "node=cp-machine" in your hardware, and remove the WorkerNodeGroup from your hardware.csv, your CP nodes will not be tainted and workloads can run there.  (so, either you have 3 x CP that are also Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
 ## References
