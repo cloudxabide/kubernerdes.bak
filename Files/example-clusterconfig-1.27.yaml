@@ -14,7 +14,7 @@ spec:
       cidrBlocks:
       - 10.96.0.0/12
   controlPlaneConfiguration:
-    count: 1
+    count: 3
     endpoint:
       host: "10.10.12.200"
     machineGroupRef:
