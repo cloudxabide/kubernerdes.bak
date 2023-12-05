@@ -1,10 +1,10 @@
 # My Kubernetes Lab - kubernerdes.lab 
 
-This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab.The Kubernerdes lab.
+This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab: The Kubernerdes lab.
 
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
-Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) starting with a USB stick with install media (Ubuntu Server 22.04) and an Internet connection.  I want this environment to be completely independent of everything else in my lab. 
+Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) starting with a USB stick with install media (Ubuntu Server 22.04 - though I am considering Ubuntu Desktop now that I have been "in the ecosystem" for a while) and an Internet connection.  I want this environment to be completely independent of everything else in my lab. 
 
 ![Kubernerdes Lab](Images/KubernerdesLab.png)
 
