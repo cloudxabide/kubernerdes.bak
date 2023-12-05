@@ -26,8 +26,8 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo docker run hello-world
 sudo gpasswd -a mansible docker
-echo "You need to logout/login to recognize group modification"
 
+echo "You need to logout/login to recognize group modification"
 docker run hello-world || { echo "Logging out to update Group membership"; logout; }
 
 docker kill $(docker ps -a | grep hello-world | awk '{ print $1 }')
@@ -45,19 +45,21 @@ EOF
 .  ./.info
 
 export CLUSTER_NAME=kubernerdes-eksa
+export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export TINKERBELL_HOST_IP=10.10.21.201
 
 # The following is how you create a vanilla clusterconfig
-eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_NAME.yaml
+eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG
 
 # However, I have one that I have already modified for my needs
-mv $CLUSTER_NAME.yaml $CLUSTER_NAME.yaml.vanilla 
-curl -o  $CLUSTER_NAME.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
+mv $CLUSTER_CONFIG.yaml $CLUSTER_CONFIG.vanilla 
+curl -o  $CLUSTER_CONFIG.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
 
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
-# NOTE:  I recommend connecting with another ssh session and running the following and waiting for the "boots" container to be running and then grabbing the container id and running the 2nd command
+# NOTE:  I recommend connecting with another ssh session 
+# You will see 3 containers start and run (an ECR container, the KIND cluster, then "boots")
 watch docker ps -a 
 
 # Then run...
@@ -65,13 +67,18 @@ eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_NAME.yaml \
    --install-packages packages.yaml
-# You will watch the logs of the last command until you see "Creating new workload cluster"
+# Watch the logs of the last command until you see "Creating new workload cluster", then....
+
 # Go back to the window where the "watch" command was running and kill the watch.  Then run
 docker logs -f <container id of "boots" container>
+docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
 # You can then start powering on your NUC and boot from the network and watch the Docker logs
 
 export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
+export KUBECONFIG=$(find . -name '*kind.kubeconfig')
+export KUBECONFIG=$(find . -name '*cluster.kubeconfig')
+
 kubectl get nodes -A -o wide
 
 # Label the worker nodes as ... (wait for it .... ) workers
@@ -86,7 +93,7 @@ Run this and wait for the boots container to come up
 while true; do docker ps; sleep 5; echo; done
 
 Then
-docker logs -f boots
+docker logs -f <boots CONTAINER ID>
 
 
 ## Options to explore later
