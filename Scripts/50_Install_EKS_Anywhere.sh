@@ -75,9 +75,10 @@ docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
 # You can then start powering on your NUC and boot from the network and watch the Docker logs
 
+# Random "shortcuts" that *I* can use to run Kubectl 
 export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
-export KUBECONFIG=$(find . -name '*kind.kubeconfig')
-export KUBECONFIG=$(find . -name '*cluster.kubeconfig')
+export KUBECONFIG=$(find ~/eksa -name '*kind.kubeconfig')
+export KUBECONFIG=$(find ~/eksa -name '*cluster.kubeconfig')
 
 kubectl get nodes -A -o wide
 
