@@ -11,7 +11,7 @@ Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) st
 ## Build THEKUBERNERD Host
 You will need to install Ubuntu on "TheKubernerd" (the "Admin Host" referenced in the docs).  While I have ways of accomplishing this with automation, *that* is not in-scope to explain here.
 
-[Post Install Script - THEKUBERNERD](Scripts/Post_Install_THEKUBERNERD.sh)
+[Post Install Script - THEKUBERNERD](Scripts/00_Post_Install_THEKUBERNERD.sh)
 
 The EKS Anywhere build process will create all the PXE bits, etc..  EKS Anywhere is incredible.  
 It will deploy a KIND Cluster using Docker to build a "bootstrap Cluster" - this will include all the necessary plumbing, etc.. to bootstrap the base OS on the Cluster Nodes.
