@@ -6,6 +6,8 @@ It is worth noting that a portion of this repo is likely not applicable in most 
 
 Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) starting with a USB stick with install media (Ubuntu Server 22.04 - though I am considering Ubuntu Desktop now that I have been "in the ecosystem" for a while) and an Internet connection.  I want this environment to be completely independent of everything else in my lab. 
 
+Status:  Work in Progress.  But, it's all there in the AWS Docs - an afternoon and you'll be far enough along to roll out a K8s cluster.  Also - I am likely going through several iterations of how to name my files appropriately - like incuding K8s version, or node count in the file name.
+
 ![Kubernerdes Lab](Images/KubernerdesLab.png)
 
 ## Build THEKUBERNERD Host
@@ -21,13 +23,24 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 * [EKS Tools](Scripts/11_Install_EKS_Tools.sh)
 * [BIND](Scripts/15_Install_BIND9.sh)
 
-Uneeded (this is all handled by the "tinkerbell boots" container:  
-* [WWW](Scripts/Install_HTTP_Server.sh)
+While not necessary, I will include the WebServer in case you wish to host your own artifacts (such as: osImage, hookImages)
+* [WWW](Scripts/Install_HTTP_Server.sh) - add WebServer to listen on 8080
+
+Uneeded (this is all handled by the "tinkerbell boots" container):  
 * [DHCP Server](Scripts/Install_DHCP_Server.sh)
 * TFTP
 
+## Tested Configurations
+My "inventory" or "hardware.csv" files do not include MBC info - primarily because my NUC(s) have no ILO/BMC.
+
+| Control-Plane | Worker Nodes | Inventory File |
+|:--------------|:------------:|:---------------|
+| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv)
+| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv)
+
 ## Deploy EKS Anywhere Cluster
-ProTip:  If you have only "node=cp-machine" in your hardware, and remove the WorkerNodeGroup from your clusterConfig, your CP nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
+ProTip:  If you have only "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
+
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
 ## References
