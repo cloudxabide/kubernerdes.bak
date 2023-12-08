@@ -35,7 +35,8 @@ sudo apt update -y
 sudo apt upgrade -y
 
 PKGS="etherwake net-tools curl git"
-sudo apt -y install $PKGS 
+OPT_PKGS="nmap"
+sudo apt -y install $PKGS $OPT_PKGS
 
 # Unload problematic module at reboot via cron
 sudo su - -c '
