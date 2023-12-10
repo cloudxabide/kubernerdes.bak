@@ -2,13 +2,20 @@
 
 This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab: The Kubernerdes lab.
 
+**Goal:**  to create my own EKS Anywhere environment using bare metal (Intel NUCs) starting with a USB stick with install media (Ubuntu Server 22.04 - though I am considering Ubuntu Desktop now that I have been "using their ecosystem" for a while) and an Internet connection.  I want this environment to be completely independent of everything else in my lab. 
+
+**Status:**  Work in Progress.  But, it's all there in the AWS Docs - an afternoon and you'll be far enough along to roll out a K8s cluster.  Also - I am likely going through several iterations of how to name my files appropriately - like incuding K8s version, or node count in the file name.
+
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially start at the point where I am plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
-Goal:  to create my own EKS Anywhere environment from bare metal (Intel NUCs) starting with a USB stick with install media (Ubuntu Server 22.04 - though I am considering Ubuntu Desktop now that I have been "in the ecosystem" for a while) and an Internet connection.  I want this environment to be completely independent of everything else in my lab. 
-
-Status:  Work in Progress.  But, it's all there in the AWS Docs - an afternoon and you'll be far enough along to roll out a K8s cluster.  Also - I am likely going through several iterations of how to name my files appropriately - like incuding K8s version, or node count in the file name.
-
 ![Kubernerdes Lab](Images/KubernerdesLab.png)
+
+## Steps
+* Build the Admin Host
+* Kickoff the EKS Install process
+* Power On the NUCs (and select Network Boot (f12))
+* Do some Post Install tasks
+* Install some Apps and Ingress, etc..
 
 ## Build THEKUBERNERD Host
 You will need to install Ubuntu on "TheKubernerd" (the "Admin Host" referenced in the docs).  
@@ -24,7 +31,8 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 * [BIND](Scripts/15_Install_BIND9.sh)
 
 While not necessary, I will include the WebServer in case you wish to host your own artifacts (such as: osImage, hookImages)
-* [WWW](Scripts/Install_HTTP_Server.sh) - add WebServer to listen on 8080
+* [WWW Server](Scripts/Install_HTTP_Server.sh) - add WebServer to listen on 8080
+* [NFS Server](Scripts/Install_NFS_Server.sh) - add NFS Server to provide shared/persistent storage
 
 Uneeded (this is all handled by the "tinkerbell boots" container):  
 * [DHCP Server](Scripts/Install_DHCP_Server.sh)
