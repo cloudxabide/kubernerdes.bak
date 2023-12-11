@@ -33,9 +33,11 @@ docker run hello-world || { echo "Logging out to update Group membership"; logou
 docker kill $(docker ps -a | grep hello-world | awk '{ print $1 }')
 docker rm $(docker ps -a | grep hello-world | awk '{ print $1 }')
 
+#############
+############# EKS Anywhere
+#############
 # Install EKS 
 mkdir $HOME/eksa; cd $_
-curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-3_0.csv
 
 cat << EOF > ./.info
 export EKSA_AWS_ACCESS_KEY_ID=""
@@ -51,9 +53,17 @@ export TINKERBELL_HOST_IP=10.10.21.201
 # The following is how you create a vanilla clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG
 
+# Retrieve the hardware inventory csv file
+curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-3_0.csv
+
 # However, I have one that I have already modified for my needs
 mv $CLUSTER_CONFIG $CLUSTER_CONFIG.vanilla 
-curl -o  $CLUSTER_CONFIG  https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
+curl -o  $CLUSTER_CONFIG.example  https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.28-3_0.yaml
+
+# Retrieve the pub key for the "kubernedes.lab" domain
+# THIS NEEDS TO BE TESTED
+export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
+envsubst <  $CLUSTER_CONFIG.example > $CLUSTER_CONFIG
 
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
@@ -77,8 +87,8 @@ docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
 # Random "shortcuts" that *I* can use to run Kubectl 
 export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfig
-export KUBECONFIG=$(find ~/eksa -name '*kind.kubeconfig')
-export KUBECONFIG=$(find ~/eksa -name '*cluster.kubeconfig')
+export KUBECONFIG=$(find ~/DevOps/eksa -name '*kind.kubeconfig')
+export KUBECONFIG=$(find ~/DevOps/eksa -name '*cluster.kubeconfig')
 
 kubectl get nodes -A -o wide
 
