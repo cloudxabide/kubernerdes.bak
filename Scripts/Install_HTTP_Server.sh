@@ -1,15 +1,21 @@
 #!/bin/bash
 
-#NOTE #NOTE #NOTE #NOTE 
-# THIS MAY BE UNNECESSARY AND POSSIBLY WORSE, MAKE EKS-A NOT WORK
+# Purpose: deploy an HTTP/S Server (running on port 8080)
+
 
 sudo apt install -y apache2 php libapache2-mod-php php-mysql
+
+# Change the port apache2 will listen on
+sudo sed -i -e 's/80/8080/g' /etc/apache2/ports.conf
+sudo sed -i -e 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
 sudo systemctl enable apache2 --now
 
+firewall_update() {
 sudo ufw app list
 sudo ufw allow in 'Apache'
 sudo ufw status
-#sudo systemctl enable --now ufw
+sudo systemctl enable --now ufw
+}
 
 # https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/
 EKSA_RELEASE_VERSION=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.latestVersion")
@@ -33,6 +39,7 @@ sudo curl -o /var/www/html/index.php https://raw.githubusercontent.com/cloudxabi
 sudo chown -R www-data:www-data /var/www
 exit 0
 
+# NOTE:  you can now browse http://10.10.12.10:8080/
 
 ######################33
 #### I have decided NOT to do any of this, and just use /var/www/html 

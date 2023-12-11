@@ -40,8 +40,8 @@ metadata:
   name: kubernerdes-eksa
 spec:
   tinkerbellIP: "10.10.12.201"
-#  osImageURL: "http://10.10.12.10/bottlerocket-v1.27.4-eks-d-1-27-10-eks-a-52-amd64.img.gz"
-#  hookImagesURLPath: "http://10.10.12.10/"
+#  osImageURL: "http://10.10.12.10:8080/bottlerocket-v1.27.4-eks-d-1-27-10-eks-a-52-amd64.img.gz"
+#  hookImagesURLPath: "http://10.10.12.10:8080/"
 
 
 ---

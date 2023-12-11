@@ -35,7 +35,7 @@ docker rm $(docker ps -a | grep hello-world | awk '{ print $1 }')
 
 # Install EKS 
 mkdir $HOME/eksa; cd $_
-curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware_with_bmc.csv
+curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-3_0.csv
 
 cat << EOF > ./.info
 export EKSA_AWS_ACCESS_KEY_ID=""
@@ -52,8 +52,8 @@ export TINKERBELL_HOST_IP=10.10.21.201
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG
 
 # However, I have one that I have already modified for my needs
-mv $CLUSTER_CONFIG.yaml $CLUSTER_CONFIG.vanilla 
-curl -o  $CLUSTER_CONFIG.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
+mv $CLUSTER_CONFIG $CLUSTER_CONFIG.vanilla 
+curl -o  $CLUSTER_CONFIG  https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.27.yaml
 
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
