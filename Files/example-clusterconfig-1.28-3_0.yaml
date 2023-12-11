@@ -26,12 +26,6 @@ spec:
   kubernetesVersion: "1.28"
   managementCluster:
     name: kubernerdes-eksa
-#  workerNodeGroupConfigurations:
-#  - count: 2
-#    machineGroupRef:
-#      kind: TinkerbellMachineConfig
-#      name: kubernerdes-eksa
-#    name: md-0
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
@@ -56,7 +50,7 @@ spec:
   users:
   - name: ec2-user
     sshAuthorizedKeys:
-    - ssh-rsa AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHmTd/TaUi3kx1jh32SbYk17jSxrreesCtHUjVgvyedlJS+xmn4/QPZP90gAgKJEoU6pBVFGiXZosKE4lgOVbRcRQHwlzTOGAsQG3RzGpVC/2ZUOM40EA6D8ddwW3aW6bGl1he/xV1W4jrLV6I+UXw9YY/gRerIvkVFf3Oc3th5Iic4mA==
+    - ssh-rsa ${MY_SSH_KEY} 
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
@@ -70,6 +64,6 @@ spec:
   users:
   - name: ec2-user
     sshAuthorizedKeys:
-    - ssh-rsa AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHmTd/TaUi3kx1jh32SbYk17jSxrreesCtHUjVgvyedlJS+xmn4/QPZP90gAgKJEoU6pBVFGiXZosKE4lgOVbRcRQHwlzTOGAsQG3RzGpVC/2ZUOM40EA6D8ddwW3aW6bGl1he/xV1W4jrLV6I+UXw9YY/gRerIvkVFf3Oc3th5Iic4mA==
+    - ssh-rsa ${MY_SSH_KEY}
 
 ---
