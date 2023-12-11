@@ -1,0 +1,75 @@
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: Cluster
+metadata:
+  name: kubernerdes-eksa
+spec:
+  bundlesRef: null
+  clusterNetwork:
+    cniConfig:
+      cilium: {}
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+    services:
+      cidrBlocks:
+      - 10.96.0.0/12
+  controlPlaneConfiguration:
+    count: 3
+    endpoint:
+      host: "10.10.12.200"
+    machineGroupRef:
+      kind: TinkerbellMachineConfig
+      name: kubernerdes-eksa-cp
+  datacenterRef:
+    kind: TinkerbellDatacenterConfig
+    name: kubernerdes-eksa
+  kubernetesVersion: "1.28"
+  managementCluster:
+    name: kubernerdes-eksa
+#  workerNodeGroupConfigurations:
+#  - count: 2
+#    machineGroupRef:
+#      kind: TinkerbellMachineConfig
+#      name: kubernerdes-eksa
+#    name: md-0
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellDatacenterConfig
+metadata:
+  name: kubernerdes-eksa
+spec:
+  tinkerbellIP: "10.10.12.201"
+  osImageURL: "http://10.10.12.10:8080/bottlerocket-v1.28.4-eks-d-1-28-10-eks-a-54-amd64.img.gz"
+  hookImagesURLPath: "http://10.10.12.10:8080/"
+
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellMachineConfig
+metadata:
+  name: kubernerdes-eksa-cp
+spec:
+  hardwareSelector: { node: "cp-machine" }
+  osFamily: bottlerocket
+  templateRef: {}
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHmTd/TaUi3kx1jh32SbYk17jSxrreesCtHUjVgvyedlJS+xmn4/QPZP90gAgKJEoU6pBVFGiXZosKE4lgOVbRcRQHwlzTOGAsQG3RzGpVC/2ZUOM40EA6D8ddwW3aW6bGl1he/xV1W4jrLV6I+UXw9YY/gRerIvkVFf3Oc3th5Iic4mA==
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellMachineConfig
+metadata:
+  name: kubernerdes-eksa
+spec:
+  hardwareSelector: { node: "worker"}
+  osFamily: bottlerocket
+  templateRef: {}
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHmTd/TaUi3kx1jh32SbYk17jSxrreesCtHUjVgvyedlJS+xmn4/QPZP90gAgKJEoU6pBVFGiXZosKE4lgOVbRcRQHwlzTOGAsQG3RzGpVC/2ZUOM40EA6D8ddwW3aW6bGl1he/xV1W4jrLV6I+UXw9YY/gRerIvkVFf3Oc3th5Iic4mA==
+
+---
