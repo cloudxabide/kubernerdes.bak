@@ -45,7 +45,7 @@ metadata:
   name: kubernerdes-eksa-cp
 spec:
   hardwareSelector: { node: "cp-machine" }
-  osFamily: bottlerocket
+  osFamily: ubuntu
   templateRef: {}
   users:
   - name: ec2-user
@@ -59,7 +59,7 @@ metadata:
   name: kubernerdes-eksa
 spec:
   hardwareSelector: { node: "worker"}
-  osFamily: bottlerocket
+  osFamily: ubuntu
   templateRef: {}
   users:
   - name: ec2-user
