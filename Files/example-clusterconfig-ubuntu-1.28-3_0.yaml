@@ -1,0 +1,69 @@
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: Cluster
+metadata:
+  name: kubernerdes-eksa
+spec:
+  bundlesRef: null
+  clusterNetwork:
+    cniConfig:
+      cilium: {}
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+    services:
+      cidrBlocks:
+      - 10.96.0.0/12
+  controlPlaneConfiguration:
+    count: 3
+    endpoint:
+      host: "10.10.12.200"
+    machineGroupRef:
+      kind: TinkerbellMachineConfig
+      name: kubernerdes-eksa-cp
+  datacenterRef:
+    kind: TinkerbellDatacenterConfig
+    name: kubernerdes-eksa
+  kubernetesVersion: "1.28"
+  managementCluster:
+    name: kubernerdes-eksa
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellDatacenterConfig
+metadata:
+  name: kubernerdes-eksa
+spec:
+  tinkerbellIP: "10.10.12.201"
+  osImageURL: "http://10.10.12.10:8080/ubuntu-2204-kube-1-28.gz"
+  hookImagesURLPath: "http://10.10.12.10:8080/"
+
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellMachineConfig
+metadata:
+  name: kubernerdes-eksa-cp
+spec:
+  hardwareSelector: { node: "cp-machine" }
+  osFamily: bottlerocket
+  templateRef: {}
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa "${MY_SSH_KEY}"
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: TinkerbellMachineConfig
+metadata:
+  name: kubernerdes-eksa
+spec:
+  hardwareSelector: { node: "worker"}
+  osFamily: bottlerocket
+  templateRef: {}
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa ${MY_SSH_KEY}
+
+---
