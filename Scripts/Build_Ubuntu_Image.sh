@@ -22,6 +22,7 @@ export OS_VERSION=22.04
 export HYPERVISOR=baremetal
 export RELEASE_CHANNEL="1-28"
 
+echo EKSA_RELEASE_VERSION= $EKSA_RELEASE_VERSION
 #image-builder build --os ubuntu --hypervisor baremetal --release-channel 1-28
 image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR --release-channel $RELEASE_CHANNEL
 
