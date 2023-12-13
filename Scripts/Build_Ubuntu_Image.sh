@@ -1,6 +1,18 @@
 #!/bin/bash
 
 
+   sudo apt update -y
+   sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
+   sudo snap install yq
+   sudo usermod -a -G kvm $USER
+   sudo chmod 666 /dev/kvm
+   sudo chown root:kvm /dev/kvm
+   mkdir -p /home/$USER/.ssh
+   echo | ssh-keygen -trsa -b2048 -N ''
+   echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config
+   echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config
+   
+
 [ ! -f /usr/bin/make ] && sudo apt-get install make
 [ ! -f /usr/bin/jq ] && sudo apt install -y jq
 sudo apt install -y python3-pip
