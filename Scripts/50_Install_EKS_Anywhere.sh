@@ -36,7 +36,7 @@ docker rm $(docker ps -a | grep hello-world | awk '{ print $1 }')
 #############
 ############# EKS Anywhere
 #############
-# Install EKS 
+# Install EKS Anywhere
 mkdir $HOME/eksa; cd $_
 
 cat << EOF > ./.info
@@ -46,38 +46,47 @@ export EKSA_AWS_REGION="us-east-2"
 EOF
 .  ./.info
 
+#############
+############# START HERE
+#############
+echo "Check out the following Doc"
+echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
+
+docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
+docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
+sudo rm -rf kubernerdes-eksa eksa-cli-logs kuber*
+
+cd ~/DevOps/eksa
 export CLUSTER_NAME=kubernerdes-eksa
+export CLUSTER_CONFIG_SOURCE="example-clusterconfig-1.28-3_0.yaml"
+export CLUSTER_CONFIG_SOURCE="example-clusterconfig-ubuntu-1.28-3_0.yaml" # Name of file in Git Repo
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export TINKERBELL_HOST_IP=10.10.21.201
+mkdir $CLUSTER_NAME
 
 # The following is how you create a vanilla clusterconfig
-eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG
+eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
 
 # Retrieve the hardware inventory csv file
 curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-3_0.csv
 
 # However, I have one that I have already modified for my needs
-mv $CLUSTER_CONFIG $CLUSTER_CONFIG.vanilla 
-curl -o  $CLUSTER_CONFIG.example  https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/example-clusterconfig-1.28-3_0.yaml
+curl -o  $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE 
 
 # Retrieve the pub key for the "kubernedes.lab" domain
 # THIS NEEDS TO BE TESTED
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
-envsubst <  $CLUSTER_CONFIG.example > $CLUSTER_CONFIG
+envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
 
-echo "Check out the following Doc"
-echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
-
-# NOTE:  I recommend connecting with another ssh session 
-# You will see 3 containers start and run (an ECR container, the KIND cluster, then "boots")
-watch docker ps -a 
-
-# Then run...
 eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
-   -f $CLUSTER_NAME.yaml \
+   -f $CLUSTER_CONFIG \
    --install-packages packages.yaml
-# Watch the logs of the last command until you see "Creating new workload cluster", then....
+# Watch the logs of the last command until you see...
+#   "Creating new workload cluster", then...
+
+# You will see 3 containers start and run (an ECR container, the KIND cluster, then "boots")
+watch docker ps -a 
 
 # Go back to the window where the "watch" command was running and kill the watch.  Then run
 docker logs -f <container id of "boots" container>
@@ -90,10 +99,7 @@ export KUBECONFIG=${PWD}/${CLUSTER_NAME}/${CLUSTER_NAME}-eks-a-cluster.kubeconfi
 export KUBECONFIG=$(find ~/DevOps/eksa -name '*kind.kubeconfig')
 export KUBECONFIG=$(find ~/DevOps/eksa -name '*cluster.kubeconfig')
 
-kubectl get nodes -A -o wide
-
-# Label the worker nodes as ... (wait for it .... ) workers
-for NODE in $(kubectl get nodes -A -o wide | grep -v control-plane | grep "<none>" | awk '{ print $1 }'); do kubectl label node $NODE node-role.kubernetes.io/worker=worker ; done
+kubectl get nodes -A -o wide --show-labels
 kubectl get nodes -A -o wide --show-labels=true
 kubectl get hardware -n eksa-system --show-labels 
 
@@ -103,9 +109,8 @@ exit 0
 Run this and wait for the boots container to come up
 while true; do docker ps; sleep 5; echo; done
 
-Then
-docker logs -f <boots CONTAINER ID>
-
+# Label the worker nodes as ... (wait for it .... ) workers
+for NODE in $(kubectl get nodes -A -o wide | grep -v control-plane | grep "<none>" | awk '{ print $1 }'); do kubectl label node $NODE node-role.kubernetes.io/worker=worker ; done
 
 ## Options to explore later
 # =======
@@ -118,4 +123,5 @@ docker logs -f <boots CONTAINER ID>
 ```
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
-rm -rf kubernerdes-eksa
+rm -rf kubernerdes-eksa eksa-cli-logs kuber*
+
