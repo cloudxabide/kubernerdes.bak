@@ -37,4 +37,4 @@ kubectl logs -l app=hello-eks-a
 ## Enable Metrics Server
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl get deployment metrics-server -n kube-system
-
+kubectl get events -w -n kube-system
