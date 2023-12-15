@@ -26,6 +26,9 @@ curl -s $IMAGEBUILDER_TARBALL_URI | tar xz ./image-builder
 sudo install -m 0755 ./image-builder /usr/local/bin/image-builder
 cd -
 
+# Add Bash Completion (optional)
+image-builder completion bash > ~/.bashrc.d/image-builder
+
 # Set some params
 #EKSA_RELEASE_VERSION=v0.18.0
 export EKSA_RELEASE_VERSION=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.latestVersion")

@@ -7,7 +7,7 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 
 #############################3
-## Add NFS Storage Class (DON'T USE)
+## Add NFS Storage Class (DON'T USE - HERE AS AN EXAMPLE)
 # https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/blob/master/charts/nfs-subdir-external-provisioner/README.md
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
@@ -38,3 +38,6 @@ kubectl logs -l app=hello-eks-a
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl get deployment metrics-server -n kube-system
 kubectl get events -w -n kube-system
+# Disable TLS for my metrics on my cluster
+kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+
