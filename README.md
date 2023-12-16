@@ -6,6 +6,14 @@ This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab: The
 
 **Status:**  Work in Progress.  But, it's all there in the AWS Docs - an afternoon and you'll be far enough along to roll out a K8s cluster.  Also - I am likely going through several iterations of how to name my files appropriately - like incuding K8s version, or node count in the file name.
 
+** Prologue: **
+This project has been created to be a [network enclave](https://en.wikipedia.org/wiki/Network_enclave) - meaning, it should be able to "stand alone" and function.  That carries some assumptions:
+
+* DNS - I have created a standalone domain "kubernerdes.lab" which 
+* DHCP - The installer will handle DHCP during the install via the "boots container".  The boots container then gets migrated to the running cluster (and continues to handle DHCP for this network).  I will be exploring how to have both the "boots DHCP" and my own "subnet DHCP" coexist
+* Cluster Access - and this is where things potentially get tricky.  If I simply create the enclave with **everything** in that enclave, things are relatively straight-forward.  Therefore, I am creating this repo with that in mind - everything is in the 10.10.12.0/22 subnet
+
+
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially start at the point where I am plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
 ![Kubernerdes Lab](Images/KubernerdesLab.png)
