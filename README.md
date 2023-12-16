@@ -7,7 +7,7 @@ This is the chronicles of deploying Kubernetes (EKS Anywhere) in my HomeLab: The
 **Status:**  Work in Progress.  But, it's all there in the AWS Docs - an afternoon and you'll be far enough along to roll out a K8s cluster.  Also - I am likely going through several iterations of how to name my files appropriately - like incuding K8s version, or node count in the file name.
 I anticiapte that there will be some refactoring occurring - mostly regarding where different steps/tasks are, and the filenames where the tasks are documented.  
 
-** Prologue: **
+**Prologue:**
 This project has been created to be a [network enclave](https://en.wikipedia.org/wiki/Network_enclave) - meaning, it should be able to "stand alone" and function.  That carries some assumptions:
 
 * DNS - I have created a standalone domain "kubernerdes.lab" which 
