@@ -38,3 +38,5 @@ kubectl logs -l app=hello-eks-a
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl get deployment metrics-server -n kube-system
 
+# Curated Packages List (work in progress)
+eksctl anywhere list packages --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor')
