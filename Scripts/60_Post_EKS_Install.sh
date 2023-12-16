@@ -43,3 +43,6 @@ kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op":
 
 # Curated Packages List (work in progress)
 eksctl anywhere list packages --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor')
+
+# ADOT
+eksctl anywhere generate package adot --cluster $( kubectl config view --minify -o jsonpath='{.clusters[].name}') > adot.yaml
