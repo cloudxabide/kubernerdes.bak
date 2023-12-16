@@ -1,0 +1,47 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: example-jiva-csi-pvc
+spec:
+  storageClassName: openebs-jiva-csi-default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Mi
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - resources:
+          limits:
+            cpu: 0.5
+        name: busybox
+        image: busybox
+        command: ['sh', '-c', 'sleep 3600']
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /var/output
+          name: demo-vol1
+      volumes:
+      - name: demo-vol1
+        persistentVolumeClaim:
+          claimName: example-jiva-csi-pvc

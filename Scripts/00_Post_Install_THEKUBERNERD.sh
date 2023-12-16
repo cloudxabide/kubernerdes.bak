@@ -12,6 +12,10 @@ echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee  /etc/sudoers.d/$SUDO_USER-
 # Install/enable SSH Server
 sudo apt install -y openssh-server
 
+# I use brew to install k9s
+mkdir ~/homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+~/homebrew/bin/brew
+
 # Enable Firewall
 enable_firewall() {
 sudo ufw allow ssh
