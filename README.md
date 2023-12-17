@@ -14,12 +14,12 @@ This project has been created to be a [network enclave](https://en.wikipedia.org
 
 * DNS - I have created a standalone domain "kubernerdes.lab" which 
 * DHCP - The installer will handle DHCP during the install via the "boots container".  The boots container then gets migrated to the running cluster (and continues to handle DHCP for this network).  I will be exploring how to have both the "boots DHCP" and my own "subnet DHCP" coexist
-* Cluster Access - and this is where things potentially get tricky.  If I simply create the enclave with **everything** in that enclave, things are relatively straight-forward.  Therefore, I am creating this repo with that in mind - everything is in the 10.10.12.0/22 subnet
-
+* Cluster Access - and this is where things potentially get tricky, if you let it.  If I simply create the enclave with **everything** in that enclave, things are relatively straight-forward.  Therefore, I am creating this repo with that in mind - everything is in the 10.10.12.0/22 subnet
 
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially start at the point where I am plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
 ![Kubernerdes Lab](Images/KubernerdesLab.png)
+![Kubernerdes Lab](Images/Kubernerdes_Host.png)
 
 ## Steps
 * Build the Admin Host
