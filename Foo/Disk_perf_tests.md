@@ -232,4 +232,62 @@ Disk stats (read/write):
   nvme0n1: ios=6587/31792, merge=0/12051, ticks=575/58526, in_queue=76437, util=99.86%
 ```
 
+## SATA Performance
+```
+root@eks-host01:/mnt/openebs# fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=4G --readwrite=randrw --rwmixread=75
+test: (g=0): rw=randrw, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=64
+fio-3.28
+Starting 1 process
+test: Laying out IO file (1 file / 4096MiB)
+Jobs: 1 (f=1): [m(1)][100.0%][r=72.8MiB/s,w=24.0MiB/s][r=18.6k,w=6138 IOPS][eta 00m:00s]
+test: (groupid=0, jobs=1): err= 0: pid=3610936: Sun Dec 17 22:51:05 2023
+  read: IOPS=19.1k, BW=74.4MiB/s (78.1MB/s)(3070MiB/41243msec)
+   bw (  KiB/s): min=64712, max=82584, per=99.95%, avg=76187.22, stdev=6331.41, samples=82
+   iops        : min=16178, max=20646, avg=19046.80, stdev=1582.85, samples=82
+  write: IOPS=6368, BW=24.9MiB/s (26.1MB/s)(1026MiB/41243msec); 0 zone resets
+   bw (  KiB/s): min=21168, max=27904, per=99.94%, avg=25459.80, stdev=2146.88, samples=82
+   iops        : min= 5292, max= 6976, avg=6364.95, stdev=536.72, samples=82
+  cpu          : usr=3.08%, sys=11.74%, ctx=978392, majf=0, minf=8
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=100.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.1%, >=64=0.0%
+     issued rwts: total=785920,262656,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=64
 
+Run status group 0 (all jobs):
+   READ: bw=74.4MiB/s (78.1MB/s), 74.4MiB/s-74.4MiB/s (78.1MB/s-78.1MB/s), io=3070MiB (3219MB), run=41243-41243msec
+  WRITE: bw=24.9MiB/s (26.1MB/s), 24.9MiB/s-24.9MiB/s (26.1MB/s-26.1MB/s), io=1026MiB (1076MB), run=41243-41243msec
+
+Disk stats (read/write):
+    dm-0: ios=782177/261472, merge=0/0, ticks=2030276/588212, in_queue=2618488, util=99.82%, aggrios=784364/262517, aggrmerge=1556/214, aggrticks=2032950/591862, aggrin_queue=2624832, aggrutil=99.66%
+  sda: ios=784364/262517, merge=1556/214, ticks=2032950/591862, in_queue=2624832, util=99.66%
+```
+
+### NVMe Performance
+```
+root@eks-host01:/var/openebs# fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=4G --readwrite=randrw --rwmixread=75
+test: (g=0): rw=randrw, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=64
+fio-3.28
+Starting 1 process
+Jobs: 1 (f=1): [m(1)][-.-%][r=932MiB/s,w=311MiB/s][r=239k,w=79.6k IOPS][eta 00m:00s]
+test: (groupid=0, jobs=1): err= 0: pid=3613999: Sun Dec 17 22:52:38 2023
+  read: IOPS=237k, BW=924MiB/s (969MB/s)(3070MiB/3321msec)
+   bw (  KiB/s): min=927216, max=958584, per=100.00%, avg=947045.33, stdev=11368.16, samples=6
+   iops        : min=231804, max=239646, avg=236761.33, stdev=2842.04, samples=6
+  write: IOPS=79.1k, BW=309MiB/s (324MB/s)(1026MiB/3321msec); 0 zone resets
+   bw (  KiB/s): min=308896, max=321960, per=100.00%, avg=316841.33, stdev=4907.46, samples=6
+   iops        : min=77224, max=80490, avg=79210.33, stdev=1226.86, samples=6
+  cpu          : usr=18.19%, sys=67.02%, ctx=244661, majf=0, minf=8
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=100.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.1%, >=64=0.0%
+     issued rwts: total=785920,262656,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=64
+
+Run status group 0 (all jobs):
+   READ: bw=924MiB/s (969MB/s), 924MiB/s-924MiB/s (969MB/s-969MB/s), io=3070MiB (3219MB), run=3321-3321msec
+  WRITE: bw=309MiB/s (324MB/s), 309MiB/s-309MiB/s (324MB/s-324MB/s), io=1026MiB (1076MB), run=3321-3321msec
+
+Disk stats (read/write):
+  nvme0n1: ios=743608/248859, merge=0/31, ticks=43051/2897, in_queue=46011, util=97.07%
+```
