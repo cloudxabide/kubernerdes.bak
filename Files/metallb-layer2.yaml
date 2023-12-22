@@ -1,0 +1,17 @@
+---
+apiVersion: packages.eks.amazonaws.com/v1alpha1
+kind: Package
+metadata:
+  name: load-balancer 
+  namespace: metallb-system
+spec:
+  packageName: metallb
+  config: |
+    IPAddressPools:
+      - name: default
+        addresses:
+          - 10.10.14.0/24
+    L2Advertisements:
+      - ipAddressPools:
+        - default    
+
