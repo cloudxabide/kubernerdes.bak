@@ -1,4 +1,4 @@
-$ORIGIN kubernerdes.lab
+$ORIGIN kubernerdes.lab.
 $TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
                         2023121101   ; Serial
