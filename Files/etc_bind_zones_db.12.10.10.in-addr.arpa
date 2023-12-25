@@ -1,8 +1,5 @@
-;
-; BIND reverse data file for local loopback interface
-;
+$ORIGIN 12.10.10.in-addr.arpa
 $TTL    604800
-$ORIGIN 12.10.10.in-addr.arpa.
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
                         2023121101   ; Serial
                         604800       ; Refresh
@@ -10,7 +7,7 @@ $ORIGIN 12.10.10.in-addr.arpa.
                         36000        ; Expire
                         604800 )     ; Negative Cache TTL
 ;
-       IN      NS      thekubernerd.kubernerdes.lab.
+        IN      NS      thekubernerd.kubernerdes.lab.
 ;
 10      IN      PTR     thekubernerd.kubernerdes.lab.
 ; also list other computers

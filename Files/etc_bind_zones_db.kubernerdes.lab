@@ -1,16 +1,14 @@
-;
-; BIND data file for kubernerdes.lab
-;
-$TTL    604800
-$ORIGIN kubernerdes.lab.
+$ORIGIN kubernerdes.lab
+$TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
                         2023121101   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
                         604800 )     ; Negative Cache TTL
-;
+
                	 	IN      NS      thekubernerd.kubernerdes.lab.
+               	 	IN      MX      10 thekubernerd.kubernerdes.lab.
 
 thekubernerd		IN      A       10.10.12.10
 

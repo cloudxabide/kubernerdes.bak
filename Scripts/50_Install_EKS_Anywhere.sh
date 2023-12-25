@@ -52,15 +52,16 @@ EOF
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
+cd ~/DevOps/eksa
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 sudo rm -rf kubernerdes-eksa eksa-cli-logs kuber*
 
 cd ~/DevOps/eksa
+OS=bottlerocket
 export CLUSTER_NAME=kubernerdes-eksa
-export CLUSTER_CONFIG_SOURCE="example-clusterconfig-1.28-3_0.yaml"
-export CLUSTER_CONFIG_SOURCE="example-clusterconfig-ubuntu-1.28-3_0.yaml" # Name of file in Git Repo
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
+export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-1.28-3_0.yaml" # Name of file in Git Repo
 export TINKERBELL_HOST_IP=10.10.21.201
 mkdir $CLUSTER_NAME
 
@@ -78,6 +79,7 @@ curl -o  $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/k
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
 envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
 
+## Let's build our cluster
 eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_CONFIG \
@@ -123,5 +125,5 @@ for NODE in $(kubectl get nodes -A -o wide | grep -v control-plane | grep "<none
 ```
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
-rm -rf kubernerdes-eksa eksa-cli-logs kuber*
+rm -rf kubernerdes-eksa eksa-cli-logs 
 
