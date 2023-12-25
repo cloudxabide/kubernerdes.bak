@@ -12,15 +12,17 @@ eks-host03"
 # Install the iSCSI components on the worker nodes
 # NOTE:  If openEBS was something to be used in "production", you would want to include these steps in your host build
 #          that would be used to deploy your worker nodes.
+
+# Clean up the SSH Keys (note: this is REALLY not a secure practice - this is just for my lab)
 for HOST in $HOSTS
 do
-  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "uptime"
+  ssh-keygen -f "/home/mansible/.ssh/known_hosts" -R "$HOST"
+  ssh -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "uptime"
 done
 
 ##
 # Install iSCSI
 ##
-
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST " 
@@ -29,6 +31,7 @@ do
     sudo systemctl enable --now iscsid"
 done
 
+# Check status of iSCSI
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
@@ -38,6 +41,8 @@ done
 
 ## 
 # Create a fileystem on spare disk (specific to my lab)
+# NOTE:  This is where things start to occur that are irreversible 
+# TODO:  Perhaps I could make this dynamically figure out which disk/device is free
 ## 
 EBS_DEVICE_NAME="nvme0n1"
 export EBS_DEVICE="/dev/$EBS_DEVICE_NAME"
@@ -53,9 +58,14 @@ echo "Disk: $EBS_DEVICE"
 echo "Partition: $EBS_DEVICE_PARTITION"
 
 # Wipe the Disk (THIS IS DESTRUCTIVE - like, for real)
+# First - wipe the device
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    sudo umount /var/openebs
+    sudo lvremove /dev/mapper/vg_localstorage-lv_openebs
+    sudo vgremove --force vg_localstorage
+    sudo pvremove --force ${EBS_DEVICE_PARTITION}
     sudo wipefs -a $EBS_DEVICE" 
 done
 
@@ -73,6 +83,16 @@ do
     sudo mount -a"
 done
 
+# Make sure the volume/fileystem is created/mounted
+for HOST in $HOSTS
+do
+  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    uname -n 
+    sudo vgs
+    sudo pvs
+    lsblk
+    #df -h | grep openebs"
+done
 
 ## 
 ##

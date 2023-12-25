@@ -34,7 +34,7 @@ docker kill $(docker ps -a | grep hello-world | awk '{ print $1 }')
 docker rm $(docker ps -a | grep hello-world | awk '{ print $1 }')
 
 #############
-############# EKS Anywhere
+## EKS Anywhere
 #############
 # Install EKS Anywhere
 mkdir $HOME/eksa; cd $_
@@ -47,11 +47,12 @@ EOF
 .  ./.info
 
 #############
-############# START HERE
+## START HERE
 #############
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
+cd
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 sudo rm -rf ~/DevOps/eksa
