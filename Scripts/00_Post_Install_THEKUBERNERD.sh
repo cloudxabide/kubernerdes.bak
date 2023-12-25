@@ -74,6 +74,14 @@ fi
 EOF
 curl https://raw.githubusercontent.com/cloudxabide/devops/main/Files/.bashrc.d_common | tee ~/.bashrc.d/common
 
+## Install Helm
+which helm || {
+sudo snap install  helm --classic
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+}
+
 # Install Desktop GUI
 install_desktop() {
   sudo apt install -y ubuntu-desktop
