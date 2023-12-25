@@ -41,7 +41,7 @@ exit 0
 
 # NOTE:  you can now browse http://10.10.12.10:8080/
 
-######################33
+######################
 #### I have decided NOT to do any of this, and just use /var/www/html 
 
 # Some foolishness to serve this repo as the web directory (might change this later?)
