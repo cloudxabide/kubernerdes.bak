@@ -64,6 +64,6 @@ spec:
   users:
   - name: ec2-user
     sshAuthorizedKeys:
-    - ssh-rsa ${MY_SSH_KEY}
+    - ssh-rsa "${MY_SSH_KEY}"
 
 ---

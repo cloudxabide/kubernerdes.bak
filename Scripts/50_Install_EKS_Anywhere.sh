@@ -57,11 +57,13 @@ docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 sudo rm -rf kubernerdes-eksa eksa-cli-logs kuber*
 
-cd ~/DevOps/eksa
-OS=bottlerocket
+[ -d ~/DevOps/eksa ] || { mkdir ~/DevOps/eksa; cd $_; } && { cd ~/DevOps/eksa; }
+OS=ubuntu
+NODE_CONFIG="3_0"
+KUBE_VERSION="1.28"
 export CLUSTER_NAME=kubernerdes-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
-export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-1.28-3_0.yaml" # Name of file in Git Repo
+export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE_CONFIG}.yaml" # Name of file in Git Repo
 export TINKERBELL_HOST_IP=10.10.21.201
 mkdir $CLUSTER_NAME
 
@@ -78,6 +80,7 @@ curl -o  $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/k
 # THIS NEEDS TO BE TESTED
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
 envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
+cat $CLUSTER_CONFIG
 
 ## Let's build our cluster
 eksctl anywhere create cluster \
