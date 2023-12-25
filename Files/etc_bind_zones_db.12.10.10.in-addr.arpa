@@ -1,4 +1,4 @@
-$ORIGIN 12.10.10.in-addr.arpa
+$ORIGIN 12.10.10.in-addr.arpa.
 $TTL    604800
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
                         2023121101   ; Serial
@@ -11,9 +11,9 @@ $TTL    604800
 ;
 10      IN      PTR     thekubernerd.kubernerdes.lab.
 ; also list other computers
-101	IN	PTR	host01.kubernerdes.lab.
-102	IN	PTR	host02.kubernerdes.lab.
-103	IN	PTR	host03.kubernerdes.lab.
+101	IN	PTR	eks-host01.kubernerdes.lab.
+102	IN	PTR	eks-host02.kubernerdes.lab.
+103	IN	PTR	eks-host03.kubernerdes.lab.
 ; Application Endpoints
 200	IN	PTR	eks-control-plane.kubernerdes.lab.
 201	IN	PTR	tinkerbell.kubernerdes.lab.

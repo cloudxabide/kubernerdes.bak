@@ -1,4 +1,4 @@
-$ORIGIN 13.10.10.in-addr.arpa
+$ORIGIN 13.10.10.in-addr.arpa.
 $TTL    604800
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
                         2023121101   ; Serial
