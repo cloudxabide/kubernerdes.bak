@@ -52,10 +52,9 @@ EOF
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
 
-cd ~/DevOps/eksa
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
-sudo rm -rf kubernerdes-eksa eksa-cli-logs kuber*
+sudo rm -rf ~/DevOps/eksa
 
 [ -d ~/DevOps/eksa ] || { mkdir ~/DevOps/eksa; cd $_; } && { cd ~/DevOps/eksa; }
 OS=ubuntu

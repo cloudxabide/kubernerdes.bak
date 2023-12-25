@@ -39,24 +39,42 @@ done
 ## 
 # Create a fileystem on spare disk (specific to my lab)
 ## 
-export EBS_DEVICE="/dev/sda"
+EBS_DEVICE_NAME="nvme0n1"
+export EBS_DEVICE="/dev/$EBS_DEVICE_NAME"
+case $EBS_DEVICE_NAME in
+  nvme0n1)
+    export EBS_DEVICE_PARTITION="${EBS_DEVICE}p1"
+  ;;
+  sda)
+    export EBS_DEVICE_PARTITION="${EBS_DEVICE}1"
+esac
+ 
+echo "Disk: $EBS_DEVICE"
+echo "Partition: $EBS_DEVICE_PARTITION"
+
+# Wipe the Disk (THIS IS DESTRUCTIVE - like, for real)
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
-    parted -s $EBS_DEVICE mklabel gpt mkpart pri ext4 2048s 100%FREE set 1 lvm on
-    partprobe $EBS_DEVICE
-    pvcreate -f ${EBS_DEVICE}1
-    vgcreate vg_localstorage ${EBS_DEVICE}1
-    lvcreate -L100G -nlv_openebs vg_localstorage
-    mkfs.ext4 /dev/mapper/vg_localstorage-lv_openebs 
-    mkdir /var/openebs
-    echo '/dev/mapper/vg_localstorage-lv_openebs /var/openebs ext4 defaults 0 0' >> /etc/fstab
-    mount -a
-    #sudo wipefs -a $EBS_DEVICE"
+    sudo wipefs -a $EBS_DEVICE" 
+done
+
+for HOST in $HOSTS
+do
+  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    sudo parted -s $EBS_DEVICE mklabel gpt mkpart pri ext4 2048s 100%FREE set 1 lvm on
+    sudo partprobe $EBS_DEVICE
+    sudo pvcreate -f ${EBS_DEVICE_PARTITION}
+    sudo vgcreate vg_localstorage ${EBS_DEVICE_PARTITION}
+    sudo lvcreate -L100G -nlv_openebs vg_localstorage
+    sudo mkfs.ext4 /dev/mapper/vg_localstorage-lv_openebs 
+    sudo mkdir /var/openebs
+    echo '/dev/mapper/vg_localstorage-lv_openebs /var/openebs ext4 defaults 0 0' | sudo tee -a /etc/fstab
+    sudo mount -a"
 done
 
 
-##
+## 
 ##
 # Install OpenEBS via helm
 ##
@@ -81,7 +99,9 @@ kubectl create namespace openebstest
 kubectl config set-context --current --namespace=openebstest
 curl -o busybox_example_app_persisent_storage.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/busybox_example_app_persisent_storage.yaml
 kubectl apply -f busybox_example_app_persisent_storage.yaml
+kubectl get pods -n openebstest -w
 
+# Review hosts for new disk image file
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
@@ -89,13 +109,6 @@ do
     find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
 done
 
-kubectl apply -f busybox_example_app_persisent_storage.yaml
-
-for HOST in $HOSTS
-do
-  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
-    sudo iscsiadm -m session -o show
-    find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
-done
+# Clean up app
 
 
