@@ -6,9 +6,9 @@
 # Assumptions: It is assumed this is being run on a "newly deployed Ubuntu Host".  I did not necessarilly create it to 
 #                be idempotent.
 #
-# Set some VARS
-NEEDRESTART_MODE=a
 
+# Set some VARS
+NEEDSRESTART=0
 
 # Allow sudo NOPASSWD
 SUDO_USER=mansible
@@ -100,4 +100,5 @@ git clone https://github.com/cloudxabide/kubernerdes.git
 ln -s $HOME/Repositories/Personal/cloudxabide/kubernerdes $HOME
 cd $HOME
 
+[ $NEEDSRESTART -ne 0 ] && { echo "Rebooting in 5 seconds (hit CTRL-C to stop)"; sleep 5; shutdown now -r; }
 exit 0
