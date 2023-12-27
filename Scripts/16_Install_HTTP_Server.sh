@@ -1,8 +1,11 @@
 #!/bin/bash
 
-# Purpose: deploy an HTTP/S Server (running on port 8080)
+#     Purpose: deploy an HTTP/S Server (running on port 8080)
+#        Date:
+#      Status:
+# Assumptions:
 
-
+# Install the Apache2 packages
 sudo apt install -y apache2 php libapache2-mod-php php-mysql
 
 # Change the port apache2 will listen on
@@ -90,3 +93,4 @@ cd /etc/apache2/sites-enabled
 sudo ln -s ../sites-available/kubernerdes.lab.conf
 sudo systemctl restart apache2
 
+exit 0

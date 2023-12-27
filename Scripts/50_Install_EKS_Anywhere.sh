@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#     Purpose: Deploy EKS Cluster from this Node
+#        Date: 2023-12-27
+#      Status: Complete
+# Assumptions:
+
 # Install Docker CE
 # https://docs.docker.com/engine/install/ubuntu/
 
@@ -129,4 +134,5 @@ for NODE in $(kubectl get nodes -A -o wide | grep -v control-plane | grep "<none
 docker kill $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | awk '{ print $1 }' | grep -v CONTAINER)
 rm -rf kubernerdes-eksa eksa-cli-logs 
+
 

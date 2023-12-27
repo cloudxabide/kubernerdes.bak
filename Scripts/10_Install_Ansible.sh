@@ -1,7 +1,9 @@
 #!/bin/bash
 
-#  Status: Complete/Done
-# Purpose: Install Ansible 
+#     Purpose: Install Ansible
+#        Date:
+#      Status: Complete/Done
+# Assumptions:
 
 sudo apt-get install -y python-software-properties
 sudo apt-get install -y software-properties-common

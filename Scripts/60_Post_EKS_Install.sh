@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#     Purpose:
+#        Date:
+#      Status: Incomplete - probably move this to ~/Foo
+# Assumptions:
+
 #############################
 ## Check Cluster Status
 kubectl get pod -A -l control-plane=controller-manager

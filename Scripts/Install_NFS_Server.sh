@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#     Purpose:
+#        Date:
+#      Status:
+# Assumptions:
+
 # WARNING:  THIS IS AN OPINIONATED SCRIPT TO INSTALL NFS SERVER ON A SYSTEM WITH
 #             A SPECIFIC CONFIGURATION.  (i.e. Don't simply run this on one of your
 #             systems and hope for the best.
@@ -86,3 +91,4 @@ sudo umount /mnt/test
 
 sudo ufw allow from 10.10.12.0/24 to 10.10.12.48 port 80
 sudo ufw allow from client_ip to any port nfs
+exit 0

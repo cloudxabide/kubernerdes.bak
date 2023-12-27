@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#     Purpose: To build an EKS Image - in this case based on Ubuntu
+#        Date:
+#      Status: In-Progress
+# Assumptions:
 
    sudo apt update -y
    sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
@@ -45,4 +49,4 @@ image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR -
 ## Cleanup
 rm -rf ${HOME}/eks-anywhere-build-tooling
 
-
+exit 0

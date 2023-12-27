@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Purpose: this script will grab a bunch of files from my "myapp" directory in my repo and then update them and apply them to my cluster
-#   NOTES: it may not be obvious, but the files have to exist and be available in the repo
+#     Purpose: this script will grab a bunch of files from my "myapp" directory in my repo and then update them and apply them to my cluster
+#        Date:
+#      Status:
+# Assumptions:
+#       Notes: it may not be obvious, but the files have to exist and be available in the repo
 #    TODO: Update this to download example files, but then deploy resources that have any name desired (and configured)
 
 export MYAPP_NAME="myapp"

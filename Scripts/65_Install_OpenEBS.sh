@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# Note:  I separate out some of the commands in their own stanza (i.e. I run a for-loop to install, then another for-loop to check status)
-#         This allows me to cut-and-paste sections of code while I am testing.  (in case my code looks ineffecient ;-)
+#     Purpose:
+#        Date:
+#      Status: Incomplete/In-Progress
 # Assumptions: This script assumes that you have a dummy/disposable cluster, created using 3-nodes which 
 #                are both control-plane and worker nodes (basically my lab setup).
+#        Note: I separate out some of the commands in their own stanza (i.e. I run a for-loop to install, then 
+#                another for-loop to check status).  This allows me to cut-and-paste sections of code while 
+#                I am testing.  (in case my code looks ineffecient ;-)
 
 HOSTS="eks-host01
 eks-host02
@@ -131,4 +135,4 @@ done
 
 # Clean up app
 
-
+exit 0

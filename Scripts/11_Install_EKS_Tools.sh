@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#     Purpose: 
+#        Date:
+#      Status: 
+# Assumptions:
+
 # Make sure SNAP is installed
 $(which yq) || sudo snap install yq
 

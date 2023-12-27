@@ -5,7 +5,6 @@
 #    Note: This is a total hack and is ripe for a TON of issues in any sort of "uncontrolled environment"
 #          But, will work awesome in my lab ;-)
 
-
 SLEEPYTIME=10
 
 HARDWARE_INVENTORY=../Files/hardware.csv
