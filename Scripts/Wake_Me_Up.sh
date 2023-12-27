@@ -11,7 +11,6 @@ SLEEPYTIME=10
 HARDWARE_INVENTORY=../Files/hardware.csv
 [ ! -f $HARDWARE_INVENTORY ] && { echo "ERROR: Hardware Inventory is not found."; exit 9; }
 
-
 PRIMARY_INTERFACE=$(route | grep '^default' | grep -o '[^ ]*$')
 
 # Figure out which column the MAC address is in the hardware inventory
@@ -42,7 +41,7 @@ do
   secs=$(($SLEEPYTIME))
 while [ $secs -gt 0 ]; do
    echo -ne "pause for: $secs\033[0K\r"
-   sleep 1
+   sleep 1 # Countdown in 1 second intervals 
    : $((secs--))
 done 
 done
