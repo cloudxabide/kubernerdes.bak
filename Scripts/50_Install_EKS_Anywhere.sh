@@ -72,7 +72,7 @@ export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE
 export TINKERBELL_HOST_IP=10.10.21.201
 mkdir $CLUSTER_NAME
 
-# The following is how you create a vanilla clusterconfig
+# The following is how you create a default clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
 
 # Retrieve the hardware inventory csv file
