@@ -19,7 +19,10 @@ sudo install -m 0755 /tmp/eksctl /usr/local/bin/eksctl
 RELEASE_VERSION=$(curl https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml --silent --location | yq ".spec.latestVersion")
 RELEASE_VERSION=v0.18.3 # You can manually set the version also
 EKS_ANYWHERE_TARBALL_URL=$(curl https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml --silent --location | yq ".spec.releases[] | select(.version==\"$RELEASE_VERSION\").eksABinary.$(uname -s | tr A-Z a-z).uri")
+# If eksctl-anywhere already exists, make a backup copy of it 
+# NOTE:  need to check whether the correct **version** already exists, then update, if needed.
 [ -f /usr/local/bin/eksctl-anywhere ] && { VERSION=$(eksctl anywhere version); sudo mv /usr/local/bin/eksctl-anywhere /usr/local/bin/eksctl-anywhere.$VERSION; }
+
 curl $EKS_ANYWHERE_TARBALL_URL \
     --silent --location \
     | tar xz ./eksctl-anywhere
