@@ -26,13 +26,12 @@ spec:
   kubernetesVersion: "1.28"
   managementCluster:
     name: kubernerdes-eksa
-   workerNodeGroupConfigurations:
-   - count: 2
-     machineGroupRef:
-       kind: TinkerbellMachineConfig
-       name: kubernerdes-eksa
-     name: md-0
-
+  workerNodeGroupConfigurations:
+  - count: 1
+    machineGroupRef:
+      kind: TinkerbellMachineConfig
+      name: kubernerdes-eksa
+    name: md-0
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
@@ -43,7 +42,6 @@ spec:
   tinkerbellIP: "10.10.12.201"
   osImageURL: "http://10.10.12.10:8080/ubuntu-2204-kube-1-28.gz"
   hookImagesURLPath: "http://10.10.12.10:8080/"
-
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
@@ -65,7 +63,7 @@ kind: TinkerbellMachineConfig
 metadata:
   name: kubernerdes-eksa
 spec:
-  hardwareSelector: { node: "worker"}
+  hardwareSelector: { node: "worker" }
   osFamily: ubuntu
   templateRef: {}
   users:
