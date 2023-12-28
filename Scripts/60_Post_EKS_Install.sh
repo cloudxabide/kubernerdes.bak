@@ -20,7 +20,7 @@ kubectl logs -l app=hello-eks-a
 ## Enable Metrics Server
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl get deployment metrics-server -n kube-system
-kubectl get events -w -n kube-system
+kubectl get events -n kube-system
 # Disable TLS for my metrics on my cluster
 kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
 
