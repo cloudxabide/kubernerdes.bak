@@ -17,7 +17,9 @@ curl "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(unam
 sudo install -m 0755 /tmp/eksctl /usr/local/bin/eksctl
 
 RELEASE_VERSION=$(curl https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml --silent --location | yq ".spec.latestVersion")
+RELEASE_VERSION=v0.18.3 # You can manually set the version also
 EKS_ANYWHERE_TARBALL_URL=$(curl https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml --silent --location | yq ".spec.releases[] | select(.version==\"$RELEASE_VERSION\").eksABinary.$(uname -s | tr A-Z a-z).uri")
+[ -f /usr/local/bin/eksctl-anywhere ] && { VERSION=$(eksctl anywhere version); sudo mv /usr/local/bin/eksctl-anywhere /usr/local/bin/eksctl-anywhere.$VERSION; }
 curl $EKS_ANYWHERE_TARBALL_URL \
     --silent --location \
     | tar xz ./eksctl-anywhere
