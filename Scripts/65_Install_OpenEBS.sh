@@ -62,6 +62,7 @@ echo "Disk: $EBS_DEVICE"
 echo "Partition: $EBS_DEVICE_PARTITION"
 
 # Wipe the Disk (THIS IS DESTRUCTIVE - like, for real)
+# NOTE: This needs some cleanup still
 # First - wipe the device
 for HOST in $HOSTS
 do
@@ -90,12 +91,14 @@ done
 # Make sure the volume/fileystem is created/mounted
 for HOST in $HOSTS
 do
+  echo "################################################"
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
     uname -n 
     sudo vgs
     sudo pvs
     lsblk
-    #df -h | grep openebs"
+    df -h | grep openebs"
+  echo
 done
 
 ## 
@@ -114,6 +117,7 @@ helm upgrade openebs openebs/openebs \
 kubectl get ns
 kubectl get pods -n openebs
 
+# Make openEBS your default storage class
 kubectl patch storageclass openebs-jiva-csi-default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 ##
@@ -134,5 +138,6 @@ do
 done
 
 # Clean up app
+## ADD SECTION FOR REMOVING THE APP
 
 exit 0
