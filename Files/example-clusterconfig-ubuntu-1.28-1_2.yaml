@@ -27,7 +27,7 @@ spec:
   managementCluster:
     name: kubernerdes-eksa
   workerNodeGroupConfigurations:
-  - count: 1
+  - count: 2
     machineGroupRef:
       kind: TinkerbellMachineConfig
       name: kubernerdes-eksa
