@@ -64,7 +64,7 @@ sudo rm -rf ~/DevOps/eksa
 
 [ -d ~/DevOps/eksa ] || { mkdir ~/DevOps/eksa; cd $_; } && { cd ~/DevOps/eksa; }
 OS=ubuntu
-NODE_CONFIG="3_0"
+NODE_CONFIG="1_2"
 KUBE_VERSION="1.28"
 export CLUSTER_NAME=kubernerdes-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
@@ -76,7 +76,7 @@ mkdir $CLUSTER_NAME
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
 
 # Retrieve the hardware inventory csv file
-curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-3_0.csv
+curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-${NODE_CONFIG}.csv
 
 # However, I have one that I have already modified for my needs
 curl -o  $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE 
