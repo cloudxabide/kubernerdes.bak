@@ -41,7 +41,7 @@ metadata:
 spec:
   tinkerbellIP: "10.10.12.201"
   osImageURL: "http://10.10.12.10:8080/ubuntu-2204-kube-1-28.gz"
-  hookImagesURLPath: "http://10.10.12.10:8080/"
+  hookImagesURLPath: "http://10.10.12.10:8080/hookos-latest"
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
