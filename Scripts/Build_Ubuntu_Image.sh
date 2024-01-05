@@ -4,6 +4,7 @@
 #        Date:
 #      Status: In-Progress
 # Assumptions:
+#   Reference: https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/#building-node-images
 
    sudo apt update -y
    sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
@@ -44,7 +45,6 @@ export RELEASE_CHANNEL="1-28"
 echo EKSA_RELEASE_VERSION= $EKSA_RELEASE_VERSION
 #image-builder build --os ubuntu --hypervisor baremetal --release-channel 1-28
 image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR --release-channel $RELEASE_CHANNEL
-
 
 ## Cleanup
 rm -rf ${HOME}/eks-anywhere-build-tooling
