@@ -14,25 +14,38 @@ echo
 kubectl get clusters.cluster.x-k8s.io -A -o=custom-columns=NAME:.metadata.name,CONTROLPLANE-READY:.status.controlPlaneReady,INFRASTRUCTURE-READY:.status.infrastructureReady,MANAGED-EXTERNAL-ETCD-INITIALIZED:.status.managedExternalEtcdInitialized,MANAGED-EXTERNAL-ETCD-READY:.status.managedExternalEtcdReady
 echo
 
-## Deploy test workload
-kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
-kubectl get pods -l app=hello-eks-a
-sleep 5
-kubectl logs -l app=hello-eks-a
+## EKS Connector
 
-## Enable Metrics Server
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-kubectl get deployment metrics-server -n kube-system
-kubectl get events -n kube-system
+AmazonEKSConnectorAgentRoleARN=$(aws iam get-role --role-name AmazonEKSConnectorAgentRole  --query Role.Arn --output text)
+EKSA_Cluster_Name=$(kubectl config view --minify -o jsonpath='{.clusters[].name}')
+MY_AWS_REGION=us-east-2
 
-# Disable TLS for my metrics on my cluster
-kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
-# NEED TO TEST THIS - IT *SHOULD* REPEAT UNTIL NO "0/1" IS FOUND
-while sleep 1; do kubectl get pods -n kube-system | grep ^metrics-server | grep "0/1" || break; done
+aws eks register-cluster \
+     --name $EKSA_Cluster_Name \
+     --connector-config roleArn=$AmazonEKSConnectorAgentRoleARN,provider="OTHER" \
+     --region $MY_AWS_REGION
 
+aws eks describe-cluster --name kubernerdes-eksa
 
-# Curated Packages List (work in progress)
-eksctl anywhere list packages --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor')
+kubectl create namespace eks-connector
+helm install eks-connector \
+  --namespace eks-connector \
+  oci://public.ecr.aws/eks-connector/eks-connector-chart \
+  --set eks.activationCode= \
+  --set eks.activationId= \
+  --set eks.agentRegion=us-east-2
 
-# ADOT
-eksctl anywhere generate package adot --cluster $( kubectl config view --minify -o jsonpath='{.clusters[].name}') > adot.yaml
+Pulled: public.ecr.aws/eks-connector/eks-connector-chart:0.0.9
+Digest: sha256:5a6d13f2e09215a89cd44b800813e35f61c11b67b0c1ae82b722b90d93e8c8f8
+NAME: eks-connector
+LAST DEPLOYED: Tue Jan  2 20:59:41 2024
+NAMESPACE: eks-connector
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+kubectl config set-context --current --namespace=eks-connector
+kubectl get events -w
+
+## CLEANUP
+helm delete eks-connector
