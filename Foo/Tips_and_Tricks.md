@@ -51,4 +51,32 @@ kubectl get nodes -A -o wide --show-labels
 kubectl get nodes -A -o wide --show-labels=true
 kubectl get hardware -n eksa-system --show-labels
 
+##
+# Deploy a Test App (To test the new storage class)
+##
+kubectl create namespace openebstest
+kubectl config set-context --current --namespace=openebstest
+curl -o busybox_example_app_persisent_storage.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/busybox_example_app_persisent_storage.yaml
+kubectl apply -f busybox_example_app_persisent_storage.yaml
+# Watch the pods until the busybox pod is "Running", then exit
+while sleep 1; do kubectl get pods -n openebstest | grep Running && break ; done
 
+# Review hosts for new disk image file
+for HOST in $HOSTS
+do
+  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    sudo iscsiadm -m session -o show
+    find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
+done
+
+# Clean up app
+## ADD SECTION FOR REMOVING THE APP
+kubectl delete namespace openebstest
+
+# And check again for the storage block device images
+for HOST in $HOSTS
+do
+  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    sudo iscsiadm -m session -o show
+    find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
+done
