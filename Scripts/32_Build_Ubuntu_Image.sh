@@ -3,20 +3,24 @@
 #     Purpose: To build an EKS Image - in this case based on Ubuntu
 #        Date:
 #      Status: In-Progress
-# Assumptions:
+# Assumptions: That you actually **need** a custom-built Ubuntu image to run your containers
 #   Reference: https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/#building-node-images
 
-   sudo apt update -y
-   sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
-   sudo snap install yq
-   sudo usermod -a -G kvm $USER
-   sudo chmod 666 /dev/kvm
-   sudo chown root:kvm /dev/kvm
-   mkdir -p /home/$USER/.ssh
-   echo | ssh-keygen -trsa -b2048 -N ''
-   echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config
-   echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config
-   
+
+sudo apt update -y
+sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
+sudo snap install yq
+sudo usermod -a -G kvm $USER
+# TODO: does this **need** to work this way?
+sudo chmod 666 /dev/kvm
+sudo chown root:kvm /dev/kvm
+mkdir -p /home/$USER/.ssh
+echo | ssh-keygen -trsa -b2048 -N ''
+echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config
+echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config
+
+# TEST (this should alleviate the need for the current user to logout/login to recognize the new group
+newgrp kvm   
 
 [ ! -f /usr/bin/make ] && sudo apt-get install make
 [ ! -f /usr/bin/jq ] && sudo apt install -y jq
