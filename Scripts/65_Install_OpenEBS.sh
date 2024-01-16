@@ -1,11 +1,12 @@
 #!/bin/bash
 
-#     Purpose:
-#        Date:
+#     Purpose: This script will prep the hosts and then install/configure openEBS
+#        Date: 2024-01-15
 #      Status: Incomplete/In-Progress
 # Assumptions: This script assumes that you have a dummy/disposable cluster, created using 3-nodes 
 #                which are both control-plane and worker nodes (basically my lab setup).
-#        Note: I separate out some of the commands in their own stanza (i.e. I run a for-loop to 
+#
+#       Notes: I separate some of the commands in their own stanza (i.e. I run a for-loop to 
 #                install, then another for-loop to check status).  This allows me to 
 #                cut-and-paste sections of code while I am testing.  (in case my code 
 #                looks ineffecient ;-)
@@ -81,6 +82,7 @@ do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "lsblk"
 done
 
+# Configure the devices
 for HOST in $HOSTS
 do
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
@@ -122,39 +124,11 @@ helm upgrade openebs openebs/openebs \
 --create-namespace \
 --set jiva.enabled=true
 
+# Watch the pods until there is no longer a "ContainerBuilding" output, then show ALL pods in the openebs namespace
+while sleep 1; do kubectl get pods -n openebs | grep Container || break; done
 kubectl get pods -n openebs
 
 # Make openEBS your default storage class
 kubectl patch storageclass openebs-jiva-csi-default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-
-##
-# Deploy a Test App
-##
-kubectl create namespace openebstest
-kubectl config set-context --current --namespace=openebstest
-curl -o busybox_example_app_persisent_storage.yaml https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/busybox_example_app_persisent_storage.yaml
-kubectl apply -f busybox_example_app_persisent_storage.yaml
-# Watch the pods until the busybox pod is "Running", then exit
-while sleep 1; do kubectl get pods -n openebstest | grep Running && break ; done
-
-# Review hosts for new disk image file
-for HOST in $HOSTS
-do
-  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
-    sudo iscsiadm -m session -o show
-    find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
-done
-
-# Clean up app
-## ADD SECTION FOR REMOVING THE APP
-kubectl delete namespace openebstest
-
-# And check again for the storage block device images
-for HOST in $HOSTS
-do
-  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
-    sudo iscsiadm -m session -o show
-    find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
-done
 
 exit 0

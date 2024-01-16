@@ -15,37 +15,39 @@ kubectl get clusters.cluster.x-k8s.io -A -o=custom-columns=NAME:.metadata.name,C
 echo
 
 ## EKS Connector
+# Note this gets kind of "cludgy" as I need to get the activation* which is only available as output when teh cluster is registered (from what I can tell)
 
 AmazonEKSConnectorAgentRoleARN=$(aws iam get-role --role-name AmazonEKSConnectorAgentRole  --query Role.Arn --output text)
 EKSA_Cluster_Name=$(kubectl config view --minify -o jsonpath='{.clusters[].name}')
 MY_AWS_REGION=us-east-2
 
-aws eks register-cluster \
+CLUSTER_REGISTRATION_OUTPUT=${EKSA_Cluster_Name}-ClusterRegistrationOutput 
+aws eks register-cluster \ 
      --name $EKSA_Cluster_Name \
      --connector-config roleArn=$AmazonEKSConnectorAgentRoleARN,provider="OTHER" \
-     --region $MY_AWS_REGION
+     --region $MY_AWS_REGION | tee $CLUSTER_REGISTRATION_OUTPUT
+EKSA_ACTIVATION_ID=$(cat $CLUSTER_REGISTRATION_OUTPUT | jq -r '.[].connectorConfig.activationId')
+EKSA_ACTIVATION_CODE=$(cat $CLUSTER_REGISTRATION_OUTPUT | jq -r '.[].connectorConfig.activationCode')
 
-aws eks describe-cluster --name kubernerdes-eksa
+aws eks describe-cluster --name kubernerdes-eksa 
 
 kubectl create namespace eks-connector
 helm install eks-connector \
   --namespace eks-connector \
   oci://public.ecr.aws/eks-connector/eks-connector-chart \
-  --set eks.activationCode= \
-  --set eks.activationId= \
+  --set eks.activationCode=${EKSA_ACTIVATION_CODE} \
+  --set eks.activationId=${EKSA_ACTIVATION_ID} \
   --set eks.agentRegion=us-east-2
 
-Pulled: public.ecr.aws/eks-connector/eks-connector-chart:0.0.9
-Digest: sha256:5a6d13f2e09215a89cd44b800813e35f61c11b67b0c1ae82b722b90d93e8c8f8
-NAME: eks-connector
-LAST DEPLOYED: Tue Jan  2 20:59:41 2024
-NAMESPACE: eks-connector
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-
 kubectl config set-context --current --namespace=eks-connector
-kubectl get events -w
+kubectl get events 
+echo "Watch the pods until they are Running"
+while sleep 1; do kubectl get pods -n eks-connector | grep Running && break; done
+
+kubectl config set-context --current --namespace=default
+
+exit 0
 
 ## CLEANUP
-helm delete eks-connector
+# Run the following without the "#"
+# helm delete eks-connector
