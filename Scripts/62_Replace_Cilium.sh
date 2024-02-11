@@ -1,10 +1,7 @@
 #/bin/bash
 # https://isovalent.com/blog/post/cilium-eks-anywhere/
 
-
 # From: https://docs.cilium.io/en/v1.13/gettingstarted/k8s-install-default/#install-the-cilium-cli
-
-
 helm repo add cilium https://helm.cilium.io/
 
 # Install Cilium CLI
@@ -79,6 +76,8 @@ kubectl -n kube-system exec ds/cilium -- cilium-health status
 
 exit 0
 
+# Troubleshooting, etc...
+
 # This cannot (easily) be scripted, I think?
 ## terminal 1
 kubectl port-forward -n kube-system svc/hubble-relay 4245:80 # For local connectivity (if you're using Docker, maybe?)
@@ -88,8 +87,6 @@ hubble status
 # This generates a TON of output
 hubble observe --server localhost:4245 --follow
 
+kubectl port-forward -n kube-system svc/hubble-ui 12000:80
 
-```
-
-# Troubleshooting
 # kubectl get events -n kube-system
