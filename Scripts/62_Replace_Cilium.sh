@@ -9,7 +9,8 @@ CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli
 CLI_ARCH=amd64
 if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
 curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
-sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum 
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
 
 # Install Hubble CLI
 export HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
@@ -20,6 +21,8 @@ sha256sum --check hubble-linux-${HUBBLE_ARCH}.tar.gz.sha256sum
 sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
 rm hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
 
+### PRE-FLIGHT CHECK
+#  Replace EKS-A version of Cilium with OSS version
 CILIUM_DEFAULT_VERSION=$(cilium version | grep "(default)" | awk -F\: '{ print $2 }' | sed 's/ //')
 helm template cilium/cilium --version $CILIUM_DEFAULT_VERSION  \
   --namespace=kube-system \
@@ -29,7 +32,6 @@ helm template cilium/cilium --version $CILIUM_DEFAULT_VERSION  \
   > cilium-preflight.yaml
 kubectl create -f cilium-preflight.yaml
 
-### PRE-FLIGHT CHECK
 # Check for the daemonset status - initially will not be ready
 # Then start a while loop until the first one starts (and there is no longer a '0' in the output from the command)
 # NOTE:  I need to improve this logic to check for the "DESIRED" number and wait until the correct number is running
@@ -58,7 +60,8 @@ kubectl delete deployment cilium-operator --namespace kube-system
 kubectl delete clusterrole cilium-operator
 }
 
-helm install cilium cilium/cilium --version 1.13.3 \
+# helm install cilium cilium/cilium --version 1.13.3 \
+helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION 1.13.3 \
   --namespace kube-system \
   --set eni.enabled=false \
   --set ipam.mode=kubernetes \
