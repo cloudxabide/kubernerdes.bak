@@ -77,7 +77,7 @@ eksctl anywhere create cluster \
    --install-packages packages.yaml
 }
 # Watch the pods until the busybox pod is "Running", then exit
-while sleep 1; do echo; docker ps -a | grep boots && break ; done
+while sleep 2; do date; docker ps -a | grep boots && break ; done
 echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
 echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
 echo "  After about 5 seconds move to the next node"; sleep 3
