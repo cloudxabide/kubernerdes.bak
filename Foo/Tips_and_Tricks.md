@@ -62,8 +62,10 @@ kubectl apply -f busybox_example_app_persisent_storage.yaml
 while sleep 1; do kubectl get pods -n openebstest | grep Running && break ; done
 
 # Review hosts for new disk image file
+HOSTS="eks-host01 eks-host02 eks-host03"
 for HOST in $HOSTS
 do
+  echo ""
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
     sudo iscsiadm -m session -o show
     find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
@@ -80,3 +82,16 @@ do
     sudo iscsiadm -m session -o show
     find  /var/openebs/local -name 'volume-head*.img' -exec ls -lh {} \; "
 done
+
+
+
+# Review hosts for new disk image file
+HOSTS="eks-host01 eks-host02 eks-host03"
+for HOST in $HOSTS
+do
+  echo ""
+  ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "
+    cat /etc/*release*
+  "
+done
+
