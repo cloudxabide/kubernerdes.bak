@@ -9,12 +9,15 @@
 ## EKS Anywhere
 #############
 # AWS Info file for Curated Packages
+# I made this in to a routine as it should not be run as part of a script (ie you need to provide the details (below))
+configure_AWS_credentials() {
 cat << EOF > ./.info
 export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
 export EKSA_AWS_REGION="us-east-1"
 EOF
 .  ./.info
+}
 
 #############
 ## START HERE
@@ -29,9 +32,8 @@ docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CO
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 
 EKS_DIR=$HOME/DevOps/eksa
-mkdir $EKS_DIR; cd $_
-
 [ -d  $EKS_DIR  ] || { mkdir $EKS_DIR; cd $_; } && { cd  $EKS_DIR; }
+
 OS=ubuntu
 NODE_CONFIG="3_0"
 KUBE_VERSION="1.28"
@@ -66,6 +68,8 @@ eksctl anywhere create cluster \
 # Watch the pods until the busybox pod is "Running", then exit
 while sleep 1; do docker ps -a | grep boots && break ; done
 echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
+echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
+echo "  After about 5 seconds move to the next node"; sleep 3
 docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
 exit 0

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#     Purpose: Deploy EKS Cluster from this Node
-#        Date: 2023-12-27
+#     Purpose: Install Docker to provide environment to run EKS Installer (and kind cluster)
+#        Date: 2024-02-11
 #      Status: Complete
 # Assumptions:
 

@@ -125,7 +125,7 @@ helm upgrade openebs openebs/openebs \
 --set jiva.enabled=true
 
 # Watch the pods until there is no longer a "ContainerBuilding" output, then show ALL pods in the openebs namespace
-while sleep 1; do kubectl get pods -n openebs | grep Container || break; done
+while sleep 2; do echo; kubectl get pods -n openebs | grep Container || break; done
 kubectl get pods -n openebs
 
 # Make openEBS your default storage class

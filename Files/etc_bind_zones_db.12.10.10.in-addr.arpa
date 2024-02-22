@@ -14,6 +14,14 @@ $TTL    604800
 101	IN	PTR	eks-host01.kubernerdes.lab.
 102	IN	PTR	eks-host02.kubernerdes.lab.
 103	IN	PTR	eks-host03.kubernerdes.lab.
+; Nutanix based fun
+110	IN	PTR	nutanix-vip.kubernerdes.lab.
+111	IN	PTR	nutanix-node-01.kubernerdes.lab.
+112	IN	PTR	nutanix-node-02.kubernerdes.lab.
+113	IN	PTR	nutanix-node-03.kubernerdes.lab.
+121	IN	PTR	nutanix-cvm-01.kubernerdes.lab.
+122	IN	PTR	nutanix-cvm-02.kubernerdes.lab.
+123	IN	PTR	nutanix-cvm-03.kubernerdes.lab.
 ; Application Endpoints
 200	IN	PTR	eks-control-plane.kubernerdes.lab.
 201	IN	PTR	tinkerbell.kubernerdes.lab.

@@ -15,7 +15,7 @@ kubectl get clusters.cluster.x-k8s.io -A -o=custom-columns=NAME:.metadata.name,C
 echo
 
 ## EKS Connector
-# Note this gets kind of "cludgy" as I need to get the activation* which is only available as output when teh cluster is registered (from what I can tell)
+# Note this gets kind of "cludgy" as I need to get the activation* which is only available as output when the cluster is registered (from what I can tell)
 
 AmazonEKSConnectorAgentRoleARN=$(aws iam get-role --role-name AmazonEKSConnectorAgentRole  --query Role.Arn --output text)
 EKSA_Cluster_Name=$(kubectl config view --minify -o jsonpath='{.clusters[].name}')
