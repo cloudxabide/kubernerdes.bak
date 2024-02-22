@@ -79,7 +79,9 @@ done
 # Review devices - they should have no partitions now
 for HOST in $HOSTS
 do
+  echo "######################################################"
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "lsblk"
+  echo ""
 done
 
 # Configure the devices
