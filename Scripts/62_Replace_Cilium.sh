@@ -4,6 +4,9 @@
 # From: https://docs.cilium.io/en/v1.13/gettingstarted/k8s-install-default/#install-the-cilium-cli
 helm repo add cilium https://helm.cilium.io/
 
+# Check the default/included Cilium 
+kubectl -n kube-system exec ds/cilium -- cilium version
+
 # Install Cilium CLI
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt)
 CLI_ARCH=amd64
@@ -77,6 +80,9 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
 while sleep 2; do cilium status | egrep 'error' || break; done
 kubectl get nodes -o wide # make sure all nodes are "READY"
 kubectl -n kube-system exec ds/cilium -- cilium-health status
+
+## Test Cilium Connectivity
+cilium connectivity test
 
 exit 0
 
