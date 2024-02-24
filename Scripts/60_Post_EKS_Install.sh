@@ -5,6 +5,9 @@
 #      Status: Incomplete - probably move this to ~/Foo
 # Assumptions: Some sort of persistent storage exists (openEBS, in my case)
 
+
+cd $HOME/DevOps/eksa/latest/
+
 #############################
 ## Check Cluster Status
 kubectl get pod -A -l control-plane=controller-manager
