@@ -26,7 +26,7 @@ It is worth noting that a portion of this repo is likely not applicable in most 
 ![Kubernerdes Lab](Images/Kubernerdes_Host.png)
 
 ## Steps
-* Build the Admin Host
+* Build the Admin Host (thekubernerd.kubernerdes.lab)
 * Kickoff the EKS Install process
 * Power On the NUCs (and select Network Boot (f12))
 * Do some Post Install tasks
