@@ -54,7 +54,7 @@ Uneeded (this is all handled by the "tinkerbell boots" container):
 * TFTP
 
 ## Tested Configurations
-My "inventory" or "hardware.csv" files do not include MBC info - primarily because my NUC(s) have no ILO/BMC.
+My "inventory" or "hardware.csv" files do not include BMC info - primarily because my NUC(s) have no ILO/BMC.
 
 | Control-Plane | Worker Nodes | Inventory File |
 |:--------------|:------------:|:---------------|
@@ -63,7 +63,7 @@ My "inventory" or "hardware.csv" files do not include MBC info - primarily becau
 
 ## Deploy EKS Anywhere Cluster
 **ProTip:**
-If you only use type of "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
+If you only use labels of "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
 
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
