@@ -47,9 +47,9 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 
 While not necessary, I will include the WebServer in case you wish to host your own artifacts (such as: osImage, hookImages)
 * [WWW Server](Scripts/Install_HTTP_Server.sh) - add WebServer to listen on 8080
-* [NFS Server](Scripts/Install_NFS_Server.sh) - add NFS Server to provide shared/persistent storage
 
 Uneeded (this is all handled by the "tinkerbell boots" container):  
+* [NFS Server](Scripts/Install_NFS_Server.sh) - add NFS Server to provide shared/persistent storage (I replaced the necessity for PVs with OpenEBS)  
 * [DHCP Server](Scripts/Install_DHCP_Server.sh)
 * TFTP
 
