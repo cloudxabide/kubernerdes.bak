@@ -58,12 +58,12 @@ My "inventory" or "hardware.csv" files do not include MBC info - primarily becau
 
 | Control-Plane | Worker Nodes | Inventory File |
 |:--------------|:------------:|:---------------|
-| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv)
-| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv)
+| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
+| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv) |
 
 ## Deploy EKS Anywhere Cluster
 **ProTip:**
-If you have only "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
+If you only use type of "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
 
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
