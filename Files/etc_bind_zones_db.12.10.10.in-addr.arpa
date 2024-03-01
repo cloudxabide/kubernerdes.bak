@@ -6,23 +6,29 @@ $TTL    604800
                         86400        ; Retry
                         36000        ; Expire
                         604800 )     ; Negative Cache TTL
-;
-        IN      NS      thekubernerd.kubernerdes.lab.
-;
-10      IN      PTR     thekubernerd.kubernerdes.lab.
-; also list other computers
-101	IN	PTR	eks-host01.kubernerdes.lab.
-102	IN	PTR	eks-host02.kubernerdes.lab.
-103	IN	PTR	eks-host03.kubernerdes.lab.
-; Nutanix based fun
-110	IN	PTR	nutanix-vip.kubernerdes.lab.
-111	IN	PTR	nutanix-node-01.kubernerdes.lab.
-112	IN	PTR	nutanix-node-02.kubernerdes.lab.
-113	IN	PTR	nutanix-node-03.kubernerdes.lab.
-121	IN	PTR	nutanix-cvm-01.kubernerdes.lab.
-122	IN	PTR	nutanix-cvm-02.kubernerdes.lab.
-123	IN	PTR	nutanix-cvm-03.kubernerdes.lab.
-; Application Endpoints
-200	IN	PTR	eks-control-plane.kubernerdes.lab.
-201	IN	PTR	tinkerbell.kubernerdes.lab.
 
+        IN      NS      thekubernerd.kubernerdes.lab.
+
+; Admin Host
+10      IN      PTR     thekubernerd.kubernerdes.lab.
+
+; EKS Anywhere Endpoints
+100	IN	PTR	eks-control-plane.kubernerdes.lab.
+101	IN	PTR	tinkerbell.kubernerdes.lab.
+; EKS-A Hosts (mgmt cluster)
+111	IN	PTR	eks-mgmt-01.kubernerdes.lab.
+112	IN	PTR	eks-mgmt-02.kubernerdes.lab.
+113	IN	PTR	eks-mgmt-03.kubernerdes.lab.
+; EKS-A Hosts (workload cluster)
+121	IN	PTR	eks-work-01.kubernerdes.lab.
+122	IN	PTR	eks-work-02.kubernerdes.lab.
+123	IN	PTR	eks-work-03.kubernerdes.lab.
+
+; Nutanix Cluster (VIP, Nodes, CVM)
+210	IN	PTR	nutanix-vip.kubernerdes.lab.
+211	IN	PTR	nutanix-node-01.kubernerdes.lab.
+212	IN	PTR	nutanix-node-02.kubernerdes.lab.
+213	IN	PTR	nutanix-node-03.kubernerdes.lab.
+221	IN	PTR	nutanix-cvm-01.kubernerdes.lab.
+222	IN	PTR	nutanix-cvm-02.kubernerdes.lab.
+223	IN	PTR	nutanix-cvm-03.kubernerdes.lab.
