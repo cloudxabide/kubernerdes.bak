@@ -1,7 +1,7 @@
 $ORIGIN kubernerdes.lab.
 $TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2023121101   ; Serial
+                        2024022901   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -20,13 +20,13 @@ thekubernerd		IN      A       10.10.12.10
 eks-control-plane 	IN	A	10.10.12.100
 tinkerbell		IN	A	10.10.12.101
 ; EKS-A Hosts (mgmt cluster)
-eks-mgmt-host01		IN      A       10.10.12.111
-eks-mgmt-host02		IN      A       10.10.12.112
-eks-mgmt-host03		IN      A       10.10.12.113
+eks-mgmt-01		IN      A       10.10.12.111
+eks-mgmt-02		IN      A       10.10.12.112
+eks-mgmt-03		IN      A       10.10.12.113
 ; EKS-A Hosts (workload cluster)
-eks-work-host01		IN      A       10.10.12.121
-eks-work-host02		IN      A       10.10.12.122
-eks-work-host03		IN      A       10.10.12.123
+eks-work-01		IN      A       10.10.12.121
+eks-work-02		IN      A       10.10.12.122
+eks-work-03		IN      A       10.10.12.123
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
 nutanix-vip		IN	A	10.10.12.210
