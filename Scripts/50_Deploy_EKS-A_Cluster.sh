@@ -46,8 +46,8 @@ KUBE_VERSION="1.28"
 export CLUSTER_NAME=kubernerdes-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
-export TINKERBELL_HOST_IP=10.10.21.201
-mkdir $CLUSTER_NAME
+export TINKERBELL_HOST_IP=10.10.21.101
+mkdir $CLUSTER_NAME 
 
 # The following is how you create a default clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
@@ -56,9 +56,9 @@ eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CL
 curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hardware-${NODE_LAYOUT}.csv
 
 # However, I have one that I have already modified for my needs
-curl -o  $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE
+curl -o $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE
 
-# Retrieve the pub key for the "kublrnedes.lab" domain
+# Retrieve the pub key for the "kubernedes.lab" domain
 # THIS NEEDS TO BE TESTED
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
 envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
@@ -77,7 +77,7 @@ eksctl anywhere create cluster \
    --install-packages packages.yaml
 }
 # Watch the pods until the busybox pod is "Running", then exit
-while sleep 2; do date; docker ps -a | grep boots && break ; done
+while sleep 2; do echo -n "Waiting...."; date; docker ps -a | grep boots && break ; done
 echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
 echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
 echo "  After about 5 seconds move to the next node"; sleep 3
