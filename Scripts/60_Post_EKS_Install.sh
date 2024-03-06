@@ -22,7 +22,7 @@ echo
 
 AmazonEKSConnectorAgentRoleARN=$(aws iam get-role --role-name AmazonEKSConnectorAgentRole  --query Role.Arn --output text)
 EKSA_Cluster_Name=$(kubectl config view --minify -o jsonpath='{.clusters[].name}')
-MY_AWS_REGION=us-east-2
+MY_AWS_REGION=us-west-2
 
 CLUSTER_REGISTRATION_OUTPUT=${EKSA_Cluster_Name}-ClusterRegistrationOutput 
 aws eks register-cluster \ 
