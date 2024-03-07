@@ -1,16 +1,12 @@
 #!/bin/bash
 
-## 
-# make sure package controller is present
-kubectl get pods -n eksa-packages | grep "eks-anywhere-packages"
+## Enable Metrics Server (using curated pacakges)
+eksctl anywhere generate package metrics-server --cluster $CLUSTER_NAME > metrics-server.yaml
 
-## TODO: Might need to make this region specific case statement
-aws ecr get-login-password --region $EKSA_AWS_REGION | docker login --username AWS --password-stdin 783794618700.dkr.ecr.us-west-2.amazonaws.com
+eksctl anywhere create packages -f metrics-server.yaml
 
-## Curated Packages List (work in progress)
-eksctl anywhere list packages --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor')
 
-## Enable Metrics Server
+## Enable Metrics Server (This is the OSS method - need to do this using curated packages)
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 # The metrics-server will NOT come up (until you update the certs - below)
 kubectl get deployment metrics-server -n kube-system 
@@ -19,23 +15,6 @@ kubectl get events -n kube-system
 ### Disable TLS for my metrics on my cluster
 kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
 while sleep 2; do kubectl get pods -n kube-system | grep ^metrics-server | grep "0/1" || break; done
-
-## Enable Prometheus
-aws ecr get-login-password --region $EKSA_AWS_REGION | docker login --username AWS --password-stdin 783794618700.dkr.ecr.us-west-2.amazonaws.com
-aws ecr get-login-password --region $EKSA_AWS_REGION | docker login --username AWS --password-stdin 297090588151.dkr.ecr.us-west-2.amazonaws.com
-
-kubectl delete secret -n eksa-packages aws-secret
-echo "kubectl create secret -n eksa-packages generic aws-secret \
-  --from-literal=AWS_ACCESS_KEY_ID=${EKSA_AWS_ACCESS_KEY_ID} \
-  --from-literal=AWS_SECRET_ACCESS_KEY=${EKSA_AWS_SECRET_ACCESS_KEY}  \
-  --from-literal=REGION=${EKSA_AWS_REGION}"
-
-kubectl create secret -n eksa-packages generic aws-secret \
-  --from-literal=AWS_ACCESS_KEY_ID=${EKSA_AWS_ACCESS_KEY_ID} \
-  --from-literal=AWS_SECRET_ACCESS_KEY=${EKSA_AWS_SECRET_ACCESS_KEY}  \
-  --from-literal=REGION=${EKSA_AWS_REGION}
-
-kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.AWS_ACCESS_KEY_ID}'  | base64 --decode
 
 eksctl anywhere generate package harbor --cluster $CLUSTER_NAME --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor') > harbor-spec.yaml
 
