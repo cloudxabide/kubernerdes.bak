@@ -19,6 +19,8 @@ EOF
 .  ./.eksainfo
 }
 
+[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; exit; }
+
 #############
 ## START HERE
 #############
@@ -34,7 +36,8 @@ docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONT
 TODAY=`date +%F`
 EKS_BASE=$HOME/DevOps/eksa
 EKS_DIR=$EKS_BASE/${TODAY}
-[ -d ${EKS_DIR}  ] || { mkdir -p $EKS_DIR;} 
+[ -d ${EKS_DIR}  ] && { mv ${EKS_DIR} ${EKS_DIR}-01; } 
+mkdir -p $EKS_DIR
 cd ${EKS_BASE}
 rm latest
 ln -s $EKS_DIR ${EKS_BASE}/latest
