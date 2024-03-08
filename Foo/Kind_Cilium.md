@@ -20,6 +20,7 @@ nodes:
 networking:
   disableDefaultCNI: true
 EOF1
+kind create cluster --config=kind-config.yaml
 
 cat << EOF2 | tee kind-config-3_2.yaml
 kind: Cluster
@@ -68,7 +69,6 @@ kubectl describe pod/tiefighter
 
 cilium hubble ui
 ```
-
 
 exit 0
 
