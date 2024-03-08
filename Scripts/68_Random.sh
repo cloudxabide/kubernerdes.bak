@@ -45,9 +45,6 @@ kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op":
 while sleep 2; do kubectl get pods -n kube-system | grep ^metrics-server | grep "0/1" || break; done
 }
 
-
-eksctl anywhere generate package harbor --cluster $CLUSTER_NAME --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor') > harbor-spec.yaml
-
 # Standard Prometheus creation process
 # eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
 # eksctl anywhere create packages -f prometheus.yaml
