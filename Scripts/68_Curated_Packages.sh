@@ -3,13 +3,14 @@
 # Curated Packages 
 
 kubectl get pods -n eksa-packages | grep "eks-anywhere-packages"
+kubectl get events -n eksa-packages --sort-by=.lastTimestamp
 
 aws ecr get-login-password --region $EKSA_AWS_REGION | docker login --username AWS --password-stdin 783794618700.dkr.ecr.us-west-2.amazonaws.com
 docker pull 783794618700.dkr.ecr.us-west-2.amazonaws.com/emissary-ingress/emissary:v3.5.1-bf70150bcdfe3a5383ec8ad9cd7eea801a0cb074
 
-kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.AWS_ACCESS_KEY_ID}'  | base64 --decode
-kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}'  | base64 --decode
-kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.REGION}'  | base64 --decode
+kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.AWS_ACCESS_KEY_ID}'  | base64 --decode; echo
+kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}'  | base64 --decode; echo
+kubectl get secret -n eksa-packages aws-secret -o jsonpath='{.data.REGION}'  | base64 --decode ; echo
 
 eksctl anywhere list packages --kube-version $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor')
 kubectl describe packagebundlecontroller -n eksa-packages
@@ -27,12 +28,30 @@ kubectl create secret -n eksa-packages generic aws-secret \
 eksctl anywhere generate package harbor --cluster ${CLUSTER_NAME} --kube-version  $(kubectl version -o json | jq -rj '.serverVersion|.major,".",.minor') > harbor-spec.yaml
 
 ## Enable Cert-Manager
-eksctl anywhere generate package cert-manager --cluster ${CLUSTER_NAME} > cert-manager.yaml
+# (remove comment to run - should already be present) eksctl anywhere generate package cert-manager --cluster ${CLUSTER_NAME} > cert-manager.yaml
 
 ## Enable Metrics Server (using curated pacakges)
-eksctl anywhere generate package metrics-server --cluster $CLUSTER_NAME > metrics-server.yaml
+#eksctl anywhere generate package metrics-server --cluster $CLUSTER_NAME > metrics-server.yaml
+cat << EOF1 | tee metrics-server.yaml
+apiVersion: packages.eks.amazonaws.com/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: generated-metrics-server
+  namespace: eksa-packages-kubernerdes-eksa
+spec:
+  packageName: metrics-server
+  targetNamespace: kube-system
+  config: |-
+    args:
+      - "--kubelet-insecure-tls"
 
+---
+
+EOF1
 eksctl anywhere create packages -f metrics-server.yaml
+kubectl get all -n kube-system 
+kubectl get events -n kube-system 
 
 ## Enable Metrics Server (This is the OSS method - need to do this using curated packages)
 metrics_server_foss() {
@@ -45,43 +64,19 @@ kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op":
 while sleep 2; do kubectl get pods -n kube-system | grep ^metrics-server | grep "0/1" || break; done
 }
 
-# Standard Prometheus creation process
-# eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
-# eksctl anywhere create packages -f prometheus.yaml
-
-# Rep2 statefulset prometheus
-cat << EOF1 | tee  prometheus-rep2-statefuleset.yaml
----
- apiVersion: packages.eks.amazonaws.com/v1alpha1
- kind: Package
- metadata:
-   name: generated-prometheus
-   namespace: eksa-packages-${CLUSTER_NAME}
- spec:
-   packageName: prometheus
-   targetNamespace: observability
-   config: |
-     server:
-       replicaCount: 2
-       statefulSet:
-         enabled: true
-     serverFiles:
-       prometheus.yml:
-         scrape_configs:
-           - job_name: prometheus
-             static_configs:
-               - targets:
-                 - localhost:9090     
-EOF1
-kubectl create namespace observability
-kubectl config set-context --current --namespace=observability
-eksctl anywhere create packages -f prometheus-rep2-statefuleset.yaml
-eksctl anywhere get packages --cluster $CLUSTER_NAME
-
-kubectl config set-context --current --namespace=default
-
-export PROM_SERVER_POD_NAME=$(kubectl get pods --namespace observability -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name")
-kubectl port-forward $PROM_SERVER_POD_NAME -n observability 9090
-
 ## ADOT
 eksctl anywhere generate package adot --cluster $( kubectl config view --minify -o jsonpath='{.clusters[].name}') > adot.yaml
+
+exit 0
+# EKS-A Packages
+You can browse the Public ECR repo here
+https://gallery.ecr.aws/eks-anywhere/eks-anywhere-packages
+https://public.ecr.aws/eks-anywhere/eks-anywhere-packages:v0.0.0-e69e0b978465571a9f462524b9dc3d2e31f0aae0
+
+
+# Troubleshooting on 2024-03-8
+kubectl set image daemonset ecr-credential-provider-package *=public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325
+
+# https://jamesdefabia.github.io/docs/user-guide/kubectl/kubectl_patch/
+kubectl patch ds -n eksa-packages --type='json' -p='[{"op": "update", "path": "/spec/template/spec/containers/image", "value": {"public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325"}]'
+public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325
