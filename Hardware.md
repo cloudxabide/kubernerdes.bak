@@ -13,13 +13,13 @@
 
 | Cost | Qty | Total | Object      | Purpose | Link |
 |:----:|:----|:------|:-------|:--------|:-----|
-| | 4 | | Network Cables (3 ft) | |
-| | 1 | | Power Strip | |
-| | 1 | | Keyboard | |
-| | 1 | | Mouse | |
-| | 1 | | Monitor | |
-| | 1 | | 4-port KVM Switch | |
-| | 1 | | USB Stick (16GB) | Installing Ubuntu | |
+|      | 4   |   | Network Cables (3 ft) | |
+|      | 1   |   | Power Strip | |
+|      | 1   |   | Keyboard | |
+|      | 1   |   | Mouse | |
+|      | 1   |   | Monitor | |
+|      | 1   |   | 4-port KVM Switch | |
+|      | 1   |   | USB Stick (16GB) | Installing Ubuntu | |
 
 
 
