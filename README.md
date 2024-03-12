@@ -22,8 +22,8 @@ This project has been created to be a [network enclave](https://en.wikipedia.org
 
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially start at the point where I am plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
-![Kubernerdes Lab](Images/KubernerdesLab.png)
-![Kubernerdes Lab](Images/Kubernerdes_Host.png)
+![Kubernerdes Lab](Images/KubernerdesLab-3_0.png)
+![Kubernerdes Lab](Images/NodeLayout-KubernetesNode.png)
 
 ## Steps
 * Build the Admin Host (thekubernerd.kubernerdes.lab)
