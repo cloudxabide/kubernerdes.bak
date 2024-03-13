@@ -4,6 +4,7 @@
 #        Date:
 #      Status: In-Progress
 # Assumptions: That you actually **need** a custom-built Ubuntu image to run your containers
+#              You are using the user: image-builder
 #   Reference: https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/#building-node-images
 
 # Check whether you are the correct user
@@ -41,13 +42,14 @@ sudo install -m 0755 ./image-builder /usr/local/bin/image-builder
 cd -
 
 # Add Bash Completion (optional)
+mkdir ~/.bashrc.d
 image-builder completion bash > ~/.bashrc.d/image-builder
 
 # Set some params
 export OS=ubuntu
 export OS_VERSION=22.04
 export HYPERVISOR=baremetal
-export RELEASE_CHANNEL="1-28"
+export RELEASE_CHANNEL="1-29"
 
 echo EKSA_RELEASE_VERSION= $EKSA_RELEASE_VERSION
 #image-builder build --os ubuntu --hypervisor baremetal --release-channel 1-28
