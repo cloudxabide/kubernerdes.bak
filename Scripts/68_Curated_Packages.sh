@@ -77,6 +77,7 @@ https://public.ecr.aws/eks-anywhere/eks-anywhere-packages:v0.0.0-e69e0b978465571
 # Troubleshooting on 2024-03-8
 kubectl set image daemonset ecr-credential-provider-package *=public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325 -n eksa-packages
 
+## I don't believe any of the following works - left here as an example
 # https://jamesdefabia.github.io/docs/user-guide/kubectl/kubectl_patch/
 kubectl patch ds -n eksa-packages --type='json' -p='[{"op": "update", "path": "/spec/template/spec/containers/image", "value": {"public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325"}]'
 public.ecr.aws/eks-anywhere/credential-provider-package:v0.3.13-828e7d186ded23e54f6bd95a5ce1319150f7e325
