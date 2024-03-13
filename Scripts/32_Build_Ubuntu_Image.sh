@@ -31,6 +31,7 @@ sudo apt install -y python3-pip
 python3 -m pip install --user ansible
 
 # Install Image Builder 
+EKSA_RELEASE_VERSION=0.19
 cd /tmp
 BUNDLE_MANIFEST_URL=$(curl -s https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.releases[] | select(.version==\"$EKSA_RELEASE_VERSION\").bundleManifestUrl")
 IMAGEBUILDER_TARBALL_URI=$(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].eksD.imagebuilder.uri")
