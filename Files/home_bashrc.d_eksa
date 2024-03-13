@@ -1,0 +1,7 @@
+# Copy this file to ${HOME}/.bashrc.d/eksa
+
+export CLUSTER_NAME=kubernerdes-eksa
+export KUBECONFIG=$(find ~/DevOps/eksa/latest -name '*eks-a-cluster.kubeconfig')
+
+[ -f ~/.awsinfo ] && . ~/.eksainfo
+# /home/mansible/DevOps/eksa/kubernerdes-eksa/kubernerdes-eksa-eks-a-cluster.kubeconfig

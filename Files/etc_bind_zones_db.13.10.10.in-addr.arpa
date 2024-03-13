@@ -1,7 +1,7 @@
 $ORIGIN 13.10.10.in-addr.arpa.
 $TTL    604800
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2023121101   ; Serial
+                        2024022901   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire

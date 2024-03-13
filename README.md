@@ -10,6 +10,8 @@ Work in Progress.  But, everything you need is in the [AWS Docs](https://anywher
 I anticiapte that there will be some refactoring occurring - mostly regarding where different steps/tasks are, and the filenames where the tasks are documented.  
 
 **Prologue:**  
+Note:  Anything in my "scripts" that is encapsulated in a bash routine - ie. my_route(){ code; } generally means it is some optional code that I won't generally use. (like installing the Desktop UI)
+
 This project has been created to be a [network enclave](https://en.wikipedia.org/wiki/Network_enclave) - meaning, it should be able to "stand alone" and function.  That carries some assumptions:
 
 * DNS - I have created a standalone domain "kubernerdes.lab". 
@@ -20,11 +22,11 @@ This project has been created to be a [network enclave](https://en.wikipedia.org
 
 It is worth noting that a portion of this repo is likely not applicable in most situations.  I am essentially start at the point where I am plumbing up a new interface on my Firewall, creating a new /22 CIDR off that interface, and starting from scratch - things you would not (or could not) need to do if you were in an enterprise situation.
 
-![Kubernerdes Lab](Images/KubernerdesLab.png)
-![Kubernerdes Lab](Images/Kubernerdes_Host.png)
+![Kubernerdes Lab](Images/KubernerdesLab-3_0.png)
+![Kubernerdes Lab](Images/NodeLayout-KubernetesNode.png)
 
 ## Steps
-* Build the Admin Host
+* Build the Admin Host (thekubernerd.kubernerdes.lab)
 * Kickoff the EKS Install process
 * Power On the NUCs (and select Network Boot (f12))
 * Do some Post Install tasks
@@ -45,23 +47,23 @@ The only "customization" I am going to pursue is hosting the OS Image and Hooks 
 
 While not necessary, I will include the WebServer in case you wish to host your own artifacts (such as: osImage, hookImages)
 * [WWW Server](Scripts/Install_HTTP_Server.sh) - add WebServer to listen on 8080
-* [NFS Server](Scripts/Install_NFS_Server.sh) - add NFS Server to provide shared/persistent storage
 
 Uneeded (this is all handled by the "tinkerbell boots" container):  
+* [NFS Server](Scripts/Install_NFS_Server.sh) - add NFS Server to provide shared/persistent storage (I replaced the necessity for PVs with OpenEBS)  
 * [DHCP Server](Scripts/Install_DHCP_Server.sh)
 * TFTP
 
 ## Tested Configurations
-My "inventory" or "hardware.csv" files do not include MBC info - primarily because my NUC(s) have no ILO/BMC.
+My "inventory" or "hardware.csv" files do not include BMC info - primarily because my NUC(s) have no ILO/BMC.
 
 | Control-Plane | Worker Nodes | Inventory File |
 |:--------------|:------------:|:---------------|
-| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv)
-| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv)
+| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
+| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv) |
 
 ## Deploy EKS Anywhere Cluster
 **ProTip:**
-If you have only "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
+If you only use labels of "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
 
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 

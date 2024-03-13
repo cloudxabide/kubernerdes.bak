@@ -4,6 +4,9 @@
 # From: https://docs.cilium.io/en/v1.13/gettingstarted/k8s-install-default/#install-the-cilium-cli
 helm repo add cilium https://helm.cilium.io/
 
+# Check the default/included Cilium 
+kubectl -n kube-system exec ds/cilium -- cilium version
+
 # Install Cilium CLI
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt)
 CLI_ARCH=amd64
@@ -11,6 +14,7 @@ if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
 curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum 
 sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+cilium version; echo
 
 # Install Hubble CLI
 export HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
@@ -20,6 +24,7 @@ curl -L --fail --remote-name-all https://github.com/cilium/hubble/releases/downl
 sha256sum --check hubble-linux-${HUBBLE_ARCH}.tar.gz.sha256sum
 sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
 rm hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
+hubble version; echo
 
 ### PRE-FLIGHT CHECK
 #  Replace EKS-A version of Cilium with OSS version
@@ -61,7 +66,7 @@ kubectl delete clusterrole cilium-operator
 }
 
 # helm install cilium cilium/cilium --version 1.13.3 \
-helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION 1.13.3 \
+helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
   --namespace kube-system \
   --set eni.enabled=false \
   --set ipam.mode=kubernetes \
@@ -71,11 +76,13 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION 1.13.3 \
   --set hubble.relay.enabled=true \
   --set hubble.ui.enabled=true 
 
-
 ### Validate the install
-cilium status
+while sleep 2; do cilium status | egrep 'error' || break; done
 kubectl get nodes -o wide # make sure all nodes are "READY"
 kubectl -n kube-system exec ds/cilium -- cilium-health status
+cilium connectivity test
+
+## Test Cilium Connectivity
 cilium connectivity test
 
 exit 0

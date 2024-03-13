@@ -5,6 +5,9 @@
 #      Status: Incomplete - probably move this to ~/Foo
 # Assumptions: Some sort of persistent storage exists (openEBS, in my case)
 
+
+cd $HOME/DevOps/eksa/latest/
+
 #############################
 ## Check Cluster Status
 kubectl get pod -A -l control-plane=controller-manager
@@ -19,7 +22,7 @@ echo
 
 AmazonEKSConnectorAgentRoleARN=$(aws iam get-role --role-name AmazonEKSConnectorAgentRole  --query Role.Arn --output text)
 EKSA_Cluster_Name=$(kubectl config view --minify -o jsonpath='{.clusters[].name}')
-MY_AWS_REGION=us-east-2
+MY_AWS_REGION=us-west-2
 
 CLUSTER_REGISTRATION_OUTPUT=${EKSA_Cluster_Name}-ClusterRegistrationOutput 
 aws eks register-cluster \ 
@@ -29,6 +32,8 @@ aws eks register-cluster \
 EKSA_ACTIVATION_ID=$(cat $CLUSTER_REGISTRATION_OUTPUT | jq -r '.[].connectorConfig.activationId')
 EKSA_ACTIVATION_CODE=$(cat $CLUSTER_REGISTRATION_OUTPUT | jq -r '.[].connectorConfig.activationCode')
 
+echo "EKSA_ACTIVATION_ID: $EKSA_ACTIVATION_ID"
+echo "EKSA_ACTIVATION_CODE: $EKSA_ACTIVATION_CODE"
 aws eks describe-cluster --name kubernerdes-eksa 
 
 kubectl create namespace eks-connector
@@ -37,13 +42,15 @@ helm install eks-connector \
   oci://public.ecr.aws/eks-connector/eks-connector-chart \
   --set eks.activationCode=${EKSA_ACTIVATION_CODE} \
   --set eks.activationId=${EKSA_ACTIVATION_ID} \
-  --set eks.agentRegion=us-east-2
+  --set eks.agentRegion=$EKSA_AWS_REGION
 
+# Switch context to eks-connector namespace
 kubectl config set-context --current --namespace=eks-connector
 kubectl get events 
 echo "Watch the pods until they are Running"
-while sleep 1; do kubectl get pods -n eks-connector | grep Running && break; done
+while sleep 1; do echo "Checking.... `date`"; kubectl get pods -n eks-connector | grep Running && break; done
 
+# Switch context back to default namespace
 kubectl config set-context --current --namespace=default
 
 exit 0

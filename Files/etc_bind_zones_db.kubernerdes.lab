@@ -1,7 +1,7 @@
 $ORIGIN kubernerdes.lab.
 $TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2023121101   ; Serial
+                        2024022901   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -10,21 +10,30 @@ $TTL    86400
                	 	IN      NS      thekubernerd.kubernerdes.lab.
                	 	IN      MX      10 thekubernerd.kubernerdes.lab.
 
+; Firewall
+gateway			IN      A       10.10.12.1
+
+; Admin Host
 thekubernerd		IN      A       10.10.12.10
 
-gateway			IN      A       10.10.12.1
-; Hosts
-eks-host01		IN      A       10.10.12.101
-eks-host02		IN      A       10.10.12.102
-eks-host03		IN      A       10.10.12.103
+; EKS Anywhere Endpoints
+eks-control-plane 	IN	A	10.10.12.100
+tinkerbell		IN	A	10.10.12.101
+; EKS-A Hosts (mgmt cluster)
+eks-mgmt-01		IN      A       10.10.12.111
+eks-mgmt-02		IN      A       10.10.12.112
+eks-mgmt-03		IN      A       10.10.12.113
+; EKS-A Hosts (workload cluster)
+eks-work-01		IN      A       10.10.12.121
+eks-work-02		IN      A       10.10.12.122
+eks-work-03		IN      A       10.10.12.123
 
-nutanix-vip		IN	A	10.10.12.110
-nutanix-node-01		IN	A	10.10.12.111
-nutanix-node-02		IN	A	10.10.12.112
-nutanix-node-03		IN	A	10.10.12.113
-nutanix-cvm-01		IN	A	10.10.12.121
-nutanix-cvm-02		IN	A	10.10.12.122
-nutanix-cvm-03		IN	A	10.10.12.122
+; Nutanix Cluster (VIP, Nodes, CVM)
+nutanix-vip		IN	A	10.10.12.210
+nutanix-node-01		IN	A	10.10.12.211
+nutanix-node-02		IN	A	10.10.12.212
+nutanix-node-03		IN	A	10.10.12.213
+nutanix-cvm-01		IN	A	10.10.12.221
+nutanix-cvm-02		IN	A	10.10.12.222
+nutanix-cvm-03		IN	A	10.10.12.223
 
-eks-control-plane 	IN	A	10.10.12.200
-tinkerbell		IN	A	10.10.12.201

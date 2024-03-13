@@ -11,7 +11,7 @@
 #                cut-and-paste sections of code while I am testing.  (in case my code 
 #                looks ineffecient ;-)
 
-HOSTS="eks-host01 eks-host02 eks-host03"
+HOSTS="eks-mgmt-01 eks-mgmt-02 eks-mgmt-03"
 
 # Install the iSCSI components on the worker nodes
 # NOTE:  If openEBS was something to be used in "production", you would want to include these 
@@ -79,7 +79,9 @@ done
 # Review devices - they should have no partitions now
 for HOST in $HOSTS
 do
+  echo "######################################################"
   ssh -i ~/.ssh/id_ecdsa-kubernerdes.lab ec2-user@$HOST "lsblk"
+  echo ""
 done
 
 # Configure the devices
@@ -124,8 +126,8 @@ helm upgrade openebs openebs/openebs \
 --create-namespace \
 --set jiva.enabled=true
 
-# Watch the pods until there is no longer a "ContainerBuilding" output, then show ALL pods in the openebs namespace
-while sleep 2; do echo; kubectl get pods -n openebs | grep Container || break; done
+# Watch the pods until there is no longer a "ContainerCreating" output, then show ALL pods in the openebs namespace
+while sleep 2; do echo; kubectl get pods -n openebs | grep ContainerCreating || break; done
 kubectl get pods -n openebs
 
 # Make openEBS your default storage class
