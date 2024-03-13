@@ -6,8 +6,9 @@
 # Assumptions: That you actually **need** a custom-built Ubuntu image to run your containers
 #   Reference: https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/#building-node-images
 
-# Makes ure you are the correct user
-[ `id -u -n` == "image-builder" ] || { echo "ERROR: you should run this as user: image-builder"; hexit 0; }
+# Check whether you are the correct user
+# NOTE: need to create logic to have this su if currently wrong user)
+[ `id -u -n` == "image-builder" ] || { echo "ERROR: you should run this as user: image-builder."; echo "  sudo su - image-builder"; exit 0; }
 
 sudo apt update -y
 sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
