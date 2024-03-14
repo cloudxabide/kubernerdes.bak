@@ -7,29 +7,56 @@
 #              You are using the user: image-builder
 #   Reference: https://anywhere.eks.amazonaws.com/docs/osmgmt/artifacts/#building-node-images
 
+## Create and manage User: image-builder
+id -u image-builder &>/dev/null || {
+
+OS_RELEASE=`grep ^NAME /etc/os-release | awk -F\" '{ print $2 }'`
+case $OS_RELEASE in
+  "Red Hat Enterprise Linux"|"openSUSE Tumbleweed")
+    SECONDARY_GROUP="wheel"
+  ;;
+  "Ubuntu")
+    SECONDARY_GROUP="sudo"
+  ;;
+  *)
+    SECONDARY_GROUP="admin"
+  ;;
+esac
+
+sudo useradd -m -G${SECONDARY_GROUP} -u1002 -c "Image Builder" -d /home/image-builder -s /bin/bash -p '$6$KG59tNcZse1h.baM$qaZadrH8Tajdc6LnBzcmCnIMOnCQxy8tD6mhBq8IdH9cjuWySZ6BSBLXkJl/ypsRqpDtbu95fquBeVp/rP2rb/' image-builder 
+
+# A new approach to managing sudo for Image Builder (image-builder) user
+echo "image-builder ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/image-builder-nopasswd-all
+restorecon -RFvv /etc/sudoers.d/image-builder-nopasswd-all
+}
+
+##
+sudo su - image-builder
 # Check whether you are the correct user
-# NOTE: need to create logic to have this su if currently wrong user)
 [ `id -u -n` == "image-builder" ] || { echo "ERROR: you should run this as user: image-builder."; echo "  sudo su - image-builder"; sleep 3; exit 0; }
+[ ! -f ${HOME}/.ssh/id_rsa ] && { echo | ssh-keygen -trsa -b2048 -N ''; }
 
 sudo apt update -y
+sudo apt upgrade -y
 sudo apt install jq make qemu-kvm libvirt-daemon-system libvirt-clients virtinst cpu-checker libguestfs-tools libosinfo-bin unzip -y
 sudo snap install yq
 sudo usermod -a -G kvm $USER
-# TODO: does this **need** to work this way?
-sudo chmod 666 /dev/kvm
-sudo chown root:kvm /dev/kvm
-mkdir -p /home/$USER/.ssh
-echo | ssh-keygen -trsa -b2048 -N ''
-echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config
-echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config
+newgrp kvm
+grep HostKeyAlgorithms /home/$USER/.ssh/config || { echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config; }
+grep PubkeyAcceptedKeyTypes /home/$USER/.ssh/config || { echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config; } 
+chmod 0600 ${HOME}/.ssh/config
 
 # TEST (this should alleviate the need for the current user to logout/login to recognize the new group
 newgrp kvm   
 
 [ ! -f /usr/bin/make ] && sudo apt-get install make
 [ ! -f /usr/bin/jq ] && sudo apt install -y jq
+[ `python --version` != "3.9.0" ] && { sudo apt -y install python3.9; }
 sudo apt install -y python3-pip
 python3 -m pip install --user ansible
+
+# If using Ubuntu 20.04 - you need to set python3.9 as the default
+# sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
 
 # Install Image Builder 
 #export EKSA_RELEASE_VERSION=v0.19.0 # Manually define version
@@ -45,6 +72,9 @@ cd -
 mkdir ~/.bashrc.d
 image-builder completion bash > ~/.bashrc.d/image-builder
 
+## Cleanup
+# rm -rf ${HOME}/eks-anywhere-build-tooling
+
 # Set some params
 export OS=ubuntu
 export OS_VERSION=22.04
@@ -54,8 +84,5 @@ export RELEASE_CHANNEL="1-29"
 echo EKSA_RELEASE_VERSION= $EKSA_RELEASE_VERSION
 #image-builder build --os ubuntu --hypervisor baremetal --release-channel 1-28
 image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR --release-channel $RELEASE_CHANNEL
-
-## Cleanup
-rm -rf ${HOME}/eks-anywhere-build-tooling
 
 exit 0
