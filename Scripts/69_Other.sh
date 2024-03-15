@@ -43,5 +43,18 @@ kubectl config set-context --current --namespace=default
 export PROM_SERVER_POD_NAME=$(kubectl get pods --namespace observability -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name"})
 kubectl port-forward $PROM_SERVER_POD_NAME -n observability 9090
 
+## Grafana
+### NOTE:  I would like to update this to install in it's own namespace and not "default"
+###        Also - to make it persistent
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install my-grafana grafana/grafana
+
+   kubectl get secret --namespace default my-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+   export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=my-grafana" -o jsonpath="{.items[0].metadata.name}")
+   kubectl --namespace default port-forward $POD_NAME 3000
+
+
+
 ## Troubeshooting
 kubectl set image statefulset.apps/generated-prometheus-server  *=783794618700.dkr.ecr.us-west-2.amazonaws.com/prometheus/prometheus:latest
