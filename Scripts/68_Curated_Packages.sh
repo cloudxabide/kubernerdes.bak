@@ -50,6 +50,7 @@ spec:
 
 EOF1
 eksctl anywhere create packages -f metrics-server.yaml
+while sleep 2; do echo "Waiting for pods to deploy..."; kubectl get pods -n kube-system | egrep '0/1' || break; done
 kubectl get all -n kube-system 
 kubectl get events -n kube-system 
 
@@ -68,6 +69,8 @@ while sleep 2; do kubectl get pods -n kube-system | grep ^metrics-server | grep 
 eksctl anywhere generate package adot --cluster $( kubectl config view --minify -o jsonpath='{.clusters[].name}') > adot.yaml
 
 exit 0
+
+### ADVANCED TROUBLESHOOTING - if you are here.. you likely have an issue that is significant
 # EKS-A Packages
 You can browse the Public ECR repo here
 https://gallery.ecr.aws/eks-anywhere/eks-anywhere-packages
