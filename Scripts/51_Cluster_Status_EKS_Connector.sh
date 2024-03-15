@@ -48,7 +48,7 @@ helm install eks-connector \
 kubectl config set-context --current --namespace=eks-connector
 kubectl get events 
 echo "Watch the pods until they are Running"
-while sleep 1; do echo "Checking.... `date`"; kubectl get pods -n eks-connector | grep Running && break; done
+while sleep 1; do echo "Waiting for 'Running'.... `date`"; kubectl get pods -n eks-connector | grep Running && break; done
 
 # Switch context back to default namespace
 kubectl config set-context --current --namespace=default
