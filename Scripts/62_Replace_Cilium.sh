@@ -80,6 +80,7 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
 while sleep 2; do cilium status | egrep 'error' || break; done
 kubectl get nodes -o wide # make sure all nodes are "READY"
 kubectl -n kube-system exec ds/cilium -- cilium-health status
+cilium connectivity test
 
 ## Test Cilium Connectivity
 cilium connectivity test
