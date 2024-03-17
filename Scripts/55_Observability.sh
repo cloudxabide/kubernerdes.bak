@@ -65,8 +65,6 @@ kubectl get events -n observability --sort-by=.lastTimestamp
 
 kubectl config set-context --current --namespace=default
 
-
-
 ## Grafana
 ### NOTE:  I would like to update this to install in it's own namespace and not "default"
 ###        Also - to make it persistent
