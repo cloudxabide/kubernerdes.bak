@@ -34,7 +34,7 @@ EKSA_ACTIVATION_CODE=$(cat $CLUSTER_REGISTRATION_OUTPUT | jq -r '.[].connectorCo
 
 echo "EKSA_ACTIVATION_ID: $EKSA_ACTIVATION_ID"
 echo "EKSA_ACTIVATION_CODE: $EKSA_ACTIVATION_CODE"
-aws eks describe-cluster --name kubernerdes-eksa 
+aws eks describe-cluster --name $EKSA_Cluster_Name
 
 kubectl create namespace eks-connector
 helm install eks-connector \
@@ -45,8 +45,7 @@ helm install eks-connector \
   --set eks.agentRegion=$EKSA_AWS_REGION
 
 # Switch context to eks-connector namespace
-kubectl config set-context --current --namespace=eks-connector
-kubectl get events 
+kubectl get events -n eks-connector
 echo "Watch the pods until they are Running"
 while sleep 1; do echo "Waiting for 'Running'.... `date`"; kubectl get pods -n eks-connector | grep Running && break; done
 
