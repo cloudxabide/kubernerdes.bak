@@ -2,7 +2,7 @@
 
 #     Purpose: This script will prep the hosts and then install/configure openEBS
 #        Date: 2024-01-15
-#      Status: Incomplete/In-Progress
+#      Status: Complete/Working (you can run this unattended now)
 # Assumptions: This script assumes that you have a dummy/disposable cluster, created using 3-nodes 
 #                which are both control-plane and worker nodes (basically my lab setup).
 #
