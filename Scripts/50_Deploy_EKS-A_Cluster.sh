@@ -19,7 +19,6 @@ EOF
 .  ./.eksainfo
 }
 
-
 # Install EKS Anywhere
 echo "Check out the following Doc"
 echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
@@ -28,7 +27,7 @@ echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spe
 ## START HERE
 #############
 ## Cleanup existing Docker Containers 
-[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; exit; }
+[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; sleep 4; exit; }
 cd
 docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
@@ -73,19 +72,18 @@ eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_CONFIG 
 
+exit 0
+
+# Watch the pods until the busybox pod is "Running", then exit
+echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
+echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
+echo "  After about 5 seconds move to the next node"; sleep 3
+while sleep 2; do echo -n "Waiting for 'Running'.... "; date; docker ps -a | grep boots && break ; done && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
+
 alt_install() {
 eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_CONFIG \
    --install-packages packages.yaml
 }
-
-exit 0
-
-# Watch the pods until the busybox pod is "Running", then exit
-while sleep 2; do echo -n "Waiting for 'Running'.... "; date; docker ps -a | grep boots && break ; done
-echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
-echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
-echo "  After about 5 seconds move to the next node"; sleep 3
-docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
