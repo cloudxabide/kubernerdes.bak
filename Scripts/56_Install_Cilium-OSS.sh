@@ -1,8 +1,14 @@
 #/bin/bash
 # https://isovalent.com/blog/post/cilium-eks-anywhere/
 
+# Install a test app
+kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
+kubectl get pods -l app=hello-eks-a
+kubectl logs -l app=hello-eks-a
+# kubectl port-forward deploy/hello-eks-a 8000:80
+# curl localhost:8000
+
 # From: https://docs.cilium.io/en/v1.13/gettingstarted/k8s-install-default/#install-the-cilium-cli
-helm repo add cilium https://helm.cilium.io/
 
 # Check the default/included Cilium 
 kubectl -n kube-system exec ds/cilium -- cilium version
@@ -25,6 +31,9 @@ sha256sum --check hubble-linux-${HUBBLE_ARCH}.tar.gz.sha256sum
 sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
 rm hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
 hubble version; echo
+
+# Add Cilium Helm Repo
+helm repo add cilium https://helm.cilium.io/
 
 ### PRE-FLIGHT CHECK
 #  Replace EKS-A version of Cilium with OSS version
@@ -79,8 +88,8 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
 ### Validate the install
 while sleep 2; do cilium status | egrep 'error' || break; done
 kubectl get nodes -o wide # make sure all nodes are "READY"
-kubectl -n kube-system exec ds/cilium -- cilium-health status
-cilium connectivity test
+## I recently noticed that I was receiving "Connection timed out" - which seemed to go away after time?
+while sleep 2; do { echo "Waiting for connectivity..."; kubectl -n kube-system exec ds/cilium -- cilium-health status | egrep "Connection timed out"; } || break; done 
 
 ## Test Cilium Connectivity
 cilium connectivity test
