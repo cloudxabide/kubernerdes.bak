@@ -114,3 +114,10 @@ hubble observe --server localhost:4245 --follow
 kubectl port-forward -n kube-system svc/hubble-ui 12000:80
 
 # kubectl get events -n kube-system
+
+# If you happen to have configured your Cilium (like I did) with the wrong masquerade interface...
+cat << EOF1 | tee update_Cilium.yaml
+---
+egressMasqueradeInterfaces: eno1
+EOF1
+helm upgrade cilium cilium/cilium -f update_Cilium.yaml  -n kube-system
