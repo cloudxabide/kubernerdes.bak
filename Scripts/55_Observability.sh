@@ -92,9 +92,10 @@ exit 0
 ## Enable UI 
 export PROM_SERVER_POD_NAME=$(kubectl get pods --namespace observability -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name"})
 kubectl port-forward $PROM_SERVER_POD_NAME -n observability 9090
+
 export POD_NAME=$(kubectl get pods --namespace $GRAFANA_NAMESPACE -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=my-grafana" -o jsonpath="{.items[0].metadata.name}")
 kubectl --namespace $GRAFANA_NAMESPACE port-forward $POD_NAME 3000
-
+# Import Dashboard 315 and 1860 
 
 ## Troubeshooting
 kubectl set image statefulset.apps/generated-prometheus-server  *=783794618700.dkr.ecr.us-west-2.amazonaws.com/prometheus/prometheus:latest
