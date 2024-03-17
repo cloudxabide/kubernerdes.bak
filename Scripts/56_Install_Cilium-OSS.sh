@@ -83,7 +83,7 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
   --namespace kube-system \
   --set eni.enabled=false \
   --set ipam.mode=kubernetes \
-  --set egressMasqueradeInterfaces=eth0 \
+  --set egressMasqueradeInterfaces=eno1 \
   --set tunnel=geneve \
   --set hubble.metrics.enabled="{dns,drop,tcp,flow,icmp,http}" \
   --set hubble.relay.enabled=true \
@@ -106,7 +106,9 @@ exit 0
 ## terminal 1
 kubectl port-forward -n kube-system svc/hubble-relay 4245:80 # For local connectivity (if you're using Docker, maybe?)
 ## terminal 2
-hubble status
+hubble status 
+# If hubble relay is not running, run the following:
+cilium hubble enable
 
 # This generates a TON of output
 hubble observe --server localhost:4245 --follow
