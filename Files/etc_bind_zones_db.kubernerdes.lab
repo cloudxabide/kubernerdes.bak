@@ -15,7 +15,6 @@ gateway			IN      A       10.10.12.1
 
 ; Admin Host
 thekubernerd		IN      A       10.10.12.10
-
 ; EKS Anywhere Endpoints
 eks-control-plane 	IN	A	10.10.12.100
 tinkerbell		IN	A	10.10.12.101
@@ -27,7 +26,6 @@ eks-mgmt-03		IN      A       10.10.12.113
 eks-work-01		IN      A       10.10.12.121
 eks-work-02		IN      A       10.10.12.122
 eks-work-03		IN      A       10.10.12.123
-
 ; Nutanix Cluster (VIP, Nodes, CVM)
 nutanix-vip		IN	A	10.10.12.210
 nutanix-node-01		IN	A	10.10.12.211
