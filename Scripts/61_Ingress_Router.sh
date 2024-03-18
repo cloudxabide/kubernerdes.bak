@@ -35,4 +35,10 @@ EOF1
 kubectl create namespace metallb-system
 eksctl anywhere create packages -f metallb-config.yaml
 eksctl anywhere get packages --cluster $CLUSTER_NAME
+
+kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
+sleep 2
+kubectl get pods -l app=hello-eks-a
+kubectl logs -l app=hello-eks-a
+
 exit 0
