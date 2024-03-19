@@ -1,47 +1,11 @@
 #!/bin/bash
 
-#     Purpose:
+#     Purpose: Install/Configure Emissary
 #        Date:
 #      Status: Incomplete/In-Progress
 # Assumptions:
 
 # Status:  just started this
-mkdir ~/DevOps/eksa/latest/metallb; cd $_
-
-kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
-
-eksctl anywhere generate package metallb --cluster $CLUSTER_NAME > metallb-generated.yaml
-
-cat << EOF1 | tee metallb-config.yaml
----
-apiVersion: packages.eks.amazonaws.com/v1alpha1
-kind: Package
-metadata:
-  creationTimestamp: null
-  name: generated-metallb-custom
-  namespace: eksa-packages-kubernerdes-eksa
-spec:
-  packageName: metallb
-  config: |
-    IPAddressPools:
-      - name: default
-        addresses:
-          - 10.10.13.1-10.10.13.255
-    L2Advertisements:
-      - ipAddressPools:
-        - default  
-EOF1
-kubectl create namespace metallb-system
-eksctl anywhere create packages -f metallb-config.yaml
-eksctl anywhere get packages --cluster $CLUSTER_NAME
-
-kubectl create namespace hello-world
-kubectl apply -f "https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hello-world/hello-world-eks-a-with-lb.yaml" -n hello-world
-sleep 2
-kubectl get pods -l app=hello-eks-a -n hello-world
-kubectl logs -l app=hello-eks-a
-kubectl get all -n hello-world
-kubectl delete ns hello-world
 
 ## Deploy Emissary
 eksa-packages-emissary() {
