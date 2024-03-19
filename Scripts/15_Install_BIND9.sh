@@ -22,6 +22,7 @@ do
   curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_zones_db.$ZONE.10.10.in-addr.arpa | sudo tee /etc/bind/zones/db.$ZONE.10.10.in-addr.arpa
 done 
 curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_zones_db.kubernerdes.lab | sudo tee /etc/bind/zones/db.kubernerdes.lab
+curl https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/etc_bind_zones_db.apps.kubernerdes.lab | sudo tee /etc/bind/zones/db.apps.kubernerdes.lab
 
 # Validate all the zone files
 cd /etc/bind/zones
