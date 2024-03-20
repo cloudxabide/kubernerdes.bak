@@ -6,7 +6,8 @@
 # Assumptions: Some sort of persistent storage exists (openEBS, in my case)
 
 
-cd $HOME/DevOps/eksa/latest/
+cd $HOME/eksa/$CLUSTER_NAME/latest/
+aws sts get-caller-identity | grep eksa-curated-packages-user || { echo "ERROR: Wrong User"; exit 0; }
 
 #############################
 ## Check Cluster Status
