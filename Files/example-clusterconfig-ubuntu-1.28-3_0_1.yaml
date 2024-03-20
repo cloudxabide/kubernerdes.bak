@@ -2,7 +2,7 @@
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
 kind: Cluster
 metadata:
-  name: kubernerdes-eksa
+  name: gpu-cluster
 spec:
   bundlesRef: null
   clusterNetwork:
