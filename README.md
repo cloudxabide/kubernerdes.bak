@@ -57,7 +57,7 @@ Uneeded (this is all handled by the "tinkerbell boots" container):
 My "inventory" or "hardware.csv" files do not include BMC info - primarily because my NUC(s) have no ILO/BMC.
 
 | Control-Plane | Worker Nodes | GPU Nodes | Inventory File |
-|:--------------|:------------:|:---------------|
+|:-------------:|:------------:|:---------:|:---------------|
 | 3 | 0 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
 | 1 | 2 | 0 | [Hardware 1_2](Files/hardware-1_2.csv) |
 | 3 | 0 | 1 | [Hardware 3_0](Files/hardware-3_0_1.csv) |
@@ -73,5 +73,5 @@ If you only use labels of "node=cp-machine" in your hardware.csv inventory file,
 [EKS Anywhere - Docs](https://anywhere.eks.amazonaws.com/docs/)  
 [Ubuntu Server - Download](https://ubuntu.com/download/server)  
 
-[Containers from the Couch - Search: EKS Anywhere (YouTube)](https://www.youtube.com/@ContainersfromtheCouch/search?query=eks%20anywhere)
+[Containers from the Couch - Search String: EKS Anywhere (YouTube)](https://www.youtube.com/@ContainersfromtheCouch/search?query=eks%20anywhere)
 
