@@ -3,5 +3,5 @@
 export CLUSTER_NAME=kubernerdes-eksa
 export KUBECONFIG=$(find ~/DevOps/eksa/latest -name '*eks-a-cluster.kubeconfig')
 
-[ -f ~/.awsinfo ] && . ~/.eksainfo
-# /home/mansible/DevOps/eksa/kubernerdes-eksa/kubernerdes-eksa-eks-a-cluster.kubeconfig
+[ -f ~/.eksainfo ] && . ~/.eksainfo
+# /home/mansible/eksa/kubernerdes-eksa/latest/kubernerdes-eksa/kubernerdes-eksa-eks-a-cluster.kubeconfig

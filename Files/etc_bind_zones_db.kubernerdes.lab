@@ -46,3 +46,5 @@ nutanix-cvm-01		IN	A	10.10.12.221
 nutanix-cvm-02		IN	A	10.10.12.222
 nutanix-cvm-03		IN	A	10.10.12.223
 
+kubernerdes-eksa	IN	CNAME	eks-mgmt-control-plane.kubernerdes.lab.
+gpu-cluster		IN	CNAME	eks-gpu-control-plane.kubernerdes.lab.

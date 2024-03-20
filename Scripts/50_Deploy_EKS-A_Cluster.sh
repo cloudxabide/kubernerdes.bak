@@ -32,16 +32,7 @@ cd
 docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 
-TODAY=`date +%F`
-EKS_BASE=$HOME/eksa
-EKS_DIR=$EKS_BASE/$CLUSTER_NAME/${TODAY}
-[ -d ${EKS_DIR}  ] && { mv ${EKS_DIR} ${EKS_DIR}-01; } 
-mkdir -p $EKS_DIR
-cd ${EKS_BASE}
-rm latest
-ln -s $EKS_DIR ${EKS_BASE}/latest
-cd ${EKS_DIR}
- 
+# Cluster-Specific Variables 
 OS=ubuntu
 NODE_LAYOUT="3_0"
 KUBE_VERSION="1.28"
@@ -50,15 +41,16 @@ export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
 export TINKERBELL_HOST_IP=10.10.21.101
 
-EKS_DIR=$EKS_BASE/$CLUSTER_NAME/${TODAY}
+TODAY=`date +%F`
+EKS_BASE=$HOME/eksa/$CLUSTER_NAME
+EKS_DIR=$EKS_BASE/${TODAY}
 [ -d ${EKS_DIR}  ] && { mv ${EKS_DIR} ${EKS_DIR}-01; }
 mkdir -p $EKS_DIR
-cd ${EKS_BASE}
+cd ${EKS_BASE}/
 rm latest
 ln -s $EKS_DIR ${EKS_BASE}/latest
 cd ${EKS_DIR}
 mkdir $CLUSTER_NAME 
-
 
 # The following is how you create a default clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
@@ -84,10 +76,11 @@ eksctl anywhere create cluster \
 exit 0
 
 # Watch the pods until the busybox pod is "Running", then exit
-echo "You will need to hit CTRL-C to exit the log follow"; sleep 1
+echo "You will now see the script wait until the -boots- container is running, then follow the boots process"
+echo "I typically do not start powering on nodes until I see 'Creating new workload cluster' from the install"
 echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
 echo "  After about 5 seconds move to the next node"; sleep 3
-while sleep 2; do echo -n "Waiting for 'Running'.... "; date; docker ps -a | grep boots && break ; done && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
+while sleep 2; do echo -n "Waiting for 'Running'....then will proceed. "; date; docker ps -a | grep boots && break ; done && sleep 15 && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
 
 alt_install() {
 eksctl anywhere create cluster \
