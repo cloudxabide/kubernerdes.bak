@@ -1,10 +1,18 @@
 #/bin/bash
+
+#     Purpose: To replace EKS-A included Cilium with Cilium OSS
+#        Date: 2024-03-01
+#      Status: In-Progress (this is still a bit clunky, therefore it should be cut-and-paste and 
+#                interactively installed
+# Assumptions:
+
 # https://isovalent.com/blog/post/cilium-eks-anywhere/
 
 # Install a test app
-kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
-kubectl get pods -l app=hello-eks-a
-kubectl logs -l app=hello-eks-a
+kubectl create namespace hello-eksa-a
+kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml" -n hello-eksa-a
+kubectl get pods -l app=hello-eks-a -n hello-eksa-a
+kubectl logs -l app=hello-eks-a -n hello-eksa-a
 # kubectl port-forward deploy/hello-eks-a 8000:80
 # curl localhost:8000
 
@@ -13,6 +21,7 @@ kubectl logs -l app=hello-eks-a
 # Check the default/included Cilium 
 kubectl -n kube-system exec ds/cilium -- cilium version
 
+########################################
 # Install Cilium CLI
 install_Cilium_CLI() {
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt)
@@ -35,6 +44,7 @@ sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
 rm hubble-linux-${HUBBLE_ARCH}.tar.gz{,.sha256sum}
 hubble version; echo
 }
+########################################
 
 # Add Cilium Helm Repo
 helm repo add cilium https://helm.cilium.io/
