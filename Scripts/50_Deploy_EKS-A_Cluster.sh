@@ -41,6 +41,7 @@ export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
 export TINKERBELL_HOST_IP=10.10.21.101
 
+# NEED TO MAKE THIS MOVE THE DIR TO AN ARCHIVE OR SOMETHING
 TODAY=`date +%F`
 EKS_BASE=$HOME/eksa/$CLUSTER_NAME
 EKS_DIR=$EKS_BASE/${TODAY}
@@ -76,11 +77,11 @@ eksctl anywhere create cluster \
 exit 0
 
 # Watch the pods until the busybox pod is "Running", then exit
-echo "You will now see the script wait until the -boots- container is running, then follow the boots process"
+echo "You will now see the script wait until the -boots- container is running, then shift to follow the boots process"
 echo "I typically do not start powering on nodes until I see 'Creating new workload cluster' from the install"
 echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
 echo "  After about 5 seconds move to the next node"; sleep 3
-while sleep 2; do echo -n "Waiting for 'Running'....then will proceed. "; date; docker ps -a | grep boots && break ; done && sleep 15 && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
+while sleep 2; do echo -n "Waiting for 'Running'....then will proceed. "; date; docker ps -a | grep boots && break ; done && sleep 30 && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }'
 
 alt_install() {
 eksctl anywhere create cluster \
