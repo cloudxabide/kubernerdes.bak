@@ -15,9 +15,9 @@ spec:
       cidrBlocks:
         - 10.96.0.0/12
   controlPlaneConfiguration:
-    count: 0
+    count: 1
     endpoint:
-      host: "10.10.12.110"
+      host: "10.10.12.130"
     machineGroupRef:
       kind: TinkerbellMachineConfig
       name: gpu-machinegroup
@@ -42,7 +42,7 @@ spec:
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
 kind: TinkerbellMachineConfig
 metadata:
-  name: gpu-machine
+  name: gpu-machinegroup
 spec:
   hardwareSelector: {node:"gpu-machine"}
   osFamily: ubuntu
