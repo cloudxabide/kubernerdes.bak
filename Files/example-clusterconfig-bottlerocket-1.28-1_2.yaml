@@ -16,7 +16,7 @@ spec:
   controlPlaneConfiguration:
     count: 1
     endpoint:
-      host: "10.10.12.200"
+      host: "10.10.12.110"
     machineGroupRef:
       kind: TinkerbellMachineConfig
       name: kubernerdes-eksa-cp

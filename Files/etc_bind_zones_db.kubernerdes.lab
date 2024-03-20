@@ -17,10 +17,10 @@ gateway			IN      A       10.10.12.1
 thekubernerd		IN      A       10.10.12.10
 
 ; EKS Anywhere Endpoints
-eks-control-plane 	IN	A	10.10.12.100
 tinkerbell		IN	A	10.10.12.101
 
 ; EKS-A Hosts (mgmt cluster)
+eks-mgmt-control-plane 	IN	A	10.10.12.110
 eks-mgmt-01		IN      A       10.10.12.111
 eks-mgmt-02		IN      A       10.10.12.112
 eks-mgmt-03		IN      A       10.10.12.113
@@ -31,6 +31,7 @@ eks-work-02		IN      A       10.10.12.122
 eks-work-03		IN      A       10.10.12.123
 
 ; EKS-A Hosts (GPU cluster)
+eks-gpu-control-plane	IN	A	10.10.12.130
 eks-gpu-01		IN	A	10.10.12.131
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
