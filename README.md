@@ -60,7 +60,7 @@ My "inventory" or "hardware.csv" files do not include BMC info - primarily becau
 |:-------------:|:------------:|:---------:|:---------------|
 | 3 | 0 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
 | 1 | 2 | 0 | [Hardware 1_2](Files/hardware-1_2.csv) |
-| 3 | 0 | 1 | [Hardware 3_0](Files/hardware-3_0_1.csv) |
+| 3 | 0 | 1 | [Hardware 3_0_1](Files/hardware-3_0_1.csv) |
 
 ## Deploy EKS Anywhere Cluster
 **ProTip:**
