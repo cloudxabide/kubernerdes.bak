@@ -1,7 +1,7 @@
 $ORIGIN 12.10.10.in-addr.arpa.
 $TTL    604800
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2024022901   ; Serial
+                        2024032001   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -15,14 +15,19 @@ $TTL    604800
 ; EKS Anywhere Endpoints
 100	IN	PTR	eks-control-plane.kubernerdes.lab.
 101	IN	PTR	tinkerbell.kubernerdes.lab.
+
 ; EKS-A Hosts (mgmt cluster)
 111	IN	PTR	eks-mgmt-01.kubernerdes.lab.
 112	IN	PTR	eks-mgmt-02.kubernerdes.lab.
 113	IN	PTR	eks-mgmt-03.kubernerdes.lab.
+
 ; EKS-A Hosts (workload cluster)
 121	IN	PTR	eks-work-01.kubernerdes.lab.
 122	IN	PTR	eks-work-02.kubernerdes.lab.
 123	IN	PTR	eks-work-03.kubernerdes.lab.
+
+; EKS-A Hosts (workload cluster)
+131	IN	PTR	eks-gpu-01.kubernerdes.lab.
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
 210	IN	PTR	nutanix-vip.kubernerdes.lab.
