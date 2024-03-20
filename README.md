@@ -56,10 +56,11 @@ Uneeded (this is all handled by the "tinkerbell boots" container):
 ## Tested Configurations
 My "inventory" or "hardware.csv" files do not include BMC info - primarily because my NUC(s) have no ILO/BMC.
 
-| Control-Plane | Worker Nodes | Inventory File |
+| Control-Plane | Worker Nodes | GPU Nodes | Inventory File |
 |:--------------|:------------:|:---------------|
-| 3 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
-| 1 | 2 | [Hardware 1_2](Files/hardware-1_2.csv) |
+| 3 | 0 | 0 | [Hardware 3_0](Files/hardware-3_0.csv) |
+| 1 | 2 | 0 | [Hardware 1_2](Files/hardware-1_2.csv) |
+| 3 | 0 | 1 | [Hardware 3_0](Files/hardware-3_0_1.csv) |
 
 ## Deploy EKS Anywhere Cluster
 **ProTip:**
