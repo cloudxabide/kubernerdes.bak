@@ -31,6 +31,7 @@ for FILE in `ls *arpa`; do named-checkzone $(echo $FILE | sed 's/db.//g'; ) $FIL
 cd -
 
 # Restart Named Service
+systemctl restart bind9
 sudo systemctl restart named.service 
 
 # Reset the host lookups (hopefully)
