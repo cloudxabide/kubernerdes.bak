@@ -13,10 +13,10 @@ $TTL    604800
 10      IN      PTR     thekubernerd.kubernerdes.lab.
 
 ; EKS Anywhere Endpoints
-100	IN	PTR	eks-control-plane.kubernerdes.lab.
 101	IN	PTR	tinkerbell.kubernerdes.lab.
 
 ; EKS-A Hosts (mgmt cluster)
+110	IN	PTR	eks-mgmt-control-plane.kubernerdes.lab.
 111	IN	PTR	eks-mgmt-01.kubernerdes.lab.
 112	IN	PTR	eks-mgmt-02.kubernerdes.lab.
 113	IN	PTR	eks-mgmt-03.kubernerdes.lab.
