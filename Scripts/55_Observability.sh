@@ -6,24 +6,10 @@
 # eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
 # eksctl anywhere create packages -f prometheus.yaml
 
-# Simple Prometheus with modified scrape intervals
-PROMETHEUS_PACKAGE_CONFIG=prometheus.yaml
-cat << EOF1 | tee $PROMETHEUS_PACKAGE_CONFIG
-apiVersion: packages.eks.amazonaws.com/v1alpha1
-kind: Package
-metadata:
-  name: generated-prometheus
-  namespace: eksa-packages-${CLUSTER_NAME}
-spec:
-  packageName: prometheus
-  config: |
-    server:
-      global:
-        evaluation_interval: "30s"
-        scrape_interval: "30s"
-        scrape_timeout: "15s" 
-EOF1
 
+### CHOOSE ONE OF THE FOLLOWING IMPLEMENTATION PATTERNS
+### I PUT THE "SIMPLE" PATTERN LAST (BECAUSE IT WORKS) - that way, if this is run non-interactively
+###   the working method will be utilized
 # Rep2 statefulset prometheus (currently not producing output (2024-03-16))
 PROMETHEUS_PACKAGE_CONFIG=prometheus-rep2-statefuleset.yaml
 cat << EOF1 | tee $PROMETHEUS_PACKAGE_CONFIG
@@ -54,6 +40,26 @@ cat << EOF1 | tee $PROMETHEUS_PACKAGE_CONFIG
                  - localhost:9090
 
 EOF1
+
+# Simple Prometheus with modified scrape intervals
+PROMETHEUS_PACKAGE_CONFIG=prometheus.yaml
+cat << EOF1 | tee $PROMETHEUS_PACKAGE_CONFIG
+apiVersion: packages.eks.amazonaws.com/v1alpha1
+kind: Package
+metadata:
+  name: generated-prometheus
+  namespace: eksa-packages-${CLUSTER_NAME}
+spec:
+  packageName: prometheus
+  config: |
+    server:
+      global:
+        evaluation_interval: "30s"
+        scrape_interval: "30s"
+        scrape_timeout: "15s"
+EOF1
+
+### PROCEED
 kubectl create namespace observability
 kubectl config set-context --current --namespace=observability
 eksctl anywhere create packages -f $PROMETHEUS_PACKAGE_CONFIG
@@ -87,7 +93,7 @@ helm upgrade my-grafana grafana/grafana -f my-grafana-storage.yaml -n $GRAFANA_N
 
 exit 0
 
-## Enable UI 
+## Enable UI  (to localhost)
 export PROM_SERVER_POD_NAME=$(kubectl get pods --namespace observability -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name"})
 kubectl port-forward $PROM_SERVER_POD_NAME -n observability 9090
 
