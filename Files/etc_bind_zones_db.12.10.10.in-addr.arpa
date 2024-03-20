@@ -9,11 +9,16 @@ $TTL    604800
 
         IN      NS      thekubernerd.kubernerdes.lab.
 
+; Firewall
+1	IN	PTR	gateway.kubernerdes.lab.
+
 ; Admin Host
 10      IN      PTR     thekubernerd.kubernerdes.lab.
 
 ; EKS Anywhere Endpoints
-101	IN	PTR	tinkerbell.kubernerdes.lab.
+101	IN	PTR	tinkerbell-eks-mgmt.kubernerdes.lab.
+102	IN	PTR	tinkerbell-eks-work.kubernerdes.lab.
+103	IN	PTR	tinkerbell-eks-gpu.kubernerdes.lab.
 
 ; EKS-A Hosts (mgmt cluster)
 110	IN	PTR	eks-mgmt-control-plane.kubernerdes.lab.
@@ -29,6 +34,7 @@ $TTL    604800
 ; EKS-A Hosts (workload cluster)
 130	IN	PTR	eks-gpu-control-plane.kubernerdes.lab.
 131	IN	PTR	eks-gpu-01.kubernerdes.lab.
+132	IN	PTR	eks-gpu-02.kubernerdes.lab.
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
 210	IN	PTR	nutanix-vip.kubernerdes.lab.
