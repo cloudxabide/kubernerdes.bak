@@ -11,4 +11,12 @@ Eventually, I would like to be able to simply run the following to build my envi
 for SCRIPT in $(ls [0-9]*.sh | sort); do sh ./$SCRIPT; done
 ```
 
-
+<pre>
+I *think* I want my folder structue on my Admin Host to be...
+  ~/ 
+   /eksa/
+        /management-cluster/*artifacts*
+        /workload-cluster/*artifacts*
+        /.archive/`date +%F`//management-cluster/
+        /.archive/`date +%F`/workload-cluster/
+</pre>

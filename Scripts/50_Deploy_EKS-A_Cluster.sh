@@ -33,8 +33,8 @@ docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CO
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 
 TODAY=`date +%F`
-EKS_BASE=$HOME/DevOps/eksa
-EKS_DIR=$EKS_BASE/${TODAY}
+EKS_BASE=$HOME/eksa
+EKS_DIR=$EKS_BASE/$CLUSTER_NAME/${TODAY}
 [ -d ${EKS_DIR}  ] && { mv ${EKS_DIR} ${EKS_DIR}-01; } 
 mkdir -p $EKS_DIR
 cd ${EKS_BASE}
@@ -49,7 +49,16 @@ export CLUSTER_NAME=kubernerdes-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
 export TINKERBELL_HOST_IP=10.10.21.101
+
+EKS_DIR=$EKS_BASE/$CLUSTER_NAME/${TODAY}
+[ -d ${EKS_DIR}  ] && { mv ${EKS_DIR} ${EKS_DIR}-01; }
+mkdir -p $EKS_DIR
+cd ${EKS_BASE}
+rm latest
+ln -s $EKS_DIR ${EKS_BASE}/latest
+cd ${EKS_DIR}
 mkdir $CLUSTER_NAME 
+
 
 # The following is how you create a default clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider tinkerbell > $CLUSTER_CONFIG.default
