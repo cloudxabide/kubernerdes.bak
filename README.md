@@ -68,6 +68,10 @@ If you only use labels of "node=cp-machine" in your hardware.csv inventory file,
 
 [Install EKS Anywhere](Scripts/50_Install_EKS_Anywhere.sh)
 
+## Utilization
+The following is my 3 x NUC cluster utilization with basic infrastructure components running (Prometheus/Grafana, openEBS, Cilium OSS/HubbleUI)  
+![Kubernerdes Lab - Utilization](Images/KubernerdesLab-Utilization.png)
+
 ## References
 [EKS Anywhere - Landing Page](https://anywhere.eks.amazonaws.com/)  
 [EKS Anywhere - Docs](https://anywhere.eks.amazonaws.com/docs/)  
