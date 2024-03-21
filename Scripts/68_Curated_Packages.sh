@@ -32,6 +32,7 @@ eksctl anywhere generate package harbor --cluster ${CLUSTER_NAME} --kube-version
 
 ## Enable Metrics Server (using curated pacakges)
 #eksctl anywhere generate package metrics-server --cluster $CLUSTER_NAME > metrics-server.yaml
+mkdir ~/eksa/$CLUSTER_NAME/latest/metrics-server/; cd $_
 cat << EOF1 | tee metrics-server.yaml
 apiVersion: packages.eks.amazonaws.com/v1alpha1
 kind: Package
@@ -53,6 +54,7 @@ eksctl anywhere create packages -f metrics-server.yaml
 while sleep 2; do echo "Waiting for pods to deploy..."; kubectl get pods -n kube-system | egrep '0/1' || break; done
 kubectl get all -n kube-system 
 kubectl get events -n kube-system 
+
 
 ## Enable Metrics Server (This is the OSS method - need to do this using curated packages)
 metrics_server_foss() {
