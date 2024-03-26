@@ -44,7 +44,7 @@ metadata:
   name: ${CLUSTER_NAME}
 spec:
   datacenter: "${VSPHERE_DATACENTER}"
-  insecure: false
+  insecure: true 
   network: "${VSPHERE_NETWORK}"   # I use my Distributed Port Group (which is confusing)
   server: "${VSPHERE_SERVER}"
   thumbprint: "${VSPHERE_THUMBPRINT}" # govc about.cert -k -json | jq -r '.thumbprintSHA1'
