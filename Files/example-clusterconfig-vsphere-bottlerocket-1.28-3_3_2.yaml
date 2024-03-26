@@ -47,7 +47,7 @@ spec:
   insecure: false
   network: "${VSPHERE_NETWORK}"   # I use my Distributed Port Group (which is confusing)
   server: "${VSPHERE_SERVER}"
-  thumbprint: "{VSPHERE_THUMBPRINT}" # govc about.cert -k -json | jq -r '.thumbprintSHA1'
+  thumbprint: "${VSPHERE_THUMBPRINT}" # govc about.cert -k -json | jq -r '.thumbprintSHA1'
                                      # govc about.cert -thumbprint -k | awk '{ print $2 }'
 
 ---
