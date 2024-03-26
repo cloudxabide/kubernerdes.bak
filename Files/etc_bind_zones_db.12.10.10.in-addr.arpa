@@ -1,7 +1,7 @@
 $ORIGIN 12.10.10.in-addr.arpa.
 $TTL    604800
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2024032001   ; Serial
+                        2024032201   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -35,6 +35,18 @@ $TTL    604800
 130	IN	PTR	eks-gpu-control-plane.kubernerdes.lab.
 131	IN	PTR	eks-gpu-01.kubernerdes.lab.
 132	IN	PTR	eks-gpu-02.kubernerdes.lab.
+
+; EKS-A Hosts (vSphere cluster - mgmt)
+140    IN     PTR eks-vmw-control-plane.kubernerdes.lab.
+141    IN     PTR eks-vmw-01.kubernerdes.lab.
+142    IN     PTR eks-vmw-02.kubernerdes.lab.
+143    IN     PTR eks-vmw-03.kubernerdes.lab.
+144    IN     PTR eks-vmw-04.kubernerdes.lab.
+145    IN     PTR eks-vmw-05.kubernerdes.lab.
+146    IN     PTR eks-vmw-06.kubernerdes.lab.
+147    IN     PTR eks-vmw-07.kubernerdes.lab.
+148    IN     PTR eks-vmw-08.kubernerdes.lab.
+149    IN     PTR eks-vmw-09.kubernerdes.lab.
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
 210	IN	PTR	nutanix-vip.kubernerdes.lab.
