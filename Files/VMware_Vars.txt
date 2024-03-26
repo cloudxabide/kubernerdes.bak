@@ -1,0 +1,23 @@
+# Copy this to ~/.vmwinfo then update values
+#   run `. ~/.vmwinfo`
+export GOVC_URL="10.10.10.10"   # vSphere API IP/Hostname
+export GOVC_USERNAME='username@domain.lab' # Fully qualified user@domain
+export GOVC_PASSWORD=''
+export GOVC_INSECURE=1
+export EKSA_VSPHERE_USERNAME=""
+export EKSA_VSPHERE_PASSWORD=''
+
+# Vars for cluster rollout
+export EKSA_CONTROL_PLANE_ENDPOINT=""
+export EKSA_CLUSTER_NAME="vsphere-eksa"
+export CLUSTER_NAME=${EKSA_CLUSTER_NAME}  # DO NOT MODIFY THIS
+export VSPHERE_DATACENTER=""
+export VSPHERE_DATASTORE=Kubernerdes
+export VSPHERE_FOLDER=EKSAnywhere
+export VSPHERE_NETWORK=DPortGroup-Kubernerdes
+export VSPHERE_RESOURCE_POOL=Kubernerdes
+export VSPHERE_SERVER=vmw-vcenter7.matrix.lab
+
+# This does not work - BUT... add this value to your inventory and try the install
+#  the failed install will provide you the string it was/is expecting
+export VSPHERE_THUMBRPINT=$(govc about.cert -thumbprint -k)
