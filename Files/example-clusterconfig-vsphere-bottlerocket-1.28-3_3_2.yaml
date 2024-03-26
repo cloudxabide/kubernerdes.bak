@@ -1,0 +1,108 @@
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: Cluster
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  clusterNetwork:
+    cniConfig:
+      cilium: {}
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+    services:
+      cidrBlocks:
+      - 10.96.0.0/12
+  controlPlaneConfiguration:
+    count: 2
+    endpoint:
+      host: "${EKSA_CONTROL_PLANE_ENDPOINT}"
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: ${CLUSTER_NAME}-cp
+  datacenterRef:
+    kind: VSphereDatacenterConfig
+    name: ${CLUSTER_NAME}
+  externalEtcdConfiguration:
+    count: 3
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: ${CLUSTER_NAME}-etcd
+  kubernetesVersion: "1.28"
+  managementCluster:
+    name: ${CLUSTER_NAME}
+  workerNodeGroupConfigurations:
+  - count: 2
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: ${CLUSTER_NAME}
+    name: md-0
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereDatacenterConfig
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  datacenter: "${VSPHERE_DATACENTER}"
+  insecure: false
+  network: "${VSPHERE_NETWORK}"   # I use my Distributed Port Group (which is confusing)
+  server: "${VSPHERE_SERVER}"
+  thumbprint: "{VSPHERE_THUMBPRINT}" # govc about.cert -k -json | jq -r '.thumbprintSHA1'
+                                     # govc about.cert -thumbprint -k | awk '{ print $2 }'
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  name: ${CLUSTER_NAME}-cp
+spec:
+  datastore: "${VSPHERE_DATASTORE}"
+  diskGiB: 25
+  folder: "${VSPHERE_FOLDER}"
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: bottlerocket
+  resourcePool: "${VSPHERE_RESOURCE_POOL}"
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa "${MY_SSH_KEY}"
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  datastore: "${VSPHERE_DATASTORE}"
+  diskGiB: 25
+  folder: "${VSPHERE_FOLDER}"
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: bottlerocket
+  resourcePool: "${VSPHERE_RESOURCE_POOL}"
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa "${MY_SSH_KEY}"
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  name: ${CLUSTER_NAME}-etcd
+spec:
+  datastore: "${VSPHERE_DATASTORE}"
+  diskGiB: 25
+  folder: "${VSPHERE_FOLDER}"
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: bottlerocket
+  resourcePool: "${VSPHERE_RESOURCE_POOL}"
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa "${MY_SSH_KEY}"
+
+---
+
