@@ -100,5 +100,8 @@ git clone https://github.com/cloudxabide/kubernerdes.git
 ln -s $HOME/Repositories/Personal/cloudxabide/kubernerdes $HOME
 cd $HOME
 
+# Install Trivy (from Aquasecurity)
+sudo snap install trivy
+
 [ $NEEDSRESTART -ne 0 ] && { echo "Rebooting in 5 seconds (hit CTRL-C to stop)"; sleep 5; shutdown now -r; }
 exit 0
