@@ -4,11 +4,9 @@
 #        Date:
 #      Status: Incomplete/In-Progress
 # Assumptions:
-
 # Status:  just started this
-mkdir ~/DevOps/eksa/latest/metallb; cd $_
 
-kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml"
+mkdir ~/eksa/$CLUSTER_NAME/latest/metallb; cd $_
 
 eksctl anywhere generate package metallb --cluster $CLUSTER_NAME > metallb-generated.yaml
 
@@ -33,19 +31,19 @@ spec:
 EOF1
 kubectl create namespace metallb-system
 eksctl anywhere create packages -f metallb-config.yaml
-eksctl anywhere get packages --cluster $CLUSTER_NAME
+while sleep 5; do echo "Checking every 5 seconds for success...."; eksctl anywhere get packages --cluster $CLUSTER_NAME | grep installing || break; done
 
 kubectl create namespace hello-world
 kubectl apply -f "https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/hello-world/hello-world-eks-a-with-lb.yaml" -n hello-world
 sleep 2
 kubectl get pods -l app=hello-eks-a -n hello-world
-kubectl logs -l app=hello-eks-a
+kubectl logs -l app=hello-eks-a -n hello-world
 kubectl get all -n hello-world
 kubectl delete ns hello-world
 
-## Deploy Emissary
+## Deploy Emissary (this seems to be broken at the moment (use the OSS version)
 eksa-packages-emissary() {
-mkdir ~/DevOps/eksa/latest/emissary; cd $_
+mkdir ~/eksa/${CLUSTER_NAME}/latest/emissary; cd $_
 eksctl anywhere generate package emissary --cluster $CLUSTER_NAME > generated-emissary.yaml
 kubectl create namespace emissary-system
 cat << EOF1 | tee emissary.yaml
@@ -60,7 +58,7 @@ spec:
 EOF1
 
 eksctl anywhere create packages -f emissary.yaml 
-eksctl anywhere get packages --cluster $CLUSTER_NAME | grep emiss
+while sleep 5; do echo "Checking every 5 seconds for success...."; eksctl anywhere get packages --cluster $CLUSTER_NAME | grep installing || break; done
 
 # eksctl anywhere delete package emissary --cluster $CLUSTER_NAME
 # eksctl anywhere delete package emissary-crds --cluster $CLUSTER_NAME
@@ -80,18 +78,9 @@ kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext 
 helm install emissary-ingress --namespace emissary datawire/emissary-ingress && \
 kubectl -n emissary wait --for condition=available --timeout=90s deploy -lapp.kubernetes.io/instance=emissary-ingress
 
-kubectl get svc -w  --namespace emissary emissary-ingress
+kubectl get svc  --namespace emissary emissary-ingress
 
 # https://www.getambassador.io/docs/emissary/latest/topics/running/host-crd
-cat << EOF1 | tee wildcard-apps-domain.yaml
----
-apiVersion: getambassador.io/v3alpha1
-kind: Host
-metadata:
-  name: wildcard-apps-domain
-spec:
-  hostname: *.apps.kubernerdes.lab
-EOF1
 
 # Create the Listener
 cat << EOF1 | tee emissary-listener.yaml
