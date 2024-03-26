@@ -1,7 +1,7 @@
 $ORIGIN kubernerdes.lab.
 $TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2024032001   ; Serial
+                        2024032201   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -36,6 +36,18 @@ eks-work-03		IN      A       10.10.12.123
 eks-gpu-control-plane	IN	A	10.10.12.130
 eks-gpu-01		IN	A	10.10.12.131
 eks-gpu-02		IN	A	10.10.12.132
+
+; EKS-A Hosts (vSphere cluster - mgmt)
+eks-vmw-control-plane 	IN	A	10.10.12.140
+eks-vmw-01		IN      A       10.10.12.141
+eks-vmw-02		IN      A       10.10.12.142
+eks-vmw-03		IN      A       10.10.12.143
+eks-vmw-04		IN      A       10.10.12.144
+eks-vmw-05		IN      A       10.10.12.145
+eks-vmw-06		IN      A       10.10.12.146
+eks-vmw-07		IN      A       10.10.12.147
+eks-vmw-08		IN      A       10.10.12.148
+eks-vmw-09		IN      A       10.10.12.149
 
 ; Nutanix Cluster (VIP, Nodes, CVM)
 nutanix-vip		IN	A	10.10.12.210
