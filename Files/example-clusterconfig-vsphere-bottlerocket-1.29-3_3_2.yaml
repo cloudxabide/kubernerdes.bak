@@ -43,11 +43,11 @@ kind: VSphereDatacenterConfig
 metadata:
   name: ${CLUSTER_NAME}
 spec:
-  datacenter: "${VSPHERE-DATACENTER}"
+  datacenter: "${VSPHERE_DATACENTER}"
   insecure: false
-  network: "${VSPHERE_NETWORK}"
+  network: "${VSPHERE_NETWORK}"   # I use my Distributed Port Group (which is confusing)
   server: "${VSPHERE_SERVER}"
-  thumbprint: ""
+  thumbprint: "{VSPHERE_THUMBPRINT}" # govc about.cert -thumbprint -k | awk '{ print $2 }'
 
 ---
 apiVersion: anywhere.eks.amazonaws.com/v1alpha1
