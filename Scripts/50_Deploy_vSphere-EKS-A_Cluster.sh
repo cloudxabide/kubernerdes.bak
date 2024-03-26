@@ -38,28 +38,38 @@ tuftool download ${TMPDIR:-/tmp/bottlerocket-ovas} --target-name "${OVA}" \
    --root ./root.json \
    --metadata-url "https://updates.bottlerocket.aws/2020-07-07/vmware-k8s-${KUBEVERSION}/x86_64/" \
    --targets-url "https://updates.bottlerocket.aws/targets/"
+}
 
+#############
+## START HERE
+#############
+## Cleanup existing Docker Containers
+[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; sleep 4; exit; }
+cd
+docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
+docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 
 # Source your VMware info file
 . ~/.vmwinfo
 
 govc datacenter.info; echo
-
 for TOPIC in network vm host datastore vm/Templates
 do
   echo "# $TOPIC"
   govc ls $TOPIC
   echo
 done
-
 echo "# Resource Pool"
 govc find / -type p
+
+# RETRIEVE vSphere THUMBPRINT
+export VSPHERE_THUMBPRINT=$(govc about.cert -k -json | jq -r '.thumbprintSHA1')
 
 # Cluster-Specific Variables
 OS=bottlerocket
 HYPERVISOR=vsphere
 NODE_LAYOUT="3_3_2"
-KUBE_VERSION="1.29"
+KUBE_VERSION="1.28"
 [ -z $CLUSTER_NAME ] && export CLUSTER_NAME=vsphere-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${HYPERVISOR}-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
@@ -96,9 +106,10 @@ exit 0
 # Update Certificates for host (status: still broken - ugh)
 curl -o certs.zip -L https://vmw-vcenter7.matrix.lab/certs/download.zip
 unzip certs.zip
-sudo cp certs/lin/9e242a2b.0 /etc/ssl/certs/MatrixLab-vSphere.pem
-sudo ln -s /etc/ssl/certs/MatrixLab-vSphere.pem /etc/ssl/certs/9e242a2b.0 
+openssl x509 -in certs/lin/9e242a2b.0 -noout -text | grep Subject:
+sudo mkdir /usr/share/ca-certificates/extra
+sudo cp certs/lin/9e242a2b.0 /usr/share/ca-certificates/extra/
 sudo update-ca-certificates
 
-# Resource Pools
-
+rm -rf /home/mansible/eksa/vsphere-eksa/2024-03-26/eksa-cli-logs/*
+rm -rf ./vsphere-eksa/generated/*
