@@ -5,6 +5,7 @@
 #      Status: Complete/Working (you can run this unattended now)
 # Assumptions: This script assumes that you have a dummy/disposable cluster, created using 3-nodes 
 #                which are both control-plane and worker nodes (basically my lab setup).
+#              Additionally, this is intended to only run on Bare Metal nodes.
 #
 #       Notes: I separate some of the commands in their own stanza (i.e. I run a for-loop to 
 #                install, then another for-loop to check status).  This allows me to 
