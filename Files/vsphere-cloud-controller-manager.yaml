@@ -45,8 +45,8 @@ data:
     vcenter:
       your-vcenter-name-here:
         server: ${GOVC_IP} 
-        user: ${GOVC_USERNAME}
-        password: ${GOVC_PASSWORD}
+        user: "${GOVC_USERNAME}"
+        password: "${GOVC_PASSWORD}"
         datacenters:
           - ${VSPHERE_DATACENTER} 
 
