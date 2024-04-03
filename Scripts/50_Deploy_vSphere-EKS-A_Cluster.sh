@@ -43,14 +43,14 @@ tuftool download ${TMPDIR:-/tmp/bottlerocket-ovas} --target-name "${OVA}" \
 #############
 ## START HERE
 #############
+# Source your VMware info file
+. ~/.vmwinfo
+
 ## Cleanup existing Docker Containers
 [ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; sleep 4; exit; }
 cd
 docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
-
-# Source your VMware info file
-. ~/.vmwinfo
 
 govc datacenter.info; echo
 for TOPIC in network vm host datastore vm/Templates
