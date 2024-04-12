@@ -27,7 +27,7 @@ spec:
     machineGroupRef:
       kind: VSphereMachineConfig
       name: ${CLUSTER_NAME}-etcd
-  kubernetesVersion: "1.28"
+  kubernetesVersion: "${KUBE_VERSION}"
   managementCluster:
     name: ${CLUSTER_NAME}
   workerNodeGroupConfigurations:
