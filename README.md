@@ -68,7 +68,7 @@ My "inventory" or "hardware.csv" files do not include BMC info - primarily becau
 If you only use labels of "node=cp-machine" in your hardware.csv inventory file, and remove the WorkerNodeGroup from your clusterConfig, your Control-Plane nodes will not be tainted and workloads can run there.  (so, I will either have 3 x Control-Plane nodes that also act as Worker Nodes - or you have 1 x CP and 2 x Worker Nodes)  
 
 I generally start with the following to rebuild my cluster  
-[Install EKS Anywhere](Scripts/50_Deploy_EKS-A_Cluster.sh)
+[Install EKS Anywhere](Scripts/50_Deploy_BareMetal_EKS-A_Cluster.sh)
 
 ## Utilization
 The following is my 3 x NUC cluster utilization with basic infrastructure components running (Prometheus/Grafana, openEBS, Cilium OSS/HubbleUI)  
