@@ -69,7 +69,7 @@ export VSPHERE_THUMBPRINT=$(govc about.cert -k -json | jq -r '.thumbprintSHA1')
 OS=bottlerocket
 HYPERVISOR=vsphere
 NODE_LAYOUT="3_3_2"
-KUBE_VERSION="1.29"
+export KUBE_VERSION="1.29"
 [ -z $CLUSTER_NAME ] && export CLUSTER_NAME=vsphere-eksa
 export CLUSTER_CONFIG=${CLUSTER_NAME}.yaml
 export CLUSTER_CONFIG_SOURCE="example-clusterconfig-${HYPERVISOR}-${OS}-${KUBE_VERSION}-${NODE_LAYOUT}.yaml" # Name of file in Git Repo
@@ -94,7 +94,7 @@ curl -o $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/ku
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
 envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
 cat $CLUSTER_CONFIG
-sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
+#sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
 sdiff $CLUSTER_CONFIG.generated $CLUSTER_CONFIG | egrep '\|'
 
 # Create the Cluster
