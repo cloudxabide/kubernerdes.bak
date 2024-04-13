@@ -11,6 +11,7 @@ I anticiapte that there will be some refactoring occurring - mostly regarding wh
 
 **Prologue:**  
 Note:  Anything in my "scripts" that is encapsulated in a bash routine - ie. my_route(){ code; } generally means it is some optional code that I won't generally use. (like installing the Desktop UI)
+
 The ["Scripts"](./Scripts) directory is where all the scripts live (obviously?), but I have created a directory in the Scripts directory that will have symlinks back to the parent dir.  The reason: not all the scripts apply to every implementation style (i.e. bareMetal is different than vSphere) but there are a number of common scripts.
 
 This project has been created to be a [network enclave](https://en.wikipedia.org/wiki/Network_enclave) - meaning, it should be able to "stand alone" and function.  That carries some assumptions:
