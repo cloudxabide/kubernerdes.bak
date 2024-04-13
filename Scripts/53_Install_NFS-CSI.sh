@@ -8,16 +8,11 @@
 
 cd ~/eksa/$CLUSTER_NAME/latest
 
-# Install using kubectl
-curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.6.0/deploy/install-driver.sh | bash -s v4.6.0 --
-curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.6.0/deploy/uninstall-driver.sh | bash -s v4.6.0 --
-
 # Install using Helm (prefered, I think)
 helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
 helm install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --version v4.6.0
 
 kubectl --namespace=kube-system get pods --selector="app.kubernetes.io/instance=csi-driver-nfs"
-
 
 cat << EOF1 | tee nfs-csi-sc.yaml
 apiVersion: storage.k8s.io/v1
@@ -41,6 +36,8 @@ kubectl get sc nfs-csi
 kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/pvc-nfs-csi-dynamic.yaml
 kubectl get pv,pvc
 
+kubectl patch storageclass nfs-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
 exit 0
 
 # create PV
@@ -50,3 +47,4 @@ kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nf
 kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/pvc-nfs-csi-static.yaml
 
 kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/deployment.yaml
+
