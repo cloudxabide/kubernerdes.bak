@@ -105,4 +105,4 @@ kubectl --namespace $GRAFANA_NAMESPACE port-forward $POD_NAME 3000
 kubectl set image statefulset.apps/generated-prometheus-server  *=783794618700.dkr.ecr.us-west-2.amazonaws.com/prometheus/prometheus:latest
 
 ### Cleanup
-eksctl anywhere delete packages generated-prometheus --cluster kubernerdes-eksa
+eksctl anywhere delete packages generated-prometheus --cluster $CLUSTER_NAME
