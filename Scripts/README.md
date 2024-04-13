@@ -1,5 +1,13 @@
 # README - Scripts directory
 
+Status:  I am currently rearranging my "Scripts" directory to be more cluster-specifc, or cluster-type-specific.  (i.e. vSphere will have it's own section, vs bare-metal)
+
+The plan:  
+* put ALL the scripts in <base>/Scripts
+* create a cluster-type-specific directory (in this case based on CLUSTER_NAME)
+* create symlinks from CLUSTER_NAME -> ../50_Deploy_EKSA.sh
+
+
 The intent of this directory ~/Scripts is files that can be run non-interactively, broken down by "area of concern".
 Non-interactive files will go in ~/Foo
 

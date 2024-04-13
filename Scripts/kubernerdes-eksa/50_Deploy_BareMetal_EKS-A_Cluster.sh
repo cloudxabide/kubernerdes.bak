@@ -1,0 +1,1 @@
+../50_Deploy_BareMetal_EKS-A_Cluster.sh
