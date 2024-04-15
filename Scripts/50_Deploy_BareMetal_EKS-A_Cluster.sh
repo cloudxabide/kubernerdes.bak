@@ -10,6 +10,7 @@
 #############
 # AWS Info file for Curated Packages
 # I made this in to a routine as it should not be run as part of a script (ie you need to provide the details (below))
+# I also don't like executing these commands to end up in my SHELL history (even if they are short-lived creds)
 configure_AWS_credentials() {
 cat << EOF > ./.eksainfo
 export EKSA_AWS_ACCESS_KEY_ID=""
