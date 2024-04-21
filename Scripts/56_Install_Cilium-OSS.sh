@@ -48,6 +48,7 @@ hubble version; echo
 
 # Add Cilium Helm Repo
 helm repo add cilium https://helm.cilium.io/
+helm repo update cilium
 
 ### PRE-FLIGHT CHECK
 #  Replace EKS-A version of Cilium with OSS version
@@ -86,6 +87,9 @@ kubectl delete service hubble-peer --namespace kube-system
 kubectl delete daemonset cilium --namespace kube-system
 kubectl delete deployment cilium-operator --namespace kube-system
 kubectl delete clusterrole cilium-operator
+# The following were new additions (2024-04-21)jjj
+kubectl delete role cilium-config-agent -n kube-system # if you ran the pre-flight test
+kubectl delete rolebinding cilium-config-agent -n kube-system
 }
 
 # helm install cilium cilium/cilium --version 1.13.3 \
