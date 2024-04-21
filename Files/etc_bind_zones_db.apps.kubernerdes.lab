@@ -1,7 +1,7 @@
 $ORIGIN apps.kubernerdes.lab.
 $TTL    86400
 @       IN      SOA     thekubernerd.kubernerdes.lab. root.kubernerdes.lab. (
-                        2024022901   ; Serial
+                        2024042101   ; Serial
                         604800       ; Refresh
                         86400        ; Retry
                         36000        ; Expire
@@ -10,4 +10,7 @@ $TTL    86400
                	 	IN      NS      thekubernerd.kubernerdes.lab.
                	 	IN      MX      10 thekubernerd.kubernerdes.lab.
 
-* 	IN	A 	10.10.13.2
+* 				IN	A 	10.10.13.2
+generated-prometheus-server	IN 	A	10.10.13.10
+my-grafana			IN 	A	10.10.13.11
+hubble-ui			IN 	A	10.10.13.12
