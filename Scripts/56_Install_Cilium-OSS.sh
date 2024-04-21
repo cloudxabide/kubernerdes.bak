@@ -3,7 +3,8 @@
 #     Purpose: To replace EKS-A included Cilium with Cilium OSS
 #        Date: 2024-03-01
 #      Status: In-Progress (this is still a bit clunky, therefore it should be cut-and-paste and 
-#                interactively installed
+#                interactively installed)
+#        Todo: Update process to update Cilium and Hubble CLI, if needed
 # Assumptions:
 
 # https://isovalent.com/blog/post/cilium-eks-anywhere/
@@ -17,7 +18,6 @@ kubectl logs -l app=hello-eks-a -n hello-eksa-a
 # curl localhost:8000
 
 # From: https://docs.cilium.io/en/v1.13/gettingstarted/k8s-install-default/#install-the-cilium-cli
-
 # Check the default/included Cilium 
 kubectl -n kube-system exec ds/cilium -- cilium version
 
