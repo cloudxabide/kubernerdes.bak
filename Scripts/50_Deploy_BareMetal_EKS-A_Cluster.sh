@@ -71,6 +71,7 @@ cat $CLUSTER_CONFIG
 sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
 
 ## Let's build our cluster
+unset KUBECONFIG
 eksctl anywhere create cluster \
    --hardware-csv hardware.csv \
    -f $CLUSTER_CONFIG 
@@ -82,7 +83,8 @@ echo "You will now see the script wait until the -boots- container is running, t
 echo "I typically do not start powering on nodes until I see 'Creating new workload cluster' from the install"
 echo "You should now start to power on your NUC, one at a time, and hit F12 until the network boot starts."
 echo "  After about 5 seconds move to the next node"; sleep 3
-while sleep 2; do echo -n "Waiting for 'Running'....then will proceed. "; date; docker ps -a | grep boots && break ; done && sleep 30 && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }'
+while sleep 2; do echo -n "Waiting for 'Running'....then will proceed. "; date; docker ps -a | grep boots && break ; done && sleep 30 && docker logs -f $(docker ps -a | grep boots | awk '{ print $1 }')
+
 
 alt_install() {
 eksctl anywhere create cluster \
