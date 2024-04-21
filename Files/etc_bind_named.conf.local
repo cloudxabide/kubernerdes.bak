@@ -11,13 +11,15 @@ zone "kubernerdes.lab" {
     type master;
     file "/etc/bind/zones/db.kubernerdes.lab"; # zone file path
     allow-query { any; };
-    allow-transfer { 10.10.12.0/22; };         # local subnet
+    allow-transfer { any; };
+    #allow-transfer { 10.10.12.0/22; };         # local subnet
 };
 zone "apps.kubernerdes.lab" {
     type master;
     file "/etc/bind/zones/db.apps.kubernerdes.lab"; # zone file path
     allow-query { any; };
-    allow-transfer { 10.10.12.0/22; };         # local subnet
+    allow-transfer { any; };
+    #allow-transfer { 10.10.12.0/22; };         # local subnet
 };
 // Reverse Lookups Zones 
 zone "12.10.10.in-addr.arpa" {
