@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Status:  Blocked
+# Status:  Blocked/Not Working
 #   Note:  Leaving this here in case I decide to revisit this. Kind of crazy how involved all this is.
 # 
 
