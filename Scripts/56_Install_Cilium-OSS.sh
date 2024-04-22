@@ -13,6 +13,7 @@
 kubectl create namespace hello-eksa-a
 kubectl apply -f "https://anywhere.eks.amazonaws.com/manifests/hello-eks-a.yaml" -n hello-eksa-a
 kubectl get pods -l app=hello-eks-a -n hello-eksa-a
+sleep 5
 kubectl logs -l app=hello-eks-a -n hello-eksa-a
 # kubectl port-forward deploy/hello-eks-a 8000:80
 # curl localhost:8000
@@ -104,12 +105,13 @@ helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
   --set hubble.ui.enabled=true 
 
 ### Validate the install
-while sleep 2; do cilium status | egrep 'error' || break; done
+while sleep 2; do echo; cilium status | egrep 'error' || { echo "Great - LGTM. Let's proceed..."; break; }; done
 kubectl get nodes -o wide # make sure all nodes are "READY"
 ## I recently noticed that I was receiving "Connection timed out" - which seemed to go away after time?
 while sleep 2; do { echo "Waiting for connectivity..."; kubectl -n kube-system exec ds/cilium -- cilium-health status | egrep "Connection timed out"; } || break; done 
 
 ## Test Cilium Connectivity
+echo "Running Cilium Connectivity Test"
 cilium connectivity test
 
 exit 0
