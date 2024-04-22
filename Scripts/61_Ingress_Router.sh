@@ -6,9 +6,15 @@
 # Assumptions:
 # Status:  just started this
 
-mkdir ~/eksa/$CLUSTER_NAME/latest/metallb; cd $_
+mkdir ~/eksa/$CLUSTER_NAME/latest/metallb; 
+eksctl anywhere generate package metallb --cluster $CLUSTER_NAME > ~/eksa/$CLUSTER_NAME/latest/metallb/metallb-generated.yaml
+cd ~/eksa/$CLUSTER_NAME/latest/metallb
 
-eksctl anywhere generate package metallb --cluster $CLUSTER_NAME > metallb-generated.yaml
+
+case $CLUSTER_NAME in
+  vsphere-eksa) CIDR_POOL="10.10.14.1-10.10.14.255";;
+  kubernerdes-eksa) CIDR_POOL="10.10.13.1-10.10.13.255";;
+esac 
 
 cat << EOF1 | tee metallb-config.yaml
 ---
@@ -17,14 +23,14 @@ kind: Package
 metadata:
   creationTimestamp: null
   name: generated-metallb-custom
-  namespace: eksa-packages-kubernerdes-eksa
+  namespace: eksa-packages-$CLUSTER_NAME
 spec:
   packageName: metallb
   config: |
     IPAddressPools:
       - name: default
         addresses:
-          - 10.10.13.1-10.10.13.255
+          - $CIDR_POOL
     L2Advertisements:
       - ipAddressPools:
         - default  

@@ -6,7 +6,6 @@
 # eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
 # eksctl anywhere create packages -f prometheus.yaml
 
-
 ### CHOOSE ONE OF THE FOLLOWING IMPLEMENTATION PATTERNS
 ### I PUT THE "SIMPLE" PATTERN LAST (BECAUSE IT WORKS) - that way, if this is run non-interactively
 ###   the working method will be utilized
@@ -68,6 +67,7 @@ echo "NOTE:  It may take a few minutes to get Prometheus up and running - be pat
 while sleep 2; do echo "Waiting for pods..."; kubectl get pods | egrep '0/1' || break; done
 
 kubectl get events -n observability --sort-by=.lastTimestamp
+echo "URL: (to add to Grafan)  http://generated-prometheus-server.observability:9090"
 
 kubectl config set-context --current --namespace=default
 
