@@ -94,11 +94,16 @@ kubectl delete rolebinding cilium-config-agent -n kube-system
 }
 
 # helm install cilium cilium/cilium --version 1.13.3 \
+case $CLUSTER_NAME in 
+  vsphere-eksa) MYINTERFACE=eth0;;
+  kubernerdes-eksa) MYINTERFACE=eno1;;
+esac
+  
 helm install cilium cilium/cilium --version $CILIUM_DEFAULT_VERSION \
   --namespace kube-system \
   --set eni.enabled=false \
   --set ipam.mode=kubernetes \
-  --set egressMasqueradeInterfaces=eno1 \
+  --set egressMasqueradeInterfaces=$MYINTERFACE \
   --set tunnel=geneve \
   --set hubble.metrics.enabled="{dns,drop,tcp,flow,icmp,http}" \
   --set hubble.relay.enabled=true \
