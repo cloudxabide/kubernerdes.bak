@@ -98,6 +98,7 @@ cat $CLUSTER_CONFIG
 sdiff $CLUSTER_CONFIG.generated $CLUSTER_CONFIG | egrep '\|'
 
 # Create the Cluster
+sudo systemctl start isc-dhcp-server.service
 unset KUBECONFIG
 eksctl anywhere create cluster \
    -f  $CLUSTER_CONFIG
