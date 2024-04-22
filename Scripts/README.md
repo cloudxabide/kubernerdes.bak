@@ -23,8 +23,29 @@ for SCRIPT in $(ls [0-9]*.sh | sort); do sh ./$SCRIPT; done
 I *think* I want my folder structue on my Admin Host to be...
   ~/ 
    /eksa/
-        /management-cluster/*artifacts*
-        /workload-cluster/*artifacts*
+        /$CLUSTER_NAME(management-cluster)/*artifacts*
+        /$CLUSTER_NAME(workload-cluster01)/*artifacts*
+        /$CLUSTER_NAME(workload-cluster02)/*artifacts*
         /.archive/`date +%F`//management-cluster/
         /.archive/`date +%F`/workload-cluster/
+</pre>
+
+<pre>
+eksa
+├── dummy-vsphere-cluster
+│   ├── eksa-cli-logs
+│   └── eksa-mgmt-cluster.yaml
+├── kubernerdes-eksa
+│   ├── 2024-03-20
+│   ├── 2024-03-20-01
+│   ├── 2024-04-21
+│   └── latest -> /home/mansible/eksa/kubernerdes-eksa/2024-04-21
+└── vsphere-eksa
+    ├── 2024-03-26
+    ├── 2024-03-26-01
+    ├── 2024-04-10
+    ├── 2024-04-10-01
+    ├── 2024-04-12
+    ├── 2024-04-22
+    └── latest -> /home/mansible/eksa/vsphere-eksa/2024-04-22
 </pre>
