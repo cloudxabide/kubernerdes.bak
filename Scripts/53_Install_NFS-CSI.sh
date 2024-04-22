@@ -12,7 +12,7 @@ cd ~/eksa/$CLUSTER_NAME/latest
 helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
 helm install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --version v4.6.0
 
-kubectl --namespace=kube-system get pods --selector="app.kubernetes.io/instance=csi-driver-nfs"
+while sleep 2; do echo "Waiting for Container to finish being Created"; kubectl --namespace=kube-system get pods --selector="app.kubernetes.io/instance=csi-driver-nfs" | grep ContainerCreating || break; done
 
 cat << EOF1 | tee nfs-csi-sc.yaml
 apiVersion: storage.k8s.io/v1
@@ -31,6 +31,7 @@ volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.1
 EOF1
+
 kubectl create -f nfs-csi-sc.yaml
 kubectl get sc nfs-csi
 kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/pvc-nfs-csi-dynamic.yaml
