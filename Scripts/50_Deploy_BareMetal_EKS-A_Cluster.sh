@@ -71,10 +71,10 @@ cat $CLUSTER_CONFIG
 sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
 
 ## Let's build our cluster
+sudo systemctl stop isc-dhcp-server.service
 unset KUBECONFIG
 eksctl anywhere create cluster \
-   --hardware-csv hardware.csv \
-   -f $CLUSTER_CONFIG 
+   -f  $CLUSTER_CONFIG
 
 exit 0
 
