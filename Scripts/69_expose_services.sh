@@ -18,7 +18,7 @@ grep -v \# $SERVICEMAPFILE | awk -F"|" '{ print $1" "$2 }' | while read -r APPNA
 do
   #echo "$APPNAME $NAMESPACE $PORT"
   echo "kubectl patch svc $APPNAME -n $NAMESPACE -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'"
-  kubectl patch svc $APPNAME -n $NAMESPACE -p '{"spec": {"type": "LoadBalancer"}}'"
+  kubectl patch svc $APPNAME -n $NAMESPACE -p '{"spec": {"type": "LoadBalancer"}}'
   echo
 done
 
