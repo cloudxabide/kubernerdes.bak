@@ -78,7 +78,8 @@ image-builder completion bash > ~/.bashrc.d/image-builder
 
 manual_versioning() {
 export EKSA_RELEASE_VERSION=v0.19.0 # Manually define version
-export EKSA_RELEASE_VERSION=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.latestVersion")
+EKSA_RELEASE_VERSION=v0.18.0; RELEASE_CHANNEL="1-28"
+EKSA_RELEASE_VERSION=v0.19.0; RELEASE_CHANNEL="1-29"
 }
 
 # Set some params
@@ -86,11 +87,12 @@ export OS=ubuntu
 export OS_VERSION=22.04
 export HYPERVISOR=baremetal
 export RELEASE_CHANNEL="1-29"
+export EKSA_RELEASE_VERSION=$(curl -sL https://anywhere-assets.eks.amazonaws.com/releases/eks-a/manifest.yaml | yq ".spec.latestVersion")
+# export BUILD_TOOLING_COMMIT=$(curl -s $BUNDLE_MANIFEST_URL | yq ".spec.versionsBundles[0].eksD.gitCommit")
 
-EKSA_RELEASE_VERSION=v0.18.0; RELEASE_CHANNEL="1-28"
-EKSA_RELEASE_VERSION=v0.19.0; RELEASE_CHANNEL="1-29"
+echo "EKSA_RELEASE_VERSION: $EKSA_RELEASE_VERSION"
+[ ! -z $BUILD_TOOLING_COMMIT ] && echo "BUILD_TOOLING_COMMIT: $BUILD_TOOLING_COMMIT"
 
-echo EKSA_RELEASE_VERSION: $EKSA_RELEASE_VERSION
 echo "image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR --release-channel $RELEASE_CHANNEL --eksa-release $EKSA_RELEASE_VERSION"
 image-builder build --os $OS --os-version $OS_VERSION --hypervisor $HYPERVISOR --release-channel $RELEASE_CHANNEL --eksa-release $EKSA_RELEASE_VERSION
 
