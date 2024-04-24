@@ -2,7 +2,8 @@
 
 #     Purpose: To replace EKS-A included Cilium with Cilium OSS
 #        Date: 2024-03-01
-#      Status: In-Progress (this is still a bit clunky, therefore it should be cut-and-paste and 
+#      Status: GTG, I think
+#              Ready to test (this is still a bit clunky, therefore it should be cut-and-paste and 
 #                interactively installed)
 #        Todo: Update process to update Cilium and Hubble CLI, if needed
 # Assumptions:
@@ -66,9 +67,10 @@ kubectl create -f cilium-preflight.yaml
 # Then start a while loop until the first one starts (and there is no longer a '0' in the output from the command)
 # NOTE:  I need to improve this logic to check for the "DESIRED" number and wait until the correct number is running
 kubectl get daemonset -n kube-system | sed -n '1p;/cilium/p'
-while sleep 2; do ( kubectl get daemonset -n kube-system | sed -n '1p;/cilium/p' | grep  0; ) || break; done
+while sleep 2; do echo; ( kubectl get daemonset -n kube-system | sed -n '1p;/cilium/p' | grep  0; ) || break; done
 
 # Once the daemonset is running
+echo "Note:  delete Cilium PreFlight Check"
 kubectl delete -f cilium-preflight.yaml
 
 ### Update Cilium
@@ -92,6 +94,7 @@ kubectl delete clusterrole cilium-operator
 kubectl delete role cilium-config-agent -n kube-system # if you ran the pre-flight test
 kubectl delete rolebinding cilium-config-agent -n kube-system
 }
+clean-up-accounts
 
 # helm install cilium cilium/cilium --version 1.13.3 \
 case $CLUSTER_NAME in 
@@ -116,7 +119,7 @@ kubectl get nodes -o wide # make sure all nodes are "READY"
 while sleep 2; do { echo "Waiting for connectivity..."; kubectl -n kube-system exec ds/cilium -- cilium-health status | egrep "Connection timed out"; } || break; done 
 
 ## Test Cilium Connectivity
-echo "Running Cilium Connectivity Test"
+echo "Running Cilium Connectivity Test - This will take a few minutes."
 cilium connectivity test
 
 exit 0
