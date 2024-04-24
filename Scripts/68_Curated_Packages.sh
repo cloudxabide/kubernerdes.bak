@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#     Purpose: Update EKS Anywhere curated packages
+#        Date: 2024-03-01
+#      Status: Unknown
+#        Todo: 
+# Assumptions:
+
 # Curated Packages 
 
 kubectl get pods -n eksa-packages | grep "eks-anywhere-packages"
