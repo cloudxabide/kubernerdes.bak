@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# NOTE THIS FILE SHOULD BE RENAMED
+#     Purpose: To install Prometheus/Grafana
+#        Date: 2024-04-24
+#      Status: Unknown - believed to be GTG
+# Assumptions:
+#        Todo:
 
 # Standard Prometheus creation process
 # eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
