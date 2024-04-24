@@ -1,9 +1,10 @@
 #!/bin/bash
 
-#     Purpose:
-#        Date:
-#      Status: Incomplete - probably move this to ~/Foo
-# Assumptions: Some sort of persistent storage exists (openEBS, in my case)
+#     Purpose: To show cluster status, then register to AWS EKS Service
+#        Date: 2024-04-24
+#      Status: Still seeems to have an issue when run non-interactive
+#              Incomplete - needs more troubleshooting
+# Assumptions: 
 
 
 cd $HOME/eksa/$CLUSTER_NAME/latest/
