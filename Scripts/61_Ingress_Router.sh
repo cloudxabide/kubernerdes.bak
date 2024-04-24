@@ -4,12 +4,10 @@
 #        Date:
 #      Status: Incomplete/In-Progress
 # Assumptions:
-# Status:  just started this
 
 mkdir ~/eksa/$CLUSTER_NAME/latest/metallb; 
 eksctl anywhere generate package metallb --cluster $CLUSTER_NAME > ~/eksa/$CLUSTER_NAME/latest/metallb/metallb-generated.yaml
 cd ~/eksa/$CLUSTER_NAME/latest/metallb
-
 
 case $CLUSTER_NAME in
   vsphere-eksa) CIDR_POOL="10.10.14.1-10.10.14.255";;
@@ -71,7 +69,6 @@ while sleep 5; do echo "Checking every 5 seconds for success...."; eksctl anywhe
 }
 
 emissary_OSS() {
-
 helm repo add datawire https://app.getambassador.io
 helm repo update
  
@@ -85,6 +82,10 @@ helm install emissary-ingress --namespace emissary datawire/emissary-ingress && 
 kubectl -n emissary wait --for condition=available --timeout=90s deploy -lapp.kubernetes.io/instance=emissary-ingress
 
 kubectl get svc  --namespace emissary emissary-ingress
+}
+emissary_OSS
+
+exit 0 
 
 # https://www.getambassador.io/docs/emissary/latest/topics/running/host-crd
 
@@ -116,4 +117,3 @@ spec:
   hostname: *.apps.kubernerdes.lab
 EOF1
 kubectl apply -f wildcard-apps-domain.yaml
-}
