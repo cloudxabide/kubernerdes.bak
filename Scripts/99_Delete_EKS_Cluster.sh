@@ -4,6 +4,7 @@
 #        Date:
 #      Status:
 # Assumptions:
+#        Todo: 
 
 cd ~/eksa/
 export CLUSTER_NAME=kubernerdes-eksa
