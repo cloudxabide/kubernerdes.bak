@@ -74,6 +74,7 @@ sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
 sudo systemctl stop isc-dhcp-server.service
 unset KUBECONFIG
 eksctl anywhere create cluster \
+  --hardware-csv hardware.csv
    -f  $CLUSTER_CONFIG
 
 exit 0

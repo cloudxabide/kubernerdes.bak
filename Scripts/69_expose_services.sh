@@ -22,6 +22,8 @@ do
   echo
 done
 
+kubectl get svc  kubectl get svc -A | grep LoadBalancer
+
 exit 0
 
 ###
