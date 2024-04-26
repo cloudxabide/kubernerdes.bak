@@ -95,6 +95,30 @@ persistence:
 EOF1
 helm upgrade my-grafana grafana/grafana -f my-grafana-storage.yaml -n $GRAFANA_NAMESPACE 
 
+## Metrics Server
+mkdir ~/eksa/$CLUSTER_NAME/latest/metrics-server/; cd $_
+cat << EOF1 | tee metrics-server.yaml
+apiVersion: packages.eks.amazonaws.com/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: generated-metrics-server
+  namespace: eksa-packages-${CLUSTER_NAME}
+spec:
+  packageName: metrics-server
+  targetNamespace: kube-system
+  config: |-
+    args:
+      - "--kubelet-insecure-tls"
+
+---
+
+EOF1
+eksctl anywhere create packages -f metrics-server.yaml
+while sleep 2; do echo "Waiting for pods to deploy..."; kubectl get pods -n kube-system | egrep '0/1' || break; done
+kubectl get all -n kube-system
+kubectl get events -n kube-system
+
 exit 0
 
 ## Enable UI  (to localhost)
