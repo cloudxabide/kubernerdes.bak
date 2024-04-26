@@ -36,43 +36,6 @@ eksctl anywhere generate package harbor --cluster ${CLUSTER_NAME} --kube-version
 ## Enable Cert-Manager
 # (remove comment to run - should already be present) eksctl anywhere generate package cert-manager --cluster ${CLUSTER_NAME} > cert-manager.yaml
 
-## Enable Metrics Server (using curated pacakges)
-#eksctl anywhere generate package metrics-server --cluster $CLUSTER_NAME > metrics-server.yaml
-mkdir ~/eksa/$CLUSTER_NAME/latest/metrics-server/; cd $_
-cat << EOF1 | tee metrics-server.yaml
-apiVersion: packages.eks.amazonaws.com/v1alpha1
-kind: Package
-metadata:
-  creationTimestamp: null
-  name: generated-metrics-server
-  namespace: eksa-packages-kubernerdes-eksa
-spec:
-  packageName: metrics-server
-  targetNamespace: kube-system
-  config: |-
-    args:
-      - "--kubelet-insecure-tls"
-
----
-
-EOF1
-eksctl anywhere create packages -f metrics-server.yaml
-while sleep 2; do echo "Waiting for pods to deploy..."; kubectl get pods -n kube-system | egrep '0/1' || break; done
-kubectl get all -n kube-system 
-kubectl get events -n kube-system 
-
-
-## Enable Metrics Server (This is the OSS method - need to do this using curated packages)
-metrics_server_foss() {
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-# The metrics-server will NOT come up (until you update the certs - below)
-kubectl get deployment metrics-server -n kube-system 
-kubectl get events -n kube-system
-### Disable TLS for my metrics on my cluster
-kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
-while sleep 2; do kubectl get pods -n kube-system | grep ^metrics-server | grep "0/1" || break; done
-}
-
 ## ADOT
 eksctl anywhere generate package adot --cluster $( kubectl config view --minify -o jsonpath='{.clusters[].name}') > adot.yaml
 
