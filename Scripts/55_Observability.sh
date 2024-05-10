@@ -4,7 +4,58 @@
 #        Date: 2024-04-24
 #      Status: Unknown - believed to be GTG
 # Assumptions:
-#        Todo:
+#        Todo: Update this procedure to use OSS versions of Prometheus and Grafana.  (Create helm charts?)
+
+
+
+
+
+NAMESPACE=monitoring
+cat << EOF3 | tee ${NAMESPACE}-ns.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $NAMESPACE
+EOF3
+kubectl create -f ${NAMESPACE}-ns.yaml
+
+helm install prometheus prometheus-community/kube-prometheus-stack --namespace $NAMESPACE 
+
+## ConfigMap
+cat << EOF5 | tee $NAMESPACE-configmap.yaml
+---
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: $NAMESPACE 
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      evaluation_interval: 15s
+    scrape_configs:
+      - job_name: '${NAMESPACE}-service'
+        scrape_interval: 5s
+        static_configs:
+          - targets: ['${NAMESPACE}-service:8080']
+EOF5
+
+## Service
+cat << EOF6 | tee ${NAMESPACE}-service.yaml
+---
+
+EOF6
+
+exit 0
+
+##########
+##########
+### THE FOLLOWING IS FOR CURATED PACKAGES
+### I have reverted to using OSS - this is here in case I need a reference.
+##########
+##########
 
 # Standard Prometheus creation process
 # eksctl anywhere generate package prometheus --cluster $CLUSTER_NAME > prometheus.yaml
@@ -43,6 +94,15 @@ cat << EOF1 | tee $PROMETHEUS_PACKAGE_CONFIG
                  - localhost:9090
 
 EOF1
+
+NAMESPACE=monitoring
+cat << EOF3 | tee ${NAMESPACE}-ns.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $NAMESPACE
+EOF3
+kubectl create -f ${NAMESPACE}-ns.yaml
 
 # Simple Prometheus with modified scrape intervals
 PROMETHEUS_PACKAGE_CONFIG=prometheus.yaml
