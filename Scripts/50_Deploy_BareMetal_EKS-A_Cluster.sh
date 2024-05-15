@@ -8,27 +8,28 @@
 #############
 ## EKS Anywhere
 #############
+# Install EKS Anywhere
+echo "Check out the following Doc"
+echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
+
 # AWS Info file for Curated Packages
 # I made this in to a routine as it should not be run as part of a script (ie you need to provide the details (below))
 # I also don't like executing these commands to end up in my SHELL history (even if they are short-lived creds)
-configure_AWS_credentials() {
+Curated_Packages() {
 cat << EOF > ./.eksainfo
 export EKSA_AWS_ACCESS_KEY_ID=""
 export EKSA_AWS_SECRET_ACCESS_KEY=""
 export EKSA_AWS_REGION="us-east-1"
 EOF
 .  ./.eksainfo
-}
 
-# Install EKS Anywhere
-echo "Check out the following Doc"
-echo "https://anywhere.eks.amazonaws.com/docs/getting-started/baremetal/bare-spec/"
+[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables, if you wish to use Curated Packages"; sleep 4;  }
+}
 
 #############
 ## START HERE
 #############
 ## Cleanup existing Docker Containers 
-[ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; sleep 4; exit; }
 cd
 docker kill $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
 docker rm $(docker ps -a | egrep 'boots|eks' | awk '{ print $1 }' | grep -v CONTAINER)
@@ -64,7 +65,6 @@ curl -o hardware.csv https://raw.githubusercontent.com/cloudxabide/kubernerdes/m
 curl -o $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE
 
 # Retrieve the pub key for the "kubernedes.lab" domain
-# THIS NEEDS TO BE TESTED
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
 envsubst <  $CLUSTER_CONFIG.vanilla > $CLUSTER_CONFIG
 cat $CLUSTER_CONFIG
@@ -74,7 +74,7 @@ sdiff $CLUSTER_CONFIG.vanilla $CLUSTER_CONFIG | egrep '\|'
 sudo systemctl stop isc-dhcp-server.service
 unset KUBECONFIG
 eksctl anywhere create cluster \
-  --hardware-csv hardware.csv
+  --hardware-csv hardware.csv \
    -f  $CLUSTER_CONFIG
 
 exit 0
