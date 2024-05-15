@@ -12,7 +12,10 @@
 #                cut-and-paste sections of code while I am testing.  (in case my code 
 #                looks ineffecient ;-)
 
-HOSTS="eks-mgmt-01 eks-mgmt-02 eks-mgmt-03"
+# TODO: Make this a dyanmic process to gather the name of all the nodes
+# HOSTS="eks-mgmt-01 eks-mgmt-02 eks-mgmt-03"
+# kubectl get nodes -o=jsonpath='{.items[1].metadata.labels.kubernetes\.io/hostname}'
+HOSTS=$(kubectl get nodes | awk '{ print $1 }' | grep -v ^NAME)
 
 # Install the iSCSI components on the worker nodes
 # NOTE:  If openEBS was something to be used in "production", you would want to include these 
