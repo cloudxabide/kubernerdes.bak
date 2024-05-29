@@ -7,11 +7,12 @@
 
 # Install the Apache2 packages
 sudo apt install -y apache2 php libapache2-mod-php php-mysql
+sudo systemctl enable apache2 --now
 
 # Change the port apache2 will listen on
 sudo sed -i -e 's/80/8080/g' /etc/apache2/ports.conf
 sudo sed -i -e 's/80/8080/g' /etc/apache2/sites-enabled/000-default.conf
-sudo systemctl enable apache2 --now
+sudo systemctl restart apache2 
 
 firewall_update() {
 sudo ufw app list
