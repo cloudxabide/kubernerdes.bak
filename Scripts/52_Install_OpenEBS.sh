@@ -96,7 +96,7 @@ do
     sudo partprobe $EBS_DEVICE
     sudo pvcreate -f ${EBS_DEVICE_PARTITION}
     sudo vgcreate vg_localstorage ${EBS_DEVICE_PARTITION}
-    sudo lvcreate -L100G -nlv_openebs vg_localstorage
+    sudo lvcreate -L300G -nlv_openebs vg_localstorage
     sudo mkfs.ext4 /dev/mapper/vg_localstorage-lv_openebs 
     sudo mkdir /var/openebs
     echo '/dev/mapper/vg_localstorage-lv_openebs /var/openebs ext4 defaults 0 0' | sudo tee -a /etc/fstab
