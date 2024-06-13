@@ -44,7 +44,7 @@ tuftool download ${TMPDIR:-/tmp/bottlerocket-ovas} --target-name "${OVA}" \
 ## START HERE
 #############
 # Source your VMware info file
-. ~/.vmwinfo
+. ~/.vsphere-eksa
 
 ## Cleanup existing Docker Containers
 [ -z $EKSA_AWS_ACCESS_KEY_ID ] && { echo "Whoa there.... you need to set your EKSA_AWS_ACCESS_KEY_ID and associated variables"; sleep 4; exit; }
@@ -88,7 +88,7 @@ mkdir $CLUSTER_NAME
 
 # The following is how you create a default clusterconfig
 eksctl anywhere generate clusterconfig $CLUSTER_NAME --provider vsphere > $CLUSTER_CONFIG.generated
-curl -o $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes/main/Files/$CLUSTER_CONFIG_SOURCE
+curl -o $CLUSTER_CONFIG.vanilla https://raw.githubusercontent.com/cloudxabide/kubernerdes.bak/main/Files/$CLUSTER_CONFIG_SOURCE
 
 # Retrieve the pub key for the "kubernedes.lab" domain
 export MY_SSH_KEY=$(cat ~/.ssh/*kubernerdes.lab.pub)
